@@ -21,6 +21,11 @@ boot_splash/image="res://assets/warning_low_tides_logos/wlt2.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
 
+[autoload]
+
+ModLoader="*res://singletons/resource_loader.gd"
+Maps="*res://singletons/maps.gd"
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

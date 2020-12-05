@@ -6,7 +6,9 @@ func _ready() -> void:
 	connect_signals()
 
 func connect_signals() -> void:
+# warning-ignore:return_value_discarded
 	network.connect("peer_connected", self, "on_peer_connected")
+# warning-ignore:return_value_discarded
 	network.connect("peer_disconnected", self, "on_peer_disconnected")
 
 #for running dedicated server
@@ -28,14 +30,17 @@ func load_singleplayer_server() -> void:
 	start_server()
 
 func start_server() -> void:
+# warning-ignore:return_value_discarded
 	network.create_server(properties["port"], properties["max_players"], properties["in_bandwidth"], properties["out_bandwidth"])
 	get_tree().set_network_peer(network)
 
 func on_peer_connected(id : int) -> void:
-	print("Peer successfully connected")
+	print("Peer successfully connected " + str(id))
+	#send client necessary information
 
 func on_peer_disconnected(id : int) -> void:
-	print("Peer disconnected")
+	print("Peer disconnected " + str(id))
+	#remove client's shit
 
 
 
