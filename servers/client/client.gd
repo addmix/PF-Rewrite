@@ -35,7 +35,7 @@ func start_singleplayer() -> void:
 	start_client()
 
 func start_client() -> void:
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 	network.create_client(ip, port)
 
 func on_failed_to_connect() -> void:
@@ -51,5 +51,3 @@ func on_peer_connected(id : int) -> void:
 
 func on_peer_disconnected(id : int) -> void:
 	print("Peer disconnected " + str(id))
-
-
