@@ -25,6 +25,7 @@ config/icon="res://icon.png"
 
 ModLoader="*res://singletons/resource_loader.gd"
 Maps="*res://singletons/maps.gd"
+ServerProperties="*res://singletons/server_properties.gd"
 
 [rendering]
 

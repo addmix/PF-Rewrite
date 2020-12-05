@@ -35,3 +35,4 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 [connection signal="pressed" from="Singleplayer" to="." method="_on_Singleplayer_pressed"]
+[connection signal="pressed" from="Multiplayer" to="." method="_on_Multiplayer_pressed"]

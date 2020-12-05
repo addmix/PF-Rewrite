@@ -6,8 +6,10 @@ var manifest := {
 
 func scan_maps() -> void:
 	var dir := Directory.new()
+# warning-ignore:return_value_discarded
 	dir.open("res://maps/")
 	
+# warning-ignore:return_value_discarded
 	dir.list_dir_begin(false, true)
 	var value := dir.get_next()
 	
@@ -22,6 +24,7 @@ func scan_maps() -> void:
 	
 	for d in folders:
 		#open to map folder
+# warning-ignore:return_value_discarded
 		dir.open("res://maps/" + d)
 		
 		if dir.file_exists("map.dat"):

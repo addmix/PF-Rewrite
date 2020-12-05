@@ -1,5 +1,6 @@
 extends Node
 
+#this will change
 var ip := "127.0.0.1"
 var port := 1909
 
@@ -9,12 +10,32 @@ func _ready() -> void:
 	connect_signals()
 
 func connect_signals() -> void:
+# warning-ignore:return_value_discarded
 	network.connect("connection_failed", self, "on_failed_to_connect")
+# warning-ignore:return_value_discarded
 	network.connect("connection_succeeded", self, "on_successfully_connected")
+# warning-ignore:return_value_discarded
 	network.connect("peer_connected", self, "on_peer_connected")
+# warning-ignore:return_value_discarded
 	network.connect("peer_disconnected", self, "on_peer_disconnected")
 
-func start_server() -> void:
+func start_multiplayer() -> void:
+	#change port, ip, or other settings
+	start_client()
+
+func start_singleplayer() -> void:
+	var server : Node = load("res://servers/server/server.tscn").instance()
+	#set server properties
+	
+	#add server
+	$"/root".add_child(server, true)
+	#start server
+	server.load_singleplayer_server()
+	#start client after server loads fully
+	start_client()
+
+func start_client() -> void:
+# warning-ignore:return_value_discarded
 	network.create_client(ip, port)
 
 func on_failed_to_connect() -> void:

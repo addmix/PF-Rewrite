@@ -1,6 +1,7 @@
 extends Node2D
 
 func _ready() -> void:
+# warning-ignore:return_value_discarded
 	$AnimationPlayer.connect("animation_finished", self, "on_animation_finished")
 	
 	#load menu
@@ -9,5 +10,5 @@ func _ready() -> void:
 	#play animation
 	$AnimationPlayer.play("fade_out")
 
-func on_animation_finished(anim : String) -> void:
+func on_animation_finished(_anim : String) -> void:
 	queue_free()
