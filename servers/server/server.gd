@@ -1,24 +1,56 @@
 extends Node
 
+var network := NetworkedMultiplayerENet.new()
+
+func _ready() -> void:
+	connect_signals()
+
+func connect_signals() -> void:
+	network.connect("peer_connected", self, "on_peer_connected")
+	network.connect("peer_disconnected", self, "on_peer_disconnected")
+
 #for running dedicated server
 func load_multiplayer_server() -> void:
 	#load default server settings
 	load_properties_file()
 	#read/apply cmdline arguments
 	extract_properties_from_cmdline_args()
-	#load match
-	load_match()
+	#load map/gamemode
+	
 	#load server
 	start_server()
 
 #for running singleplayer/lan server
 func load_singleplayer_server() -> void:
-	#load match
-	load_match()
+	#load map/gamemode
+	
 	#load server
 	start_server()
 
 func start_server() -> void:
+	network.create_server(properties["port"], properties["max_players"], properties["in_bandwidth"], properties["out_bandwidth"])
+	get_tree().set_network_peer(network)
+
+func on_peer_connected(id : int) -> void:
+	print("Peer successfully connected")
+
+func on_peer_disconnected(id : int) -> void:
+	print("Peer disconnected")
+
+
+
+
+#loading map/gamemode
+
+
+
+
+#load map/gamemode
+func load_match():
+	pass
+
+#unload map/gamemode (for after one match ends, then you can load another match
+func unload_match():
 	pass
 
 
@@ -33,9 +65,10 @@ const DEFAULT_PROPERTIES := {
 	"map": "Desert Storm",
 	"gamemode": "TDM",
 	"port": 1909,
-	"maxplayers": 32,
+	"max_players": 32,
+	"in_bandwidth": 0,
+	"out_bandwidth": 0,
 	"whitelist": false,
-	"blacklist": false,
 	"lan": false,
 }
 
@@ -43,9 +76,10 @@ var properties := {
 	"map": "Desert Storm",
 	"gamemode": "TDM",
 	"port": 1909,
-	"maxplayers": 32,
+	"max_players": 32,
+	"in_bandwidth": 0,
+	"out_bandwidth": 0,
 	"whitelist": false,
-	"blacklist": false,
 	"lan": false,
 }
 
@@ -128,20 +162,3 @@ func create_properties_file() -> void:
 	var err := config.save(OS.get_executable_path().get_base_dir() + "/server.properties")
 	if err:
 		push_error("Could not save server.properties at " + OS.get_executable_path().get_base_dir() + "/server.properties" + " Error " + str(err))
-
-
-
-
-#match
-
-
-
-
-#loads new match
-func load_match() -> void:
-	
-	pass
-
-#removes finished match and allows for new match to be loaded
-func unload_match() -> void:
-	pass

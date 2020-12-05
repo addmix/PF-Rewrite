@@ -15,12 +15,11 @@ func _ready() -> void:
 	else:
 		load_client()
 	
-	
 	queue_free()
 
 
 func load_client() -> void:
-	var splash_screen = load("res://game_loader/game/splash_screen/splash_screen.tscn").instance()
+	var splash_screen = load("res://game_loader/splash_screen/splash_screen.tscn").instance()
 	$"/root".call_deferred("add_child", splash_screen, true)
 
 func load_server() -> void:

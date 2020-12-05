@@ -1,3 +1,13 @@
 [gd_scene format=2]
 
 [node name="Menu" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+margin_left = 517.493
+margin_top = 260.334
+margin_right = 557.493
+margin_bottom = 274.334
+text = "menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
