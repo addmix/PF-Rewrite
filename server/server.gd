@@ -20,7 +20,7 @@ var PauseMenu : Control
 
 var network := NetworkedMultiplayerENet.new()
 
-var players := []
+var players := {}
 
 signal recieved_game_data
 
@@ -33,18 +33,18 @@ func _connect_signals() -> void:
 	network.connect("peer_connected", self, "peer_connected")
 	network.connect("peer_disconnected", self, "peer_disconnected")
 
+#only on client
 func connection_succeeded(id : int) -> void:
 	print("Connection succeeded for player id: " + str(id))
+	rpc_id(1, "set_player_name", id, Playerdata.data)
 
+#only on client
 func connection_failed(id : int) -> void:
 	print("Connection failed for player id: " + str(id))
 	get_tree().set_network_peer(null)
 
 func peer_connected(id : int) -> void:
 	print("Peer connected with id: " + str(id))
-	
-	#everywhere
-	players.append(id)
 	
 	#only on server
 	if get_tree().is_network_server():
@@ -59,6 +59,9 @@ func start_host() -> void:
 	#create server
 	network.create_server(port, playerlimit, in_bandwidth, out_bandwidth)
 	get_tree().set_network_peer(network)
+	
+	#creates player for server host
+	players[1] = Playerdata.data
 	
 	#prevent players from joining while server is still loading
 	network.refuse_new_connections = true
@@ -137,6 +140,9 @@ func set_server(address : String, port : int) -> void:
 
 
 #host functions
+remote func set_player_data(id : int, data : Dictionary) -> void:
+	players[id] = data
+	rpc("send_player_data", id, data)
 
 
 
@@ -146,9 +152,15 @@ remote func return_game_data(data : Dictionary) -> void:
 	game_data = data
 	emit_signal("recieved_game_data")
 
+remote func return_player_data(data : Dictionary) -> void:
+	players = data
+
+remote func send_player_data(id : int, data : Dictionary) -> void:
+	players[id] = data
+
+
 remote func load_new_game(data : Dictionary) -> void:
 	pass
-
 
 
 #gamemode funcs

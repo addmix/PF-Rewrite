@@ -9,4 +9,4 @@ func _ready():
 
 
 func _on_Spawn_pressed():
-	PlayerSpawner.spawn()
+	PlayerSpawner.on_spawn_pressed()

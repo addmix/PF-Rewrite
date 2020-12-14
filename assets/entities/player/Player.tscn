@@ -17,12 +17,14 @@ shape = SubResource( 1 )
 [node name="Smoothing" type="Spatial" parent="."]
 script = ExtResource( 1 )
 
-[node name="Player" parent="Smoothing" instance=ExtResource( 3 )]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
-
 [node name="RotationHelper" type="Spatial" parent="Smoothing"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 0 )
+
+[node name="Player" parent="Smoothing/RotationHelper" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -4.4, 0 )
 
 [node name="Head" type="Spatial" parent="Smoothing/RotationHelper"]
 
 [node name="Camera" type="Camera" parent="Smoothing/RotationHelper/Head"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 0 )
+current = true
+far = 1000.0

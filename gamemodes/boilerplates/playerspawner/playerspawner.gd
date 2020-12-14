@@ -1,38 +1,41 @@
 extends Node
 
+var player = preload("res://assets/entities/player/Player.tscn")
 var plugin = preload("res://gamemodes/boilerplates/playerspawner/playerspawneruiplugin.tscn")
+var Plugin : Control
 
 func _ready():
 	#loads and instances the spawner's UI plugin
 	var instance = plugin.instance()
 	instance.PlayerSpawner = self
+	Plugin = instance
 	add_child(instance)
 
 var selected_spawn : Position3D
 
-func on_player_selected(id : int) -> void:
-	rpc_id(1, "select_player", id)
-
-remotesync func select_player(id : int) -> void:
-	#if player on same team
-	#if player not in danger
-	#if player not in restricted area
-	Server.GamemodeInstance.Teams
-	pass
-
-remotesync func spawn() -> void:
-	#when no spawn point selected
-	if selected_spawn == null:
-		spawn_player(get_best_spawn())
+#when spawn pressed
+func on_spawn_pressed() -> void:
+	#send request to server
+	Plugin.hide()
+	if get_tree().is_network_server():
+		request_spawn(1)
 	else:
-		#check if player is viable to spawn on
-		pass
-	pass
+		rpc_id(1, "request_spawn")
 
-remotesync func spawn_player(pos):
+#server recieves request from client to spawn
+remote func request_spawn(id : int) -> void:
+	#server validates spawn
+	rpc("spawn_player", id, get_best_spawn())
+
+remotesync func spawn_player(id : int, pos : Vector3) -> void:
 	if get_tree().get_rpc_sender_id() == 1:
 		#spawn player
-		pass
+		var instance = player.instance()
+		instance.name = str(id)
+		instance.set_network_master(id)
+		instance.add_to_group("players")
+		instance.transform.origin = pos
+		$"/root".add_child(instance)
 
 func get_best_spawn() -> Position3D:
 	var spawns := get_tree().get_nodes_in_group("Spawners")
@@ -45,7 +48,7 @@ func get_best_spawn() -> Position3D:
 		highest_value = value * int(value > highest_value)
 		highest_spawn = pos * int(value > highest_value)
 	
-	return spawns[highest_spawn]
+	return spawns[highest_spawn].transform.origin
 
 #computes a value for each spawn location
 func get_spawn_value(spawn : Position3D) -> float:
