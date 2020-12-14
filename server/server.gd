@@ -1,5 +1,6 @@
 extends Node
 
+#server variables
 export var ip := "127.0.0.1"
 export var port := 1909
 export var playerlimit := 32
@@ -7,6 +8,7 @@ export var in_bandwidth := 0
 export var out_bandwidth := 0
 export var client_port := 1909
 
+#game settings
 export var game_data := {
 	"map": "Desert Storm",
 	"mode": "TDM",
@@ -16,8 +18,9 @@ var MapInstance : Spatial
 var GamemodeInstance : Node
 var PauseMenu : Control
 
-
 var network := NetworkedMultiplayerENet.new()
+
+var players := []
 
 signal recieved_game_data
 
@@ -40,7 +43,13 @@ func connection_failed(id : int) -> void:
 func peer_connected(id : int) -> void:
 	print("Peer connected with id: " + str(id))
 	
-	rpc_id(id, "return_game_data", game_data)
+	#everywhere
+	players.append(id)
+	
+	#only on server
+	if get_tree().is_network_server():
+		rpc_id(id, "return_game_data", game_data)
+		rpc_id(id, "return_player_data", players)
 
 func peer_disconnected(id : int) -> void:
 	print("Peer disconnected with id: " + str(id))

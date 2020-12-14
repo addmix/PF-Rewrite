@@ -17,6 +17,7 @@ remotesync func select_player(id : int) -> void:
 	#if player on same team
 	#if player not in danger
 	#if player not in restricted area
+	Server.GamemodeInstance.Teams
 	pass
 
 remotesync func spawn() -> void:

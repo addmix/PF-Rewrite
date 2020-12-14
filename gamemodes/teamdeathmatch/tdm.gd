@@ -6,7 +6,7 @@ var countdown_timer := Timer.new()
 var end_timer := Timer.new()
 
 #teams
-var teams := preload("res://gamemodes/boilerplates/teams.tscn")
+var teams := preload("res://gamemodes/boilerplates/teams/teams.tscn")
 var Teams : Node
 
 #spawning
