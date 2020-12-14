@@ -26,7 +26,10 @@ func unhandled_input(event):
 
 
 func fire():
+	
+	pass # Replace with function body.
+
+
+func _on_FiremodeMachine_fire():
 	if get_parent().currentState == stateName:
 		emit_signal("changeState", "Fire")
-		get_parent().get_parent().emit_signal("fire")
-	pass # Replace with function body.

@@ -7,6 +7,7 @@ signal changeState
 
 # warning-ignore:unused_argument
 func enter(prev):
+	get_parent().get_parent().emit_signal("shotFired")
 	yield(get_tree().create_timer(.08), "timeout")
 	call_deferred("emit_signal", "changeState", "Back")
 

@@ -66,7 +66,7 @@ puppet func syncState(new_state : String) -> void:
 func _unhandled_input(event):
 	if is_network_master():
 		#change firemode
-		if Input.is_action_just_pressed("ChangeFiremode"):
+		if Input.is_action_just_pressed("change_firemode"):
 			states[currentState].changeFiremode()
 			get_tree().set_input_as_handled()
 			return

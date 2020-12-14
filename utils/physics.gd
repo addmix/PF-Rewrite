@@ -86,6 +86,7 @@ class V3Spring:
 		
 		var e = pow(2.718281828459045, damper * speed * delta)
 		
+		
 		position = target + (direction * cosine + curve1 * sine) / e
 		velocity = speed * ((curve * curve1 - damper * direction) * cosine - (curve * direction + damper * curve1) * sine) / e
 	

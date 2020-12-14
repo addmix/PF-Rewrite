@@ -7,7 +7,6 @@ export var team := -1
 
 #in game data
 export var health := 100
-export var weapons := []
 
 #nodes
 onready var RotationHelper : Spatial = $Smoothing/RotationHelper
@@ -26,19 +25,10 @@ onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/
 onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
 
 func _ready() -> void:
-	#gets IK target nodes
-#	LeftHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKL").get_path()
-#	RightHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKR").get_path()
-#	LeftHandIK.start()
-#	RightHandIK.start()
-	
-	
 	if is_network_master():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		LeftHandIK.max_iterations = 20
 		RightHandIK.max_iterations = 20
-	
-	
 
 func _exit_tree() -> void:
 	if is_network_master():
@@ -49,13 +39,18 @@ func _unhandled_input(event : InputEvent) -> void:
 		#mouse movement
 		if event is InputEventMouseMotion:
 			var relative = event.relative * camera_sensitiviy
-			emit_signal("camera_movement", relative)
+			
+			var current = Head.rotation_degrees
+			
 			RotationHelper.rotate_y(deg2rad(-relative.x))
 			
 			#branchless way of limiting up/down movement
 			Head.rotation_degrees.x = ((Head.rotation_degrees.x - relative.y) * int(!Head.rotation_degrees.x - relative.y <= camera_min_angle and !Head.rotation_degrees.x - relative.y >= camera_max_angle)
 			+ camera_min_angle * int(Head.rotation_degrees.x - relative.y <= camera_min_angle)
 			+ camera_max_angle * int(Head.rotation_degrees.x - relative.y >= camera_max_angle))
+			
+			var delta : Vector3 = current - Head.rotation_degrees
+			emit_signal("camera_movement", Vector3(delta.x, -relative.x, delta.z))
 
 func get_axis() -> Vector3:
 	var axis := Vector3.ZERO
@@ -84,7 +79,7 @@ func _physics_process(delta : float) -> void:
 	
 	
 	#gravity
-	velocity.y += -9.8 * delta
+	velocity.y += -14.8 * delta
 	#friction
 	velocity *= ((0.95 * int(is_on_floor()))
 	 + int(!is_on_floor())
@@ -194,3 +189,10 @@ func identity_matrix(n : int) -> Array:
 		matrix.append(row)
 	
 	return matrix
+
+
+func _on_WeaponController_weapon_changed(weapon : Spatial) -> void:
+	LeftHandIK.target_node = weapon.LeftIK.get_path()
+	RightHandIK.target_node = weapon.RightIK.get_path()
+	LeftHandIK.start()
+	RightHandIK.start()

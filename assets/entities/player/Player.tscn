@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://addons/smoothing/smoothing.gd" type="Script" id=1]
 [ext_resource path="res://assets/entities/player/Player.gd" type="Script" id=2]
 [ext_resource path="res://assets/entities/player/model/playermodel.gd" type="Script" id=3]
 [ext_resource path="res://assets/entities/player/WeaponController.gd" type="Script" id=4]
+[ext_resource path="res://assets/entities/player/Camera.gd" type="Script" id=5]
 
 [sub_resource type="CapsuleShape" id=1]
 height = 3.0
@@ -93,14 +94,15 @@ script = ExtResource( 1 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 0 )
 
 [node name="Head" type="Spatial" parent="Smoothing/RotationHelper"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.347835 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.32078 )
 
 [node name="Camera" type="Camera" parent="Smoothing/RotationHelper/Head"]
 current = true
 far = 1000.0
+script = ExtResource( 5 )
 
 [node name="WeaponController" type="Spatial" parent="Smoothing/RotationHelper/Head"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.504622, -0.72057, -0.967986 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.504622, -0.727396, -1.20499 )
 script = ExtResource( 4 )
 
 [node name="Player" type="Spatial" parent="Smoothing/RotationHelper"]
@@ -216,5 +218,14 @@ max_iterations = 4
 
 [node name="RightHandIK" type="SkeletonIK" parent="Smoothing/RotationHelper/Player/metarig/Skeleton"]
 process_priority = 1
+root_bone = "shoulder_r"
+tip_bone = "hand_r"
+use_magnet = true
+magnet = Vector3( -2, 3, -1 )
 max_iterations = 4
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Player_camera_movement"]
+[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Player_camera_movement"]
+[connection signal="set_process" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_set_process"]
+[connection signal="shot_fired" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_shot_fired"]
+[connection signal="weapon_changed" from="Smoothing/RotationHelper/Head/WeaponController" to="." method="_on_WeaponController_weapon_changed"]
+[connection signal="weapon_changed" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_weapon_changed"]
