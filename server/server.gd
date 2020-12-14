@@ -50,6 +50,7 @@ func peer_connected(id : int) -> void:
 	if get_tree().is_network_server():
 		rpc_id(id, "return_game_data", game_data)
 		rpc_id(id, "return_player_data", players)
+		rpc_id(id, "return_spawned_players", GamemodeInstance.Spawner.spawned_players.keys())
 
 func peer_disconnected(id : int) -> void:
 	print("Peer disconnected with id: " + str(id))
@@ -154,6 +155,11 @@ remote func return_game_data(data : Dictionary) -> void:
 
 remote func return_player_data(data : Dictionary) -> void:
 	players = data
+
+remote func return_spawned_players(data : Array) -> void:
+	#spawn all players already in the game
+	for id in data:
+		GamemodeInstance.Spawner.spawn_player(id, Vector3.ZERO)
 
 remote func send_player_data(id : int, data : Dictionary) -> void:
 	players[id] = data

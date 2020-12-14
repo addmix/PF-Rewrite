@@ -1,5 +1,7 @@
 extends Node
 
+var spawned_players := {}
+
 var player = preload("res://assets/entities/player/Player.tscn")
 var plugin = preload("res://gamemodes/boilerplates/playerspawner/playerspawneruiplugin.tscn")
 var Plugin : Control
@@ -12,6 +14,9 @@ func _ready():
 	add_child(instance)
 
 var selected_spawn : Position3D
+
+func connect_signals() -> void:
+	Server.network.connect("peer_disconnected", self, "on_player_left")
 
 #when spawn pressed
 func on_spawn_pressed() -> void:
@@ -35,7 +40,14 @@ remotesync func spawn_player(id : int, pos : Vector3) -> void:
 		instance.set_network_master(id)
 		instance.add_to_group("players")
 		instance.transform.origin = pos
+		spawned_players[id] = instance
 		$"/root".add_child(instance)
+
+remotesync func despawn_player(id : int) -> void:
+	#remove player from world
+	spawned_players[id].queue_free()
+	#erase player from spawned players
+	spawned_players.erase(id)
 
 func get_best_spawn() -> Position3D:
 	var spawns := get_tree().get_nodes_in_group("Spawners")
@@ -54,3 +66,8 @@ func get_best_spawn() -> Position3D:
 func get_spawn_value(spawn : Position3D) -> float:
 	
 	return 0.0
+
+#when player leaves the server
+func on_player_left(id : int) -> void:
+	if spawned_players.has(id):
+		despawn_player(id)
