@@ -6,7 +6,7 @@ signal set_process
 
 #primary, secondary, melee, grenade
 #weapon names
-var loadout := ["M4A1", null, null, null]
+var loadout := ["M4A1", "P38", null, null]
 #weapon nodes
 var weapons := [null, null, null, null]
 #index of current weapon

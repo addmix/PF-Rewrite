@@ -32,7 +32,7 @@ bone_name = "hand_ik_r"
 [node name="Aim" type="Position3D" parent="." index="1"]
 transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.404, 0.793761 )
 
-[node name="Barrel" type="Spatial" parent="." index="2"]
+[node name="Barrel" type="Position3D" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.196854, -1.06708 )
 
 [node name="GunMachine" type="Node" parent="." index="3"]
