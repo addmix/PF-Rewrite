@@ -38,21 +38,8 @@ func can_reload() -> bool:
 	return magazine < magazineCapacity
 
 func _ready():
-	
 	$AnimationPlayer.call_deferred("play", "Ready")
-	call_deferred("_connect_signals")
 	call_deferred("emit_signal", "ammoChanged", chamber, magazine, reserve)
-
-func _connect_signals():
-# warning-ignore:return_value_discarded
-	find_parent("Viewer").get_parent().connect("spawned", self, "onSpawn")
-
-func onSpawn():
-	pass
-
-func shoot():
-	$Gunshots.shoot()
-	$Particles.shoot()
 
 var data := {
 	"Ballistics": {

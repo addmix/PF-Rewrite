@@ -5,3 +5,12 @@
 
 [node name="Player" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+
+[node name="LeftHandIK" type="SkeletonIK" parent="metarig/Skeleton" index="1"]
+process_priority = 1
+root_bone = "shoulder_l"
+tip_bone = "hand_l"
+use_magnet = true
+
+[node name="RightHandIK" type="SkeletonIK" parent="metarig/Skeleton" index="2"]
+process_priority = 1

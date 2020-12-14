@@ -63,7 +63,7 @@ puppet func syncState(new_state : String) -> void:
 	#assing currentState to new state
 	currentState = new_state
 
-master func _unhandled_input(event):
+func _unhandled_input(event):
 	if is_network_master():
 		if event.is_action_pressed("Reload") and get_parent().can_reload():
 			get_tree().set_input_as_handled()

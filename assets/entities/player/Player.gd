@@ -14,14 +14,31 @@ onready var RotationHelper : Spatial = $Smoothing/RotationHelper
 onready var Head : Spatial = $Smoothing/RotationHelper/Head
 
 #control finess
+signal camera_movement
+
 export var camera_max_angle := 85
 export var camera_min_angle := -80
 
 export var camera_sensitiviy := Vector2(.3, .3)
 
+#skeleton and IK stuff
+onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftHandIK"
+onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
+
 func _ready() -> void:
+	#gets IK target nodes
+	LeftHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKL").get_path()
+	RightHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKR").get_path()
+	LeftHandIK.start()
+	RightHandIK.start()
+	
+	
 	if is_network_master():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+#		LeftHandIK.max_iterations = 20
+#		RightHandIK.max_iterations = 20
+	
+	
 
 func _exit_tree() -> void:
 	if is_network_master():
@@ -32,18 +49,13 @@ func _unhandled_input(event : InputEvent) -> void:
 		#mouse movement
 		if event is InputEventMouseMotion:
 			var relative = event.relative * camera_sensitiviy
+			emit_signal("camera_movement", relative)
 			RotationHelper.rotate_y(deg2rad(-relative.x))
 			
 			#branchless way of limiting up/down movement
 			Head.rotation_degrees.x = ((Head.rotation_degrees.x - relative.y) * int(!Head.rotation_degrees.x - relative.y <= camera_min_angle and !Head.rotation_degrees.x - relative.y >= camera_max_angle)
 			+ camera_min_angle * int(Head.rotation_degrees.x - relative.y <= camera_min_angle)
 			+ camera_max_angle * int(Head.rotation_degrees.x - relative.y >= camera_max_angle))
-		
-		if event.is_action_pressed("reset_character"):
-			kill()
-
-func kill() -> void:
-	pass
 
 func get_axis() -> Vector3:
 	var axis := Vector3.ZERO
