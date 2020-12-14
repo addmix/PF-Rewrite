@@ -28,4 +28,8 @@ func _unhandled_input(event):
 			+ camera_min_angle * int(Head.rotation_degrees.x - event.relative.y <= camera_min_angle)
 			+ camera_max_angle * int(Head.rotation_degrees.x - event.relative.y >= camera_max_angle))
 		
+		if event.is_action_pressed("reset_character"):
+			kill()
 
+func kill() -> void:
+	pass

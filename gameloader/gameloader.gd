@@ -12,7 +12,6 @@ func _ready():
 	
 	
 	
-	#load game
-	
+	#load splash screen
 	$"/root".call_deferred("add_child", SplashScreen.instance())
 	call_deferred("queue_free")

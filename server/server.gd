@@ -91,7 +91,7 @@ func load_game() -> void:
 	GamemodeInstance.init()
 	
 	#load pause menu
-	resource = load("res://scenes/ingame/pausemenu.tscn")
+	resource = load("res://scenes/ingame/pausemenu/pausemenu.tscn")
 	PauseMenu = resource.instance()
 	$"/root".add_child(PauseMenu)
 	

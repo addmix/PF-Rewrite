@@ -12,7 +12,12 @@ func _ready() -> void:
 		states[child.name] = child
 
 func change_state(new_state : String) -> void:
-	
+	#exit previous state
+	states[current_state].exit()
+	#enter new state
+	states[new_state].enter(current_state)
+	#make new state the current state
+	current_state = new_state
 
 func _process(delta : float) -> void:
 	states[current_state].process(delta)

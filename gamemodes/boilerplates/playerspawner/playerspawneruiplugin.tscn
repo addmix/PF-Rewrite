@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://gamemodes/boilerplates/playerspawner/playerspawneruiplugin.gd" type="Script" id=1]
+
+[node name="PlayerSpawner" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Playerlist" type="VBoxContainer" parent="."]
+margin_left = 126.838
+margin_top = 74.0825
+margin_right = 166.838
+margin_bottom = 114.082
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 692.957
+margin_top = 461.131
+margin_right = 884.957
+margin_bottom = 501.131
+alignment = 1
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Spawn" type="Button" parent="HBoxContainer"]
+margin_right = 192.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+text = "Spawn"
+[connection signal="pressed" from="HBoxContainer/Spawn" to="." method="_on_Spawn_pressed"]

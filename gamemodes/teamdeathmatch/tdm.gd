@@ -10,7 +10,7 @@ var teams := preload("res://gamemodes/boilerplates/teams.tscn")
 var Teams : Node
 
 #spawning
-var spawner := preload("res://gamemodes/boilerplates/playerspawner.tscn")
+var spawner := preload("res://gamemodes/boilerplates/playerspawner/playerspawner.tscn")
 var Spawner : Node
 
 export var options := {

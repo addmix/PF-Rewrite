@@ -1,0 +1,11 @@
+[gd_scene format=2]
+
+[node name="player" type="Button"]
+margin_right = 12.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 160, 40 )
+size_flags_horizontal = 3
+text = "Player"
+__meta__ = {
+"_edit_use_anchors_": false
+}

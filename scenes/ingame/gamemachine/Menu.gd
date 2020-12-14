@@ -6,10 +6,12 @@ func _ready() -> void:
 	pass
 
 func enter(prev : String) -> void:
-	pass
+	#set's the map's deploy camera to be current
+	Server.MapInstance.DeployCamera.current = true
 
 func exit() -> void:
-	pass
+	#set's the map's deploy camera to no longer be current
+	Server.MapInstance.DeployCamera.current = false
 
 func process(delta : float) -> void:
 	pass

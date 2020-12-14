@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scenes/ingame/gamemachine/Spawned.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ingame/gamemachine/Died.gd" type="Script" id=2]
+[ext_resource path="res://scenes/ingame/gamemachine/Menu.gd" type="Script" id=3]
+[ext_resource path="res://scenes/ingame/gamemachine/GameMachine.gd" type="Script" id=4]
+[ext_resource path="res://scenes/ingame/gamemachine/Spawning.gd" type="Script" id=5]
+
+[node name="GameMachine" type="Node"]
+script = ExtResource( 4 )
+
+[node name="Menu" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="Spawning" type="Node" parent="."]
+script = ExtResource( 5 )
+
+[node name="Spawned" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[node name="Died" type="Node" parent="."]
+script = ExtResource( 2 )
