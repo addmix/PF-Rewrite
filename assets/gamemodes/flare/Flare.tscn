@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="CylinderShape" id=1]
+radius = 10.0
+height = 6.0
+
+[sub_resource type="SpatialMaterial" id=2]
+flags_transparent = true
+emission_enabled = true
+emission = Color( 1, 1, 1, 1 )
+emission_energy = 0.05
+emission_operator = 0
+emission_on_uv2 = false
+proximity_fade_enable = true
+proximity_fade_distance = 2.31
+distance_fade_mode = 1
+distance_fade_min_distance = 0.0
+distance_fade_max_distance = 5.0
+
+[node name="Flare" type="Spatial"]
+
+[node name="Area" type="Area" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
+shape = SubResource( 1 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="."]
+radius = 10.0
+height = 0.960377
+sides = 32
+material = SubResource( 2 )
+
+[node name="CSGCylinder2" type="CSGCylinder" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+radius = 0.5
+height = 4.0

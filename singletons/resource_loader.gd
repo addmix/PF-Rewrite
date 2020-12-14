@@ -1,6 +1,12 @@
 extends Node
 
+#for game patches
+func load_patches():
+	pass
+
+#for mods
 func load_resources():
+#	print("loading resources")
 	#initialize directory for loading
 	var dir := Directory.new()
 # warning-ignore:return_value_discarded

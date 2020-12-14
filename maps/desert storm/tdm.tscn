@@ -1,0 +1,18 @@
+[gd_scene format=2]
+
+[node name="TDM" type="Spatial"]
+
+[node name="Position3D" type="Position3D" parent="." groups=[
+"Spawners",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 153.308, 100.094, 185.487 )
+
+[node name="Position3D2" type="Position3D" parent="." groups=[
+"Spawners",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 256.264, 100.094, 122.763 )
+
+[node name="Position3D3" type="Position3D" parent="." groups=[
+"Spawners",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 265.696, 100.094, 30.3451 )

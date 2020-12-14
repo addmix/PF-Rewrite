@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/smoothing/smoothing.gd" type="Script" id=1]
+[ext_resource path="res://assets/entities/player/Player.gd" type="Script" id=2]
+[ext_resource path="res://assets/entities/player/model/playermodel.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CapsuleShape" id=1]
+height = 3.0
+
+[node name="Player" type="KinematicBody"]
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 2.5, 0 )
+shape = SubResource( 1 )
+
+[node name="Smoothing" type="Spatial" parent="."]
+script = ExtResource( 1 )
+
+[node name="Player" parent="Smoothing" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+
+[node name="RotationHelper" type="Spatial" parent="Smoothing"]
+
+[node name="Head" type="Spatial" parent="Smoothing/RotationHelper"]
+
+[node name="Camera" type="Camera" parent="Smoothing/RotationHelper/Head"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 0 )

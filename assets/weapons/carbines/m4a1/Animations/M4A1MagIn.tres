@@ -1,0 +1,36 @@
+[gd_resource type="Animation" format=2]
+
+[resource]
+resource_name = "Reload"
+length = 10.0
+tracks/0/type = "transform"
+tracks/0/path = NodePath("LeftHandPosIK")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray(  )
+tracks/1/type = "value"
+tracks/1/path = NodePath("LeftHandPosIK:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.0100002, 0.48, 3.06, 4.5, 4.61, 6.46, 6.97, 7.55 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 35.6486, -36.3008, -50.2448 ), Vector3( 36.2617, -22.9964, -48.5036 ), Vector3( 42.077, -3.16692e-06, -12.843 ), Vector3( 31.095, -8.86486e-07, -12.843 ), Vector3( 31.095, -8.86486e-07, -12.843 ), Vector3( 31.095, -4.0044e-07, -12.843 ), Vector3( 31.095, -4.0044e-07, -12.843 ), Vector3( 0, 0, -18.969 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("LeftHandPosIK:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.0100002, 0.48, 3.06, 4.5, 4.61, 6.46, 6.97, 7.55 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -0.677541, -0.511332, 0.716325 ), Vector3( -0.677541, -0.403275, 0.716325 ), Vector3( -0.0775423, -0.369823, -0.0818428 ), Vector3( -0.0775423, -0.340555, -0.064311 ), Vector3( -0.0775423, -0.340555, -0.064311 ), Vector3( -0.0775423, -0.313852, -0.064311 ), Vector3( -0.0775423, -0.313852, -0.064311 ), Vector3( -0.0775423, -0.0511281, -0.392516 ) ]
+}

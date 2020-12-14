@@ -1,0 +1,106 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/M4A1.gltf" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/StateMachine/GunMachine.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/M4A1.gd" type="Script" id=7]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/StateMachine/Ready.gd" type="Script" id=8]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/FiremodeMachine/FiremodeMachine.gd" type="Script" id=9]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/StateMachine/Fire.gd" type="Script" id=10]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/FiremodeMachine/Auto.gd" type="Script" id=11]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/FiremodeMachine/Semi.gd" type="Script" id=12]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/FiremodeMachine/Burst.gd" type="Script" id=13]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/ReloadMachine/ReloadMachine.gd" type="Script" id=14]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/StateMachine/Back.gd" type="Script" id=15]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/StateMachine/Locked.gd" type="Script" id=16]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/StateMachine/Forward.gd" type="Script" id=17]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/ReloadMachine/Ready.gd" type="Script" id=18]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/ReloadMachine/MagazineOut.gd" type="Script" id=19]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/ReloadMachine/MagazineIn.gd" type="Script" id=20]
+[ext_resource path="res://Assets/Weapons/Carbines/M4A1/ReloadMachine/BoltRelease.gd" type="Script" id=21]
+
+[node name="M4A1" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0426883, -0.347325 )
+script = ExtResource( 7 )
+
+[node name="Skeleton" parent="Armature" index="0"]
+bones/17/bound_children = [ NodePath("HandIKL") ]
+bones/18/bound_children = [ NodePath("HandIKR") ]
+
+[node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="34"]
+transform = Transform( 1, 1.42109e-14, -2.38419e-07, 2.38419e-07, -8.9407e-08, 1, 0, -1, -5.96046e-08, -0.115257, -0.221117, 0.0495666 )
+bone_name = "hand_ik_l"
+
+[node name="HandIKR" type="BoneAttachment" parent="Armature/Skeleton" index="35"]
+transform = Transform( 1, 0, 0, 0, -0.368812, 0.929504, 0, -0.929504, -0.368812, -1.21196e-16, -0.062671, 0.626752 )
+bone_name = "hand_ik_r"
+
+[node name="Aim" type="Position3D" parent="." index="1"]
+transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.404, 0.793761 )
+
+[node name="Barrel" type="Spatial" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.196854, -1.06708 )
+
+[node name="GunMachine" type="Node" parent="." index="3"]
+script = ExtResource( 4 )
+stateMachine = "GunMachine"
+currentState = "Ready"
+
+[node name="Ready" type="Node" parent="GunMachine" index="0"]
+script = ExtResource( 8 )
+stateName = "Ready"
+
+[node name="Fire" type="Node" parent="GunMachine" index="1"]
+script = ExtResource( 10 )
+stateName = "Fire"
+
+[node name="Back" type="Node" parent="GunMachine" index="2"]
+script = ExtResource( 15 )
+stateName = "Back"
+
+[node name="Locked" type="Node" parent="GunMachine" index="3"]
+script = ExtResource( 16 )
+stateName = "Locked"
+
+[node name="Forward" type="Node" parent="GunMachine" index="4"]
+script = ExtResource( 17 )
+stateName = "Forward"
+
+[node name="ReloadMachine" type="Node" parent="." index="4"]
+script = ExtResource( 14 )
+stateMachine = "ReloadMachine"
+currentState = "Ready"
+
+[node name="Ready" type="Node" parent="ReloadMachine" index="0"]
+script = ExtResource( 18 )
+stateName = "Ready"
+
+[node name="MagazineOut" type="Node" parent="ReloadMachine" index="1"]
+script = ExtResource( 19 )
+stateName = "MagazineOut"
+
+[node name="MagazineIn" type="Node" parent="ReloadMachine" index="2"]
+script = ExtResource( 20 )
+stateName = "MagazineIn"
+
+[node name="BoltRelease" type="Node" parent="ReloadMachine" index="3"]
+script = ExtResource( 21 )
+stateName = "BoltRelease"
+
+[node name="FiremodeMachine" type="Node" parent="." index="5"]
+script = ExtResource( 9 )
+stateMachine = "FiremodeMachine"
+currentState = "Auto"
+
+[node name="Auto" type="Node" parent="FiremodeMachine" index="0"]
+script = ExtResource( 11 )
+stateName = "Auto"
+
+[node name="Burst" type="Node" parent="FiremodeMachine" index="1"]
+script = ExtResource( 13 )
+stateName = "Burst"
+
+[node name="Semi" type="Node" parent="FiremodeMachine" index="2"]
+script = ExtResource( 12 )
+stateName = "Semi"
+[connection signal="reset" from="GunMachine/Ready" to="FiremodeMachine" method="_on_Ready_reset"]
+[connection signal="animation_finished" from="AnimationPlayer" to="ReloadMachine" method="_on_AnimationPlayer_animation_finished"]

@@ -1,0 +1,13 @@
+[info]
+
+name="Desert Storm"
+icon="icon.png"
+scene="desert storm.tscn"
+
+[gamemodes]
+
+TDM="tdm.tscn"
+KOTH="koth.tscn"
+KC="kc.tscn"
+CTF="ctf.tscn"
+FD="fd.tscn"
