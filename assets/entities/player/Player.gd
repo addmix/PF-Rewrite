@@ -35,8 +35,8 @@ func _ready() -> void:
 	
 	if is_network_master():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-#		LeftHandIK.max_iterations = 20
-#		RightHandIK.max_iterations = 20
+		LeftHandIK.max_iterations = 20
+		RightHandIK.max_iterations = 20
 	
 	
 

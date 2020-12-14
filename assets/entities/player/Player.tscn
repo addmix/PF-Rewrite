@@ -95,18 +95,18 @@ script = ExtResource( 1 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 0 )
 
 [node name="Head" type="Spatial" parent="Smoothing/RotationHelper"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.382116, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.347835 )
 
 [node name="Camera" type="Camera" parent="Smoothing/RotationHelper/Head"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.437043, -0.179143 )
 current = true
 far = 1000.0
 
 [node name="WeaponController" type="Spatial" parent="Smoothing/RotationHelper/Head"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.504622, -0.241894, -1.0881 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.504622, -0.72057, -0.967986 )
 script = ExtResource( 4 )
 
 [node name="M4A1" parent="Smoothing/RotationHelper/Head/WeaponController" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Player" type="Spatial" parent="Smoothing/RotationHelper"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -4.4, 0 )
@@ -222,3 +222,4 @@ max_iterations = 4
 [node name="RightHandIK" type="SkeletonIK" parent="Smoothing/RotationHelper/Player/metarig/Skeleton"]
 process_priority = 1
 max_iterations = 4
+[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Player_camera_movement"]
