@@ -32,6 +32,7 @@ Physics="*res://utils/physics.gd"
 Server="*res://server/server.gd"
 Playerdata="*res://singletons/playerdata.gd"
 NodeUtils="*res://utils/nodeutils.gd"
+Weapons="*res://singletons/weapons.gd"
 
 [editor_plugins]
 

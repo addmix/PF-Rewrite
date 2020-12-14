@@ -9,7 +9,8 @@ func _ready():
 	Maps.scan_maps()
 	#scan gamemodes
 	Gamemodes.scan_gamemodes()
-	
+	#scan weapons
+	Weapons.scan_weapons()
 	
 	
 	#load splash screen

@@ -9,7 +9,7 @@
 [sub_resource type="CapsuleShape" id=1]
 height = 3.0
 
-[sub_resource type="ArrayMesh" id=3]
+[sub_resource type="ArrayMesh" id=2]
 resource_name = "Cube009"
 surfaces/0 = {
 "aabb": AABB( -0.933914, -0.0341366, -0.29523, 1.86783, 4.69937, 0.830487 ),
@@ -23,8 +23,7 @@ surfaces/0 = {
 "vertex_count": 384
 }
 
-[sub_resource type="Skin" id=2]
-resource_name = "Skin"
+[sub_resource type="Skin" id=3]
 bind_count = 18
 bind/0/name = "spine_1"
 bind/0/bone = -1
@@ -207,8 +206,8 @@ bones/17/enabled = true
 bones/17/bound_children = [  ]
 
 [node name="Cube009" type="MeshInstance" parent="Smoothing/RotationHelper/Player/metarig/Skeleton"]
-mesh = SubResource( 3 )
-skin = SubResource( 2 )
+mesh = SubResource( 2 )
+skin = SubResource( 3 )
 material/0 = null
 
 [node name="LeftHandIK" type="SkeletonIK" parent="Smoothing/RotationHelper/Player/metarig/Skeleton"]
