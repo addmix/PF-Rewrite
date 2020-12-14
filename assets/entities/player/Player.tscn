@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/smoothing/smoothing.gd" type="Script" id=1]
 [ext_resource path="res://assets/entities/player/Player.gd" type="Script" id=2]
 [ext_resource path="res://assets/entities/player/model/playermodel.gd" type="Script" id=3]
 [ext_resource path="res://assets/entities/player/WeaponController.gd" type="Script" id=4]
-[ext_resource path="res://assets/weapons/carbines/m4a1/M4A1.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CapsuleShape" id=1]
 height = 3.0
@@ -103,9 +102,6 @@ far = 1000.0
 [node name="WeaponController" type="Spatial" parent="Smoothing/RotationHelper/Head"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.504622, -0.72057, -0.967986 )
 script = ExtResource( 4 )
-
-[node name="M4A1" parent="Smoothing/RotationHelper/Head/WeaponController" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Player" type="Spatial" parent="Smoothing/RotationHelper"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -4.4, 0 )

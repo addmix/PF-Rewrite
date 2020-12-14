@@ -4,7 +4,7 @@ extends Spatial
 signal ammoChanged
 signal fire
 
-onready var aim = $Aim
+onready var aim_node = $Aim
 
 onready var chamber : int = data["Misc"]["Chamber"] setget set_chamber, get_chamber
 func set_chamber(value : int) -> void:

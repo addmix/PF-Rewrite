@@ -1,16 +1,30 @@
 extends Spatial
 
+#primary, secondary, melee, grenade
 #weapon names
-var loadout := []
+var loadout := ["M4A1", null, null, null]
 #weapon nodes
-var weapons := []
+var weapons := [null, null, null, null]
+#index of current weapon
 var current_weapon := 0
 
-func _ready():
+func _ready() -> void:
 	#load weapons
+	for weapon in range(loadout.size()):
+		if loadout[weapon] == null:
+			continue
+		
+		set_weapon(weapon, loadout[weapon])
 	
 	#initialize springs
-	pass
+	initialize_springs(weapons[0].data)
+	add_child(weapons[current_weapon])
+
+func set_weapon(index : int, weapon : String) -> void:
+	#load weapon
+	var resource : Resource = load(Weapons.manifest[weapon]["info"]["path"] + "/" + Weapons.manifest[weapon]["info"]["scene"])
+	weapons[index] = resource.instance()
+	loadout[index] = weapon
 
 func load_weapons() -> void:
 	pass
@@ -20,6 +34,10 @@ onready var aim_node : Position3D = find_node("Aim")
 
 var mouse_delta := Vector2.ZERO
 
+
+#springs
+
+
 var aim_spring : Physics.Spring
 var sway_spring : Physics.V3Spring
 
@@ -27,13 +45,15 @@ func initialize_springs(data : Dictionary) -> void:
 	aim_spring = Physics.Spring.new(0, 0, 0, .95, 14)
 	sway_spring = Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .75, 15)
 
+
+
 func _process(delta : float) -> void:
 	var pos := Vector3.ZERO
 	var rot := Vector3.ZERO
 	
 	#aiming
 	aim_spring.positionvelocity(delta)
-	pos -= aim_spring.position * (base_offset + aim_node.transform.origin)
+	pos -= aim_spring.position * (base_offset + weapons[current_weapon].aim_node.transform.origin)
 	
 	var accuracy = interpolateAccuracy(aim_spring.position)
 	

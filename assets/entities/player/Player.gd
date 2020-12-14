@@ -27,10 +27,10 @@ onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig
 
 func _ready() -> void:
 	#gets IK target nodes
-	LeftHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKL").get_path()
-	RightHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKR").get_path()
-	LeftHandIK.start()
-	RightHandIK.start()
+#	LeftHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKL").get_path()
+#	RightHandIK.target_node = $"Smoothing/RotationHelper/Head/WeaponController".find_node("HandIKR").get_path()
+#	LeftHandIK.start()
+#	RightHandIK.start()
 	
 	
 	if is_network_master():
