@@ -2,12 +2,9 @@ extends Node
 
 onready var player = get_parent()
 
-export(String) var stateMachine
-export(String) var currentState
-
 signal stateChanged
 
-var stateStack := []
+export var currentState := "State"
 var states := {}
 
 func _ready() -> void:
@@ -26,18 +23,15 @@ func initialize_states() -> void:
 		#connect node's signals
 		i.connect("changeState", self, "changeState")
 
-func _process(delta):
+func _process(delta : float) -> void:
 	states[currentState].process(delta)
 
-func _unhandled_input(event):
+func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
 		states[currentState].unhandled_input(event)
 
-func changeState(new_state):
+func changeState(new_state : String) -> void:
 	if is_network_master():
-#		print(new_state)
-		#add state to state stack
-		stateStack.append(currentState)
 		#exit current state
 		states[currentState].exit()
 		#enter new state from current state
@@ -49,8 +43,6 @@ func changeState(new_state):
 #		rpc("syncState", new_state)
 
 puppet func syncState(new_state : String) -> void:
-	#add state to state stack
-	stateStack.append(currentState)
 	#exit current state
 	states[currentState].exit()
 	#enter new state from current state
@@ -61,8 +53,8 @@ puppet func syncState(new_state : String) -> void:
 	currentState = new_state
 	
 
-func input():
+func input() -> void:
 	pass
 
-func _on_FiremodeMachine_fire():
+func _on_FiremodeMachine_fire() -> void:
 	states[currentState].fire()

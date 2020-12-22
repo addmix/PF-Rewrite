@@ -6,24 +6,24 @@ export(String) var stateName = "State"
 signal changeState
 
 # warning-ignore:unused_argument
-func enter(prev):
+func enter(prev : String) -> void:
 	get_parent().get_parent().set_magazine(get_parent().get_parent().get_magazine() - 1)
 	get_parent().get_parent().set_chamber(get_parent().get_parent().get_chamber() + 1)
 	call_deferred("emit_signal", "changeState", "Ready")
 
-func exit():
+func exit() -> void:
 	pass
 
-func stop():
-	pass
-
-# warning-ignore:unused_argument
-func process(delta):
+func stop() -> void:
 	pass
 
 # warning-ignore:unused_argument
-func unhandled_input(event):
+func process(delta : float) -> void:
 	pass
 
-func fire():
+# warning-ignore:unused_argument
+func unhandled_input(event : InputEvent) -> void:
+	pass
+
+func fire() -> void:
 	pass

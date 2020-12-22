@@ -8,23 +8,23 @@ signal changeState
 var stopped := true
 
 # warning-ignore:unused_argument
-func enter(prev):
+func enter(prev : String) -> void:
 	pass
 
-func exit():
+func exit() -> void:
 	pass
 
-func stop():
+func stop() -> void:
 	pass
 
-func resume():
+func resume() -> void:
 	emit_signal("changeState", "MagazineOut")
 
 # warning-ignore:unused_argument
-func process(delta):
+func process(delta : float) -> void:
 	pass
 
-func unhandled_input(event):
+func unhandled_input(event : InputEvent) -> void:
 	pass
 
 func anim_finished(anim : String) -> void:

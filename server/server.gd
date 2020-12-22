@@ -1,4 +1,10 @@
+#global node
 extends Node
+
+signal connection_successful
+signal connection_failed
+signal peer_connected
+signal peer_disconnected
 
 #server variables
 export var ip := "127.0.0.1"
@@ -20,8 +26,6 @@ var PauseMenu : Control
 
 var network := NetworkedMultiplayerENet.new()
 
-var players := {}
-
 signal recieved_game_data
 
 func _ready() -> void:
@@ -36,7 +40,6 @@ func _connect_signals() -> void:
 #only on client
 func connection_succeeded(id : int) -> void:
 	print("Connection succeeded for player id: " + str(id))
-	rpc_id(1, "set_player_name", id, Playerdata.data)
 
 #only on client
 func connection_failed(id : int) -> void:
@@ -49,8 +52,6 @@ func peer_connected(id : int) -> void:
 	#only on server
 	if get_tree().is_network_server():
 		rpc_id(id, "return_game_data", game_data)
-		rpc_id(id, "return_player_data", players)
-		rpc_id(id, "return_spawned_players", GamemodeInstance.Spawner.spawned_players.keys())
 
 func peer_disconnected(id : int) -> void:
 	print("Peer disconnected with id: " + str(id))
@@ -60,9 +61,6 @@ func start_host() -> void:
 	#create server
 	network.create_server(port, playerlimit, in_bandwidth, out_bandwidth)
 	get_tree().set_network_peer(network)
-	
-	#creates player for server host
-	players[1] = Playerdata.data
 	
 	#prevent players from joining while server is still loading
 	network.refuse_new_connections = true
@@ -138,35 +136,6 @@ func set_server(address : String, port : int) -> void:
 	self.port = port
 
 
-
-
-#host functions
-remote func set_player_data(id : int, data : Dictionary) -> void:
-	players[id] = data
-	rpc("send_player_data", id, data)
-
-
-
-
-#client functions
-remote func return_game_data(data : Dictionary) -> void:
-	game_data = data
-	emit_signal("recieved_game_data")
-
-remote func return_player_data(data : Dictionary) -> void:
-	players = data
-
-remote func return_spawned_players(data : Array) -> void:
-	#spawn all players already in the game
-	for id in data:
-		GamemodeInstance.Spawner.spawn_player(id, Vector3.ZERO)
-
-remote func send_player_data(id : int, data : Dictionary) -> void:
-	players[id] = data
-
-
-remote func load_new_game(data : Dictionary) -> void:
-	pass
 
 
 #gamemode funcs

@@ -11,6 +11,7 @@ export var health := 100
 #nodes
 onready var RotationHelper : Spatial = $Smoothing/RotationHelper
 onready var Head : Spatial = $Smoothing/RotationHelper/Head
+onready var WeaponController : Spatial = $Smoothing/RotationHelper/Head/WeaponController
 
 #control finess
 signal camera_movement
@@ -18,7 +19,7 @@ signal camera_movement
 export var camera_max_angle := 85
 export var camera_min_angle := -80
 
-export var camera_sensitiviy := Vector2(.3, .3)
+export var camera_sensitiviy := Vector2(.2, .2)
 
 #skeleton and IK stuff
 onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftHandIK"
@@ -51,42 +52,54 @@ func _unhandled_input(event : InputEvent) -> void:
 			
 			var delta : Vector3 = current - Head.rotation_degrees
 			emit_signal("camera_movement", Vector3(delta.x, -relative.x, delta.z))
+			
+		if event.is_action_pressed("jump"):
+			jump()
 
 func get_axis() -> Vector3:
 	var axis := Vector3.ZERO
-	axis += Vector3(0, 0, -1) * int(Input.is_action_pressed("Forward"))
-	axis += Vector3(0, 0, 1) * int(Input.is_action_pressed("Backward"))
-	axis += Vector3(-1, 0, 0) * int(Input.is_action_pressed("Left"))
-	axis += Vector3(1, 0, 0) * int(Input.is_action_pressed("Right"))
+	if is_network_master():
+		axis += Vector3(0, 0, -1) * int(Input.is_action_pressed("walk_forward"))
+		axis += Vector3(0, 0, 1) * int(Input.is_action_pressed("walk_backward"))
+		axis += Vector3(-1, 0, 0) * int(Input.is_action_pressed("walk_left"))
+		axis += Vector3(1, 0, 0) * int(Input.is_action_pressed("walk_right"))
 	return axis
 
-var velocity := Vector3.ZERO
+var walk_spring = Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8, 14)
+var player_velocity := Vector3.ZERO
 
 func _physics_process(delta : float) -> void:
+	if !is_network_master():
+		return
+	
 	#local space axis
 	var axis := get_axis()
+	walk_spring.target = axis.normalized() * WeaponController.accuracy["Walkspeed"]
+	walk_spring.positionvelocity(delta)
+	
 	#world space axis
-	var xformed : Vector3 = RotationHelper.transform.xform(axis)
+	var xformed : Vector3 = RotationHelper.transform.xform(walk_spring.position)
 	
 	#gets translation basis for ground normal
 	var basis : Basis = RotationHelper.get_global_transform().basis
 	
 	if is_on_floor():
+		#change floor normal to be average of slides
 		basis = get_ground_normal_translation(RotationHelper.get_global_transform().basis, get_floor_normal())
 	
 	#xform input vector by basis
-	var translated := basis.xform(axis)
+	var translated := basis.xform(walk_spring.position)
 	
 	
 	#gravity
-	velocity.y += -14.8 * delta
-	#friction
-	velocity *= ((0.95 * int(is_on_floor()))
-	 + int(!is_on_floor())
-	)
+	player_velocity.y += -14.8 * delta
+	player_velocity *= Vector3(0, 1, 0)
 	
-	
-	velocity = move_and_slide(translated + velocity, Vector3(0, 1, 0), false, 4, deg2rad(45), true)
+	player_velocity = move_and_slide(translated + player_velocity, Vector3(0, 1, 0), true, 4, deg2rad(45), false)
+
+func jump() -> void:
+	if is_on_floor():
+		player_velocity.y += 7.5
 
 func get_ground_normal_translation(basis : Basis, normal : Vector3) -> Basis:
 	var zy := intersect_planes(Vector3.ZERO, normal, Vector3.ZERO, basis.x, Vector3.ZERO)

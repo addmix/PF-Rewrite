@@ -8,29 +8,29 @@ signal changeState
 var stopped := false
 
 # warning-ignore:unused_argument
-func enter(prev):
-	get_parent().get_parent().animationPlayer.play("BoltRelease")
+func enter(prev: String) -> void:
+	get_parent().get_parent()._AnimationPlayer.play("BoltRelease")
 	
 	#from magazine in
 	pass
 
-func exit():
+func exit() -> void:
 	#to ready
 	pass
 
-func stop():
+func stop() -> void:
 	stopped = true
 
-func resume():
+func resume() -> void:
 	stopped = false
-	get_parent().get_parent().animationPlayer.play("BoltRelease")
+	get_parent().get_parent()._AnimationPlayer.play("BoltRelease")
 
 # warning-ignore:unused_argument
-func process(delta):
+func process(delta : float) -> void:
 	pass
 
 # warning-ignore:unused_argument
-func unhandled_input(event):
+func unhandled_input(event : InputEvent) -> void:
 	pass
 
 func anim_finished(anim : String) -> void:

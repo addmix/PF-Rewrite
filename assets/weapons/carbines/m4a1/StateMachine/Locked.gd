@@ -5,26 +5,26 @@ export(String) var stateName = "State"
 # warning-ignore:unused_signal
 signal changeState
 
-func release():
+func release() -> void:
 	call_deferred("emit_signal", "changeState", "Forward")
 
 # warning-ignore:unused_argument
-func enter(prev):
+func enter(prev : String) -> void:
 	pass
 
-func exit():
+func exit() -> void:
 	pass
 
-func stop():
-	pass
-
-# warning-ignore:unused_argument
-func process(delta):
+func stop() -> void:
 	pass
 
 # warning-ignore:unused_argument
-func unhandled_input(event):
+func process(delta : float) -> void:
 	pass
 
-func fire():
+# warning-ignore:unused_argument
+func unhandled_input(event : InputEvent) -> void:
+	pass
+
+func fire() -> void:
 	pass

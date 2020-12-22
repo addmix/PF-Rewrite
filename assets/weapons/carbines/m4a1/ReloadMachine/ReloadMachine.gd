@@ -2,14 +2,11 @@ extends Node
 
 onready var player = get_parent()
 
-export(String) var stateMachine
-export(String) var currentState
-
 signal stateChanged
 
 onready var gunMachine = get_parent().get_node("GunMachine")
 
-var stateStack := []
+export var currentState := "State"
 var states := {}
 
 func _ready() -> void:
@@ -17,8 +14,8 @@ func _ready() -> void:
 	initialize_states()
 	call_deferred("set_process", true)
 
-func interrupt_reload():
-	get_parent().animationPlayer.stop(true)
+func interrupt_reload() -> void:
+	get_parent()._AnimationPlayer.stop(true)
 	states[currentState].stop()
 
 func initialize_states() -> void:
@@ -32,15 +29,13 @@ func initialize_states() -> void:
 		#connect node's signals
 		i.connect("changeState", self, "changeState")
 
-func _process(delta):
-	if Input.is_action_just_pressed("Shoot"):
+func _process(delta : float) -> void:
+	if Input.is_action_just_pressed("shoot"):
 		interrupt_reload()
 	states[currentState].process(delta)
 
-func changeState(new_state):
+func changeState(new_state : String) -> void:
 	if is_network_master():
-		#add state to state stack
-		stateStack.append(currentState)
 		#exit current state
 		states[currentState].exit()
 		#enter new state from current state
@@ -52,8 +47,6 @@ func changeState(new_state):
 		rpc("syncState", new_state)
 
 puppet func syncState(new_state : String) -> void:
-	#add state to state stack
-	stateStack.append(currentState)
 	#exit current state
 	states[currentState].exit()
 	#enter new state from current state
@@ -63,9 +56,9 @@ puppet func syncState(new_state : String) -> void:
 	#assing currentState to new state
 	currentState = new_state
 
-func _unhandled_input(event):
+func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
-		if event.is_action_pressed("Reload") and get_parent().can_reload():
+		if event.is_action_pressed("reload") and get_parent().can_reload():
 			get_tree().set_input_as_handled()
 			if states[currentState].stopped:
 				states[currentState].resume()

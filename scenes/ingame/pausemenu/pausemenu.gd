@@ -4,6 +4,7 @@ onready var PausePopup : PopupDialog = $PopupDialog
 
 func _on_Resume_pressed():
 	resume()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _on_Options_pressed():
 	#popup options menu
@@ -23,8 +24,10 @@ func _unhandled_input(event):
 	if PausePopup.visible:
 		if event.is_action_pressed("ui_cancel"):
 			resume()
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			get_tree().set_input_as_handled()
 	else:
 		if event.is_action_pressed("ui_pause"):
 			PausePopup.popup_centered()
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	

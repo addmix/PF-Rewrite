@@ -3,9 +3,27 @@ extends Spatial
 signal ammoChanged
 signal shotFired
 
+signal equipped
+signal dequipped
+
 onready var aim_node : Position3D = $Aim
 onready var LeftIK : BoneAttachment = $Armature/Skeleton/HandIKL
 onready var RightIK : BoneAttachment = $Armature/Skeleton/HandIKR
+
+onready var GunMachine = $GunMachine
+onready var ReloadMachine = $ReloadMachine
+onready var EquipMachine = $EquipMachine
+
+var base_offset := Vector3.ZERO
+
+func _ready() -> void:
+	base_offset = transform.origin
+	_connect_signals()
+
+func _connect_signals() -> void:
+	EquipMachine.connect("equipped", self, "on_equipped")
+	EquipMachine.connect("dequipped", self, "on_dequipped")
+	
 
 onready var chamber : int = data["Misc"]["Chamber"] setget set_chamber, get_chamber
 func set_chamber(value : int) -> void:
@@ -31,6 +49,33 @@ func set_reserve(value : int) -> void:
 func get_reserve() -> int:
 	return reserve
 
+func can_reload() -> bool:
+	return magazine < data["Misc"]["Magazine"]
+
+#spring stuff
+func _process(delta : float) -> void:
+	var pos := Vector3.ZERO
+	var rot := Vector3.ZERO
+	
+	pos += EquipMachine.EquipPositionSpring.position
+	rot += EquipMachine.EquipRotationSpring.position
+	
+	transform.origin = pos + base_offset
+	rotation = rot
+
+#takes care of weapon-side equip protocol
+func equip() -> void:
+	EquipMachine.change_state("Equip")
+
+#takes care of weapon-side dequip protocol
+func dequip() -> void:
+	EquipMachine.change_state("Dequip")
+
+func on_equipped() -> void:
+	emit_signal("equipped", self)
+
+func on_dequipped() -> void:
+	emit_signal("dequipped", self)
 
 var data := {
 	"Ballistics": {
@@ -73,6 +118,12 @@ var data := {
 		"Camera rotation sway speed": 5.0,
 		"Camera rotation sway damping": .8,
 		
+		"Camera bob damper": .9,
+		"Camera bob idle speed": 4.0,
+		"Camera bob idle intensity": Vector3(.1, .1, .1),
+		"Camera bob speed": 0.1,
+		"Camera bob intensity": Vector3(.01, .01, .01),
+		
 		#total bounds
 		"Min translation": Vector3(-.75, -.75, 0),
 		"Max translation": Vector3(.5, .5, 2.0),
@@ -100,6 +151,21 @@ var data := {
 		"Rotation sway": Vector3(.04, .04, 0),
 		"Rotation sway speed": 12.0,
 		"Rotation sway damping": .7,
+		
+		"Gun bob position": Vector3(1.1, .7, 1),
+		"Gun bob position multiplier": 0.04,
+		"Gun bob rotation": Vector3(.9, 1.4, 1),
+		"Gun bob rotation multiplier": 0.02,
+		"Gun bob idle": 1,
+		
+		"Gun bob intensity speed": 10,
+		"Gun bob intensity damper": .9,
+		"Gun bob speed damper": .7,
+		"Gun bob speed speed": 10,
+		
+		"Gun bob intensity multiplier": .01,
+		"Gun bob position damping": .7,
+		"Gun bob position speed": 3,
 		
 		"Walkspeed": 12.0,
 		
@@ -132,6 +198,12 @@ var data := {
 		"Camera rotation sway speed": 6,
 		"Camera rotation sway damping": .3,
 		
+		"Camera bob damper": .9,
+		"Camera bob idle speed": 4.0,
+		"Camera bob idle intensity": Vector3(.1, .1, .1),
+		"Camera bob speed": 0.1,
+		"Camera bob intensity": Vector3(.01, .01, .01),
+		
 		#total bounds
 		"Min translation": Vector3(-.75, -.75, 0),
 		"Max translation": Vector3(.5, .5, 2.0),
@@ -160,7 +232,22 @@ var data := {
 		"Rotation sway speed": 18.0,
 		"Rotation sway damping": .9,
 		
-		"Walkspeed": 12.0,
+		"Gun bob position": Vector3(1.4, .7, 1),
+		"Gun bob position multiplier": 0.001,
+		"Gun bob rotation": Vector3(1.4, .7, 1),
+		"Gun bob rotation multiplier": 0.001,
+		"Gun bob idle": 1.5,
+		
+		"Gun bob intensity speed": 10,
+		"Gun bob intensity damper": .9,
+		"Gun bob speed damper": .7,
+		"Gun bob speed speed": 10,
+		
+		"Gun bob intensity multiplier": .01,
+		"Gun bob position damping": .7,
+		"Gun bob position speed": 3,
+		
+		"Walkspeed": 6.0,
 		
 		"Spread factor": float(0),
 		"Choke": float(0),
@@ -168,10 +255,25 @@ var data := {
 		"Recoil speed": 15.0,
 		"Recoil damping": .8,
 		
-		"Magnification": 1.0,
+		"Magnification": 1.2,
 	},
 	"Weapon handling": {
-		"Equip speed": 12,
+		"Equip translation speed": 10,
+		"Equip translation damping": .8,
+		"Equip rotation speed": 8,
+		"Equip rotation damping": .7,
+		
+		"Equip position": Vector3(0, -1.5, 0),
+		"Equip rotation": Vector3(-.7, 0, 0),
+		
+		"Dequip translation speed": 12,
+		"Dequip translation damping": .8,
+		"Dequip rotation speed": 12,
+		"Dequip rotation damping": .8,
+		
+		"Dequip position": Vector3(0, -1.5, 0),
+		"Dequip rotation": Vector3(0, 0, 0),
+		
 		"Aiming speed": 15,
 		"Aiming damping": .8,
 		
@@ -184,19 +286,26 @@ var data := {
 		"Sprint speed": 4.0,
 		"Sprint damping": 1.0,
 		
+		"Sprint position damper": .7,
+		"Sprint position speed": 14,
+		"Sprint position": Vector3.ZERO,
+		"Sprint rotation damper": .7,
+		"Sprint rotation speed": 14,
+		"Sprint rotation": Vector3.ZERO,
+		
 		"Accel speed": 6.0,
 		"Accel damping": 1.0,
 	},
 	"Misc": {
-		"Name": "M4A1",
-		"Ammo type": "5.56x45mm NATO",
-		"Manufacturer": "Colt",
-		"Category": 1,
-		"Description": "The Colt M4A1 is a firearm based off of Eugene Stoner's Armalite 15. Adopted by the US military in 1994 to replace the M16.",
+		"Name": "P38",
+		"Ammo type": "9x19mm Parabellum",
+		"Manufacturer": "Walther",
+		"Category": "Pistols",
+		"Description": "The Walther P38 was the cheap and rugged successor to the Luger Pistole Parabellum. The P38 introduced groundbreaking technical features which are still in use today.",
 		
 		"Chamber": 1,
-		"Magazine": 30,
-		"Reserve": 120,
+		"Magazine": 8,
+		"Reserve": 40,
 		
 		"Path": "res://Assets/Weapons/Carbines/M4A1/",
 	},

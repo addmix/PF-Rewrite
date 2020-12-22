@@ -1,20 +1,85 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://assets/weapons/pistols/p38/P38bakcup.gd" type="Script" id=1]
 [ext_resource path="res://assets/weapons/pistols/p38/P38bakcup.gltf" type="PackedScene" id=2]
+[ext_resource path="res://assets/weapons/pistols/p38/gun machine/GunMachine.gd" type="Script" id=3]
+[ext_resource path="res://assets/weapons/pistols/p38/gun machine/Ready.gd" type="Script" id=4]
+[ext_resource path="res://assets/weapons/pistols/p38/gun machine/Fire.gd" type="Script" id=5]
+[ext_resource path="res://assets/weapons/pistols/p38/gun machine/Back.gd" type="Script" id=6]
+[ext_resource path="res://assets/weapons/pistols/p38/gun machine/Locked.gd" type="Script" id=7]
+[ext_resource path="res://assets/weapons/pistols/p38/gun machine/Forward.gd" type="Script" id=8]
+[ext_resource path="res://assets/weapons/pistols/p38/reload machine/ReloadMachine.gd" type="Script" id=9]
+[ext_resource path="res://assets/weapons/pistols/p38/reload machine/Slide.gd" type="Script" id=10]
+[ext_resource path="res://assets/weapons/pistols/p38/reload machine/MagazineOut.gd" type="Script" id=11]
+[ext_resource path="res://assets/weapons/pistols/p38/reload machine/MagazineIn.gd" type="Script" id=12]
+[ext_resource path="res://assets/weapons/pistols/p38/reload machine/Ready.gd" type="Script" id=13]
+[ext_resource path="res://assets/weapons/pistols/p38/equip machine/EquipMachine.gd" type="Script" id=16]
+[ext_resource path="res://assets/weapons/pistols/p38/equip machine/Equip.gd" type="Script" id=17]
+[ext_resource path="res://assets/weapons/pistols/p38/equip machine/Idle.gd" type="Script" id=18]
+[ext_resource path="res://assets/weapons/pistols/p38/equip machine/Inactive.gd" type="Script" id=19]
+[ext_resource path="res://assets/weapons/pistols/p38/equip machine/Dequip.gd" type="Script" id=20]
 
 [node name="P38bakcup" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.187936 )
 script = ExtResource( 1 )
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="16"]
-transform = Transform( 0.744168, 0.645671, 0.171238, 0.137426, -0.398847, 0.906662, 0.653703, -0.651176, -0.385541, -0.233801, -0.150088, 0.320333 )
+transform = Transform( 0.899793, 0.406763, 0.157848, 0.0194702, -0.398847, 0.916811, 0.435882, -0.821867, -0.366799, -0.197831, -0.173427, 0.380892 )
 bone_name = "left_hand_ik"
 
 [node name="HandIKR" type="BoneAttachment" parent="Armature/Skeleton" index="17"]
-transform = Transform( 0.999095, 3.93639e-09, 0.0425308, -0.0425308, 2.98023e-08, 0.999095, 1.86265e-09, -1, 2.98023e-08, 0.0596005, -0.195104, 0.411103 )
+transform = Transform( 0.964501, -0.264028, 0.00511488, -0.0413649, -0.131921, 0.990397, -0.260818, -0.955451, -0.138159, 0.151971, -0.229348, 0.49993 )
 bone_name = "right_hand_ik"
 
 [node name="Aim" type="Position3D" parent="." index="1"]
 transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.127231, 0.951031 )
 
 [node name="Barrel" type="Position3D" parent="." index="2"]
+
+[node name="GunMachine" type="Node" parent="." index="3"]
+script = ExtResource( 3 )
+
+[node name="Ready" type="Node" parent="GunMachine" index="0"]
+script = ExtResource( 4 )
+
+[node name="Fire" type="Node" parent="GunMachine" index="1"]
+script = ExtResource( 5 )
+
+[node name="Back" type="Node" parent="GunMachine" index="2"]
+script = ExtResource( 6 )
+
+[node name="Locked" type="Node" parent="GunMachine" index="3"]
+script = ExtResource( 7 )
+
+[node name="Forward" type="Node" parent="GunMachine" index="4"]
+script = ExtResource( 8 )
+
+[node name="ReloadMachine" type="Node" parent="." index="4"]
+script = ExtResource( 9 )
+
+[node name="Ready" type="Node" parent="ReloadMachine" index="0"]
+script = ExtResource( 13 )
+
+[node name="MagazineOut" type="Node" parent="ReloadMachine" index="1"]
+script = ExtResource( 11 )
+
+[node name="MagazineIn" type="Node" parent="ReloadMachine" index="2"]
+script = ExtResource( 12 )
+
+[node name="Slide" type="Node" parent="ReloadMachine" index="3"]
+script = ExtResource( 10 )
+
+[node name="EquipMachine" type="Node" parent="." index="5"]
+script = ExtResource( 16 )
+
+[node name="Equip" type="Node" parent="EquipMachine" index="0"]
+script = ExtResource( 17 )
+
+[node name="Idle" type="Node" parent="EquipMachine" index="1"]
+script = ExtResource( 18 )
+
+[node name="Dequip" type="Node" parent="EquipMachine" index="2"]
+script = ExtResource( 20 )
+
+[node name="Inactive" type="Node" parent="EquipMachine" index="3"]
+script = ExtResource( 19 )

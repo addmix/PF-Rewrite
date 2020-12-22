@@ -1,45 +1,74 @@
 extends Spatial
 
+var player : KinematicBody
+
 signal weapon_changed
 signal shot_fired
 signal set_process
 
 #primary, secondary, melee, grenade
 #weapon names
-var loadout := ["M4A1", "P38", null, null]
+var loadout := ["M4A1", "P38"]
 #weapon nodes
-var weapons := [null, null, null, null]
+var weapons := [null, null]
 #index of current weapon
 var current_weapon := 0
 
 func _ready() -> void:
+	set_process(false)
 	emit_signal("set_process", false)
-	#load weapons
+	
+	#loads weapons
 	for weapon in range(loadout.size()):
 		if loadout[weapon] == null:
 			continue
 		set_weapon(weapon, loadout[weapon])
 		weapons[weapon].connect("shotFired", self, "on_shot_fired")
+		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
+		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")
 	
 	add_child(weapons[current_weapon])
+	weapons[current_weapon].equip()
+	
+	#initialize
 	accuracy = interpolateAccuracy(0.0)
-	emit_signal("set_process", true)
+	
+	
 	call_deferred("emit_signal", "weapon_changed", weapons[current_weapon])
+	call_deferred("deferred")
 
+func deferred() -> void:
+	player = get_parent().get_parent().get_parent().get_parent()
+	set_process(true)
+	emit_signal("set_process", true)
+
+#loading of weapon
 func set_weapon(index : int, weapon : String) -> void:
 	#load weapon
 	var resource : Resource = load(Weapons.manifest[weapon]["info"]["path"] + "/" + Weapons.manifest[weapon]["info"]["scene"])
 	weapons[index] = resource.instance()
 	loadout[index] = weapon
 
-func load_weapons() -> void:
+func change_weapon(index : int) -> void:
+	#do dequip animation
+	weapons[current_weapon].dequip()
+	new_weapon = index
+
+var new_weapon := 0
+
+func on_weapon_equipped(weapon : Spatial) -> void:
 	pass
 
-func change_weapon(index : int) -> void:
-	remove_child(weapons[current_weapon])
-	current_weapon = index
+func on_weapon_dequipped(weapon : Spatial) -> void:
+	current_weapon = new_weapon
+	remove_child(weapon)
+	
 	add_child(weapons[current_weapon])
+	weapons[current_weapon].equip()
+	
 	emit_signal("weapon_changed", weapons[current_weapon])
+
+
 
 onready var base_offset := transform.origin
 onready var aim_node : Position3D = find_node("Aim")
@@ -50,48 +79,6 @@ var rotation_delta := Vector3.ZERO
 #springs
 
 
-
-
-#
-#		#total bounds
-#		"Min translation": Vector3(-.75, -.75, 0),
-#		"Max translation": Vector3(.5, .5, 2.0),
-#		"Min rotation": Vector3(-2, -2, -2),
-#		"Max rotation": Vector3(2, 2, 2),
-#
-#		#recoil force
-#		"Min translation force": Vector3(-1.2, .2, 2.5),
-#		"Max translation force": Vector3(1.6, 1.2, 4.0),
-#		"Min rotation force": Vector3(.4, -1.2, 0),
-#		"Max rotation force": Vector3(1.0, 1.4, 0),
-#
-#		#recoil spring settings
-#		"Recoil translation speed": 13,
-#		"Recoil translation damping": .7,
-#
-#		"Recoil rotation speed": 13,
-#		"Recoil rotation damping": .7,
-#
-#		#sway springs
-#		"Translation sway": Vector3(.2, .2, 0),
-#		"Translation sway speed": 12.0,
-#		"Translation sway damping": .7,
-#
-#		"Rotation sway": Vector3(.4, .4, 0),
-#		"Rotation sway speed": 12.0,
-#		"Rotation sway damping": .7,
-#
-#		"Walkspeed": 12.0,
-#
-#		"Spread factor": float(0),
-#		"Choke": float(0),
-#
-#		"Recoil speed": 15.0,
-#		"Recoil damping": .8,
-#
-#		"Magnification": 1.0,
-#	},
-
 var aim_spring := Physics.Spring.new(0, 0, 0, .5, 1)
 
 var recoil_rotation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
@@ -100,6 +87,11 @@ var recoil_translation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO
 var rotation_sway_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 var translation_sway_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 
+var walk_bob_speed_spring := Physics.Spring.new(0, 0, 0, 0, 1)
+var walk_bob_position_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+var walk_bob_intensity := Physics.Spring.new(1, 0, 1, 0, 1)
+
+var walk_bob_tick := 0.0
 
 var accuracy := {}#interpolateAccuracy(aim_spring.position)
 
@@ -107,7 +99,10 @@ func _process(delta : float) -> void:
 	var pos := Vector3.ZERO
 	var rot := Vector3.ZERO
 	
+	
 	#aiming
+	
+	
 	aim_spring.damper = weapons[current_weapon].data["Weapon handling"]["Aiming damping"]
 	aim_spring.speed = weapons[current_weapon].data["Weapon handling"]["Aiming speed"]
 	
@@ -116,7 +111,21 @@ func _process(delta : float) -> void:
 	
 	accuracy = interpolateAccuracy(aim_spring.position)
 	
+	
+	
+	
+	
+	
+	#implement sprint position/rotation
+	
+	
+	
+	
+	
+	
 	#recoil
+	
+	
 	recoil_rotation_spring.damper = accuracy["Recoil rotation damping"]
 	recoil_rotation_spring.speed = accuracy["Recoil rotation speed"]
 	
@@ -129,23 +138,45 @@ func _process(delta : float) -> void:
 	recoil_translation_spring.positionvelocity(delta)
 	pos += recoil_translation_spring.position
 	
-	#sway
+	
+	#camera movement sway
+	
+	
 	rotation_sway_spring.accelerate(rotation_delta * accuracy["Rotation sway"])
 	rotation_sway_spring.damper = accuracy["Rotation sway damping"]
 	rotation_sway_spring.speed = accuracy["Rotation sway speed"]
-
+	
 	rotation_sway_spring.positionvelocity(delta)
 	rot += Vector3(rotation_sway_spring.position.x, -rotation_sway_spring.position.y, rotation_sway_spring.position.z)
-
+	
 	translation_sway_spring.accelerate(rotation_delta * accuracy["Translation sway"])
 	translation_sway_spring.damper = accuracy["Translation sway damping"]
 	translation_sway_spring.speed = accuracy["Translation sway speed"]
-
+	
 	translation_sway_spring.positionvelocity(delta)
 	pos += Vector3(translation_sway_spring.position.y, translation_sway_spring.position.x, translation_sway_spring.position.z)
 	
 	
-	transform.origin = base_offset + pos
+	#walk bob speed
+	
+	walk_bob_speed_spring.damper = accuracy["Gun bob speed damper"]
+	walk_bob_speed_spring.speed = accuracy["Gun bob speed speed"]
+	walk_bob_speed_spring.target = player.player_velocity.length() * int(player.is_on_floor())
+	walk_bob_speed_spring.positionvelocity(delta)
+	
+	#intensity
+	
+	walk_bob_intensity.damper = accuracy["Gun bob intensity damper"]
+	walk_bob_intensity.speed = accuracy["Gun bob intensity speed"]
+	walk_bob_intensity.target = player.player_velocity.length() * accuracy["Gun bob intensity multiplier"] + accuracy["Gun bob idle"]
+	walk_bob_intensity.positionvelocity(delta)
+	
+	walk_bob_tick += delta * (walk_bob_speed_spring.position + 1)
+	
+	pos += Vector3(cos(walk_bob_tick / 2) * 2, sin(walk_bob_tick), 0) * accuracy["Gun bob position"] * accuracy["Gun bob position multiplier"] * walk_bob_intensity.position
+	rot += Vector3(cos(walk_bob_tick), sin(walk_bob_tick / 2), 0) * accuracy["Gun bob rotation"] * accuracy["Gun bob rotation multiplier"] * walk_bob_intensity.position
+	
+	transform.origin = base_offset + pos - weapons[current_weapon].base_offset
 	rotation = rot
 	rotation_delta = Vector3.ZERO
 
@@ -171,15 +202,41 @@ func _unhandled_input(event : InputEvent) -> void:
 		aim_spring.target = 0
 		get_tree().set_input_as_handled()
 	
+	#switch to next weapon
+	elif event.is_action_pressed("weapon_next"):
+		#looparound functionality
+		if current_weapon + 1 > loadout.size():
+			change_weapon(0)
+		else:
+			change_weapon((current_weapon + 1) % loadout.size())
+	#switch to previous weapon
+	elif event.is_action_pressed("weapon_prev"):
+		#looparound functionality
+		if current_weapon - 1 < 0:
+			change_weapon(loadout.size() - 1)
+		else:
+			change_weapon((current_weapon - 1) % loadout.size())
 	
+	#switching to specific weapons
 	elif event.is_action_pressed("weapon_1"):
+			if current_weapon == 0:
+				return
 			change_weapon(0)
 	elif event.is_action_pressed("weapon_2"):
-			change_weapon(1)
+			if current_weapon == 1:
+				return
+			if weapons.size() >= 1:
+				change_weapon(1)
 	elif event.is_action_pressed("weapon_3"):
-			change_weapon(2)
+			if current_weapon == 2:
+				return
+			if weapons.size() >= 2:
+				change_weapon(2)
 	elif event.is_action_pressed("weapon_4"):
-			change_weapon(3)
+			if current_weapon == 3:
+				return
+			if weapons.size() >= 3:
+				change_weapon(3)
 
 func _on_Player_camera_movement(relative : Vector3) -> void:
 	rotation_delta = relative
