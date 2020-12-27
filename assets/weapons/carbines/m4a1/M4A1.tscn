@@ -24,7 +24,7 @@
 [ext_resource path="res://assets/weapons/carbines/m4a1/EquipMachine/Inactive.gd" type="Script" id=22]
 
 [node name="M4A1" instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0845567, -0.335449 )
+transform = Transform( 0.428849, -0.447262, 0.784886, 0.157379, 0.892539, 0.422618, -0.889562, -0.0577151, 0.453154, 0, -0.0845567, -0.335449 )
 script = ExtResource( 7 )
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="34"]

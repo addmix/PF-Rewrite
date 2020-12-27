@@ -12,12 +12,13 @@ export var health := 100
 onready var RotationHelper : Spatial = $Smoothing/RotationHelper
 onready var Head : Spatial = $Smoothing/RotationHelper/Head
 onready var WeaponController : Spatial = $Smoothing/RotationHelper/Head/WeaponController
+onready var _Camera : Camera = $Smoothing/RotationHelper/Head/Camera
 
 #control finess
 signal camera_movement
 
 export var camera_max_angle := 85
-export var camera_min_angle := -80
+export var camera_min_angle := -85
 
 export var camera_sensitiviy := Vector2(.2, .2)
 
@@ -65,6 +66,40 @@ func get_axis() -> Vector3:
 		axis += Vector3(1, 0, 0) * int(Input.is_action_pressed("walk_right"))
 	return axis
 
+
+
+func _process(delta : float) -> void:
+	set_delta_pos()
+	set_delta_vel()
+
+#delta velocity
+var delta_vel := Vector3.ZERO
+
+var last_vel := Vector3.ZERO
+
+func set_delta_vel() -> void:
+	delta_vel = player_velocity - last_vel
+	call_deferred("set_last_vel")
+
+func set_last_vel() -> void:
+	last_vel = player_velocity
+
+
+#position/time
+var delta_pos := Vector3.ZERO
+
+var last_pos := Vector3.ZERO
+var current_pos := Vector3.ZERO
+
+func set_delta_pos() -> void:
+	current_pos = get_global_transform().origin
+	delta_pos = current_pos - last_pos
+	#set this at last possible moment
+	call_deferred("set_last_pos")
+
+func set_last_pos() -> void:
+	last_pos = current_pos
+
 var walk_spring = Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8, 14)
 var player_velocity := Vector3.ZERO
 
@@ -74,7 +109,9 @@ func _physics_process(delta : float) -> void:
 	
 	#local space axis
 	var axis := get_axis()
-	walk_spring.target = axis.normalized() * WeaponController.accuracy["Walkspeed"]
+	walk_spring.speed = WeaponController.accuracy["Walk accel"]
+	walk_spring.damper = WeaponController.accuracy["Walk damper"]
+	walk_spring.target = axis.normalized() * WeaponController.movement_speed
 	walk_spring.positionvelocity(delta)
 	
 	#world space axis
@@ -93,6 +130,8 @@ func _physics_process(delta : float) -> void:
 	
 	#gravity
 	player_velocity.y += -14.8 * delta
+	
+	#change player_velocity to a spring
 	player_velocity *= Vector3(0, 1, 0)
 	
 	player_velocity = move_and_slide(translated + player_velocity, Vector3(0, 1, 0), true, 4, deg2rad(45), false)
