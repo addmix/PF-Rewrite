@@ -160,7 +160,7 @@ func _physics_process(delta : float) -> void:
 	#xform input vector by basis
 	var translated := basis.xform(walk_spring.position)
 	
-	if is_on_floor() and player_velocity.y > 0:
+	if is_on_floor() and player_velocity.y > 0 and !Input.is_action_just_pressed("jump"):
 		player_velocity.y *= 0
 	
 	#gravity
