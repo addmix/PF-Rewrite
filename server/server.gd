@@ -39,11 +39,17 @@ func _connect_signals() -> void:
 
 #only on client
 func connection_succeeded(id : int) -> void:
-	print("Connection succeeded for player id: " + str(id))
+	print("Successfully connected to server")
+	
+	#get server info and load map n shit
+	yield(self, "recieved_game_data")
+	
+	#loads map and gamemode, and removes menu
+	load_game()
 
 #only on client
 func connection_failed(id : int) -> void:
-	print("Connection failed for player id: " + str(id))
+	print("Failed to connect to server")
 	get_tree().set_network_peer(null)
 
 func peer_connected(id : int) -> void:
@@ -51,6 +57,7 @@ func peer_connected(id : int) -> void:
 	
 	#only on server
 	if get_tree().is_network_server():
+		#send game data to new player
 		rpc_id(id, "return_game_data", game_data)
 
 func peer_disconnected(id : int) -> void:
@@ -70,18 +77,14 @@ func start_host() -> void:
 	
 	#loading stuff is done, allow players to join
 	network.refuse_new_connections = false
+	
+	Players.add_player(1, Players.local_player)
 
 #start client player, connects to host player
 func start_client() -> void:
 	#connect to server
 	network.create_client(ip, port, in_bandwidth, out_bandwidth, client_port)
 	get_tree().set_network_peer(network)
-	
-	#get server info and load map n shit
-	yield(self, "recieved_game_data")
-	
-	#loads map and gamemode, and removes menu
-	load_game()
 
 #loads map and gamemode
 func load_game() -> void:

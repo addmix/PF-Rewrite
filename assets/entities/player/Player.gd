@@ -1,14 +1,17 @@
 extends Node
 
-#nodes
-var player_name : String = "Player"
-var player_id : int = 0
-
-var character_reference = preload("res://assets/entities/player/Character.tscn")
-var character : Spatial
-
 #values
+var data : Dictionary
 var loadout := ["M4A1", "P38", null, null]
+
+var player_name : String
+var player_id : int
+
+#nodes
+var character = preload("res://assets/entities/player/Character.tscn")
+var Character : Spatial
+
+
 
 #signals
 signal died
@@ -18,11 +21,11 @@ func _connect_signals() -> void:
 
 func instance_character() -> void:
 	#remove preexisting character
-	if character:
-		character.queue_free()
+	if Character:
+		Character.queue_free()
 	
-	#iunstance fresh character
-	character = character_reference.instance()
+	#instance fresh character
+	Character = character.instance()
 	#initializes character values
 	initialize_character()
 	#connects character signals
@@ -30,15 +33,21 @@ func instance_character() -> void:
 
 func initialize_character() -> void:
 	#give character a reference to player node
-	character.player = self
+	Character.player = self
+	
+	Character.add_to_group("characters")
 
 func connect_character_signals() -> void:
 	pass
 
 #call to gamemode player spawner
 func spawn_character() -> void:
-	pass
+	instance_character()
 
 func remove_character() -> void:
-	pass
+	Character.remove_from_group("characters")
+	Character.queue_free()
 
+func _exit_tree() -> void:
+	if Character:
+		remove_character()

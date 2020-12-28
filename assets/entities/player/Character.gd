@@ -1,7 +1,7 @@
 extends KinematicBody
 
 #general data
-var player : Node
+var Player : Node
 
 #in game data
 export var health := 100
