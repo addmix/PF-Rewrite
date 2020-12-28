@@ -38,7 +38,8 @@ func _connect_signals() -> void:
 	network.connect("peer_disconnected", self, "peer_disconnected")
 
 #only on client
-func connection_succeeded(id : int) -> void:
+func connection_succeeded() -> void:
+	emit_signal("connection_successful")
 	print("Successfully connected to server")
 	
 	#get server info and load map n shit
@@ -48,11 +49,13 @@ func connection_succeeded(id : int) -> void:
 	load_game()
 
 #only on client
-func connection_failed(id : int) -> void:
+func connection_failed() -> void:
+	emit_signal("connection_failed")
 	print("Failed to connect to server")
 	get_tree().set_network_peer(null)
 
 func peer_connected(id : int) -> void:
+	emit_signal("peer_connected", id)
 	print("Peer connected with id: " + str(id))
 	
 	#only on server
@@ -61,6 +64,7 @@ func peer_connected(id : int) -> void:
 		rpc_id(id, "return_game_data", game_data)
 
 func peer_disconnected(id : int) -> void:
+	emit_signal("peer_disconnected", id)
 	print("Peer disconnected with id: " + str(id))
 
 #start host player
@@ -83,8 +87,14 @@ func start_host() -> void:
 #start client player, connects to host player
 func start_client() -> void:
 	#connect to server
-	network.create_client(ip, port, in_bandwidth, out_bandwidth, client_port)
+	network.create_client(ip, port, in_bandwidth, out_bandwidth)
 	get_tree().set_network_peer(network)
+
+remote func return_game_data(data : Dictionary) -> void:
+	if get_tree().get_rpc_sender_id() == 1:
+		game_data = data
+	
+	emit_signal("recieved_game_data")
 
 #loads map and gamemode
 func load_game() -> void:

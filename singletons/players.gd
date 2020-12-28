@@ -13,17 +13,21 @@ var local_player := {
 }
 
 func _ready() -> void:
-	Server.connect("connection_successful", self, "on_connection_successful")
+	_connect_signals()
+
+func _connect_signals() -> void:
+	Server.connect("connection_successful", self, "on_connection_succeeded")
 	Server.connect("connection_failed", self, "on_connection_dailed")
 	Server.connect("peer_connected", self, "on_peer_connected")
 	Server.connect("peer_disconnected", self, "on_peer_disconnected")
 
 #client only
-func on_connection_succeeded(id : int) -> void:
-	rpc_id(1, "send_player_data", id, local_player)
+func on_connection_succeeded() -> void:
+	print("connection successful")
+	rpc_id(1, "send_player_data", local_player)
 
 #client only
-func on_connection_failed(id : int) -> void:
+func on_connection_failed() -> void:
 	pass
 
 func on_peer_connected(id : int) -> void:
@@ -36,12 +40,13 @@ func on_peer_disconnected(id : int) -> void:
 	pass
 
 #on server
-remote func send_player_data(id : int, data : Dictionary) -> void:
+remote func send_player_data(data : Dictionary) -> void:
+	print("sent")
 	#send new player's data to everyone
-	rpc("distribute_player_data", id, data)
+	rpc("distribute_player_data", get_tree().get_rpc_sender_id(), data)
 	
 	#sends all players' data to new client
-	rpc_id(id, "recieve_player_data", players_data)
+	rpc_id(get_tree().get_rpc_sender_id(), "recieve_player_data", players_data)
 
 #on new client
 remote func recieve_player_data(data : Dictionary) -> void:
@@ -53,6 +58,7 @@ remote func recieve_player_data(data : Dictionary) -> void:
 
 #on clients
 remotesync func distribute_player_data(id : int, data : Dictionary) -> void:
+	print("dist")
 	if get_tree().get_rpc_sender_id() == 1:
 		add_player(id, data)
 
@@ -84,3 +90,5 @@ func add_player(id : int, data : Dictionary) -> void:
 	
 	#add player node to players dictionary
 	players[id] = instance
+	#adds player to the tree
+	add_child(instance)
