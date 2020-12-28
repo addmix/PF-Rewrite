@@ -36,6 +36,8 @@ func dequipped() -> void:
 	change_state("Inactive")
 
 func change_state(new_state : String) -> void:
+	if !is_inside_tree():
+		return
 	if is_network_master():
 		rpc("syncState", new_state)
 	#exit current state
