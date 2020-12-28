@@ -1,9 +1,7 @@
 extends KinematicBody
 
 #general data
-export var player_name := "Player"
-export var id := -1
-export var team := -1
+var player : Node
 
 #in game data
 export var health := 100

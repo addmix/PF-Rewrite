@@ -233,8 +233,8 @@ tip_bone = "hand_r"
 use_magnet = true
 magnet = Vector3( -2, 3, -1 )
 max_iterations = 4
-[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Player_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Player_camera_movement"]
+[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Player_camera_movement"]
 [connection signal="set_process" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_set_process"]
 [connection signal="shot_fired" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_shot_fired"]
 [connection signal="weapon_changed" from="Smoothing/RotationHelper/Head/WeaponController" to="." method="_on_WeaponController_weapon_changed"]
