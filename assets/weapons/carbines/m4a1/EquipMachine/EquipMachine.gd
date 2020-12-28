@@ -36,6 +36,8 @@ func dequipped() -> void:
 	change_state("Inactive")
 
 func change_state(new_state : String) -> void:
+	if is_network_master():
+		rpc("syncState", new_state)
 	#exit current state
 	states[current_state].exit()
 	
@@ -44,8 +46,7 @@ func change_state(new_state : String) -> void:
 	
 	current_state = new_state
 	
-	if is_network_master():
-		rpc("syncState", new_state)
+	
 
 puppet func syncState(new_state : String) -> void:
 	#exit current state

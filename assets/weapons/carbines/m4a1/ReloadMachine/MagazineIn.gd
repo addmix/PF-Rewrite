@@ -34,10 +34,13 @@ func unhandled_input(event : InputEvent) -> void:
 	pass
 
 func anim_finished(anim : String) -> void:
-	get_parent().get_parent().set_magazine(get_parent().get_parent().data["Misc"]["Magazine"])
-	
-	#negative ammo bug here
-	get_parent().get_parent().set_reserve(get_parent().get_parent().get_reserve() - get_parent().get_parent().data["Misc"]["Magazine"])
+	var step = get_parent().get_parent().get_reserve() - get_parent().get_parent().data["Misc"]["Magazine"]
+	if step < 0:
+		get_parent().get_parent().set_reserve(0)
+		get_parent().get_parent().set_magazine(get_parent().get_parent().data["Misc"]["Magazine"] - abs(step))
+	else:
+		get_parent().get_parent().set_reserve(step)
+		get_parent().get_parent().set_magazine(get_parent().get_parent().data["Misc"]["Magazine"])
 	
 	if get_parent().gunMachine.currentState == "Locked":
 		call_deferred("emit_signal", "changeState", "BoltRelease")

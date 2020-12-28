@@ -34,17 +34,17 @@ func _unhandled_input(event : InputEvent) -> void:
 		states[currentState].unhandled_input(event)
 
 func changeState(new_state : String) -> void:
+
+	#exit current state
+	states[currentState].exit()
+	#enter new state from current state
+	states[new_state].enter(currentState)
+	#emit stateChanged signal
+	emit_signal("stateChanged", self, currentState, new_state)
+	#assing currentState to new state
+	currentState = new_state
 	if is_network_master():
-		#exit current state
-		states[currentState].exit()
-		#enter new state from current state
-		states[new_state].enter(currentState)
-		#emit stateChanged signal
-		emit_signal("stateChanged", self, currentState, new_state)
-		#assing currentState to new state
-		currentState = new_state
-		if is_network_master():
-			rpc("syncState", new_state)
+		rpc("syncState", new_state)
 
 puppet func syncState(new_state : String) -> void:
 	#exit current state

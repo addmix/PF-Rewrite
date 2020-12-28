@@ -40,7 +40,7 @@ func deferred() -> void:
 	accuracy = interpolateAccuracy(0.0)
 	
 	call_deferred("emit_signal", "weapon_changed", weapons[current_weapon])
-	
+	print(weapons)
 	set_process(true)
 	emit_signal("set_process", true)
 
@@ -50,6 +50,8 @@ func set_weapon(index : int, weapon : String) -> void:
 	weapons[index] = Weapons.models[weapon].instance()
 
 func switch_weapon(index : int) -> void:
+	if weapons[index] == null:
+		return
 	#do dequip animation
 	weapons[current_weapon].dequip()
 	new_weapon = index

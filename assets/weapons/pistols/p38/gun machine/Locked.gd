@@ -2,9 +2,11 @@ extends Node
 
 signal change_state
 
+func release() -> void:
+	call_deferred("emit_signal", "change_state", "Forward")
+
 func enter() -> void:
 	pass
-#	release()
 
 func exit() -> void:
 	pass
@@ -14,6 +16,3 @@ func process(delta : float) -> void:
 
 func unhandled_input(event : InputEvent) -> void:
 	pass
-
-func release() -> void:
-	call_deferred("emit_signal", "change_state", "Forward")

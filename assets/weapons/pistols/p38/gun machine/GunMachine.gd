@@ -14,9 +14,17 @@ func _process(delta : float) -> void:
 	states[current_state].process(delta)
 
 func _unhandled_input(event : InputEvent) -> void:
-	states[current_state].unhandled_input(event)
+	if is_network_master():
+		states[current_state].unhandled_input(event)
 
 func change_state(new_state : String) -> void:
+	states[current_state].exit()
+	states[new_state].enter()
+	current_state = new_state
+	if is_network_master():
+		rpc("sync_state", new_state)
+
+puppet func sync_state(new_state : String) -> void:
 	states[current_state].exit()
 	states[new_state].enter()
 	current_state = new_state

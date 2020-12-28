@@ -3,13 +3,30 @@ extends Node
 signal change_state
 var stopped := false
 func enter() -> void:
-	pass
+	var step = get_parent().get_parent().get_reserve() - get_parent().get_parent().data["Misc"]["Magazine"]
+	if step < 0:
+		get_parent().get_parent().set_reserve(0)
+		get_parent().get_parent().set_magazine(get_parent().get_parent().data["Misc"]["Magazine"] - abs(step))
+	else:
+		get_parent().get_parent().set_reserve(step)
+		get_parent().get_parent().set_magazine(get_parent().get_parent().data["Misc"]["Magazine"])
+	
+	if get_parent().get_parent().GunMachine.current_state == "Locked":
+		call_deferred("emit_signal", "change_state", "Slide")
+	else:
+		call_deferred("emit_signal", "change_state", "Ready")
 
 func exit() -> void:
 	pass
 
 func process(delta : float) -> void:
 	pass
+
+func resume() -> void:
+	if get_parent().get_parent().GunMachine.current_state == "Locked":
+		call_deferred("emit_signal", "change_state", "Slide")
+	else:
+		call_deferred("emit_signal", "change_state", "Ready")
 
 func unhandled_input(event : InputEvent) -> void:
 	pass
