@@ -107,7 +107,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425351, 0 )
 
 [node name="Camera" type="Camera" parent="Smoothing/RotationHelper/Head"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.458991, -0.129674 )
-current = true
 far = 1000.0
 script = ExtResource( 3 )
 

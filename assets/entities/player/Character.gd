@@ -25,14 +25,26 @@ onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/
 onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
 
 func _ready() -> void:
+	call_deferred("deferred")
+
+func deferred() -> void:
 	if is_network_master():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		LeftHandIK.max_iterations = 20
 		RightHandIK.max_iterations = 20
+		_Camera.current = true
 
 func _exit_tree() -> void:
 	if is_network_master():
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func shot(projectile : Spatial) -> void:
+	#calculate damage here
+	pass
+
+
+#input
+
 
 func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
@@ -54,6 +66,8 @@ func _unhandled_input(event : InputEvent) -> void:
 			
 		if event.is_action_pressed("jump"):
 			jump()
+		if event.is_action_pressed("reset_character"):
+			Player.remove_character()
 
 func get_axis() -> Vector3:
 	var axis := Vector3.ZERO

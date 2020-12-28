@@ -33,7 +33,9 @@ func instance_character() -> void:
 
 func initialize_character() -> void:
 	#give character a reference to player node
-	Character.player = self
+	Character.set_network_master(player_id)
+	
+	Character.Player = self
 	
 	Character.add_to_group("characters")
 
@@ -41,12 +43,17 @@ func connect_character_signals() -> void:
 	pass
 
 #call to gamemode player spawner
-func spawn_character() -> void:
+func spawn_character(node : Position3D) -> void:
 	instance_character()
+	$"/root".add_child(Character)
+	#set player's transform
+	Character.transform = get_tree().get_nodes_in_group("Spawns")[0].transform
 
 func remove_character() -> void:
 	Character.remove_from_group("characters")
 	Character.queue_free()
+	if is_network_master():
+		Server.GamemodeInstance.Spawner.show_menu()
 
 func _exit_tree() -> void:
 	if Character:

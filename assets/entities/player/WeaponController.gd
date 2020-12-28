@@ -18,15 +18,19 @@ var current_weapon := 0
 func _ready() -> void:
 	set_process(false)
 	emit_signal("set_process", false)
+	call_deferred("deferred")
+
+func deferred() -> void:
+	character = get_parent().get_parent().get_parent().get_parent()
 	
 	#loads weapons
-	for weapon in range(character.player.loadout.size()):
-		if character.player.loadout[weapon] == null:
+	for weapon in range(character.Player.loadout.size()):
+		if character.Player.loadout[weapon] == null:
 			continue
-		set_weapon(weapon, character.player.loadout[weapon])
-		character.player.loadout[weapon].connect("shotFired", self, "on_shot_fired")
-		character.player.loadout[weapon].connect("equipped", self, "on_weapon_equipped")
-		character.player.loadout[weapon].connect("dequipped", self, "on_weapon_dequipped")
+		set_weapon(weapon, character.Player.loadout[weapon])
+		weapons[weapon].connect("shotFired", self, "on_shot_fired")
+		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
+		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")
 	
 	add_child(weapons[current_weapon])
 	weapons[current_weapon].equip()
@@ -34,12 +38,8 @@ func _ready() -> void:
 	#initialize
 	accuracy = interpolateAccuracy(0.0)
 	
-	
 	call_deferred("emit_signal", "weapon_changed", weapons[current_weapon])
-	call_deferred("deferred")
-
-func deferred() -> void:
-	character = get_parent().get_parent().get_parent().get_parent()
+	
 	set_process(true)
 	emit_signal("set_process", true)
 

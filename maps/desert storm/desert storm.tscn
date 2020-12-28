@@ -206,8 +206,10 @@ material/0 = ExtResource( 6 )
 [node name="CollisionShape" type="CollisionShape" parent="Building007/StaticBody" index="0"]
 shape = SubResource( 17 )
 
-[node name="Position3D" type="Position3D" parent="." index="17"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.02552, 105.577, 119.218 )
+[node name="Position3D" type="Position3D" parent="." index="17" groups=[
+"Spawns",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 152.244, 99.2134, 175.871 )
 
 [node name="Building009" parent="." index="18"]
 material/0 = ExtResource( 6 )
