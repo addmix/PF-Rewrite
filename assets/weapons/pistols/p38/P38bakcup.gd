@@ -77,7 +77,7 @@ func on_equipped() -> void:
 func on_dequipped() -> void:
 	emit_signal("dequipped", self)
 
-var data := {
+export var data := {
 	"Ballistics": {
 		"Head multiplier": float(1.5),
 		"Torso multipler": float(1.0),
