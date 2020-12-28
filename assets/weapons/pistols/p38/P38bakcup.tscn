@@ -20,8 +20,14 @@
 [ext_resource path="res://assets/weapons/pistols/p38/equip machine/Dequip.gd" type="Script" id=20]
 
 [node name="P38bakcup" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.187936 )
 script = ExtResource( 1 )
+
+[node name="Armature" parent="." index="0"]
+transform = Transform( 0.652137, 0, 0, 0, 0.652137, 0, 0, 0, 0.652137, 0, 0, -0.119293 )
+
+[node name="Skeleton" parent="Armature" index="0"]
+bones/6/bound_children = [ NodePath("HandIKL") ]
+bones/7/bound_children = [ NodePath("HandIKR") ]
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="16"]
 transform = Transform( 0.899793, 0.406763, 0.157848, 0.0194702, -0.398847, 0.916811, 0.435882, -0.821867, -0.366799, -0.197831, -0.173427, 0.380892 )
@@ -32,9 +38,10 @@ transform = Transform( 0.964501, -0.264028, 0.00511488, -0.0413649, -0.131921, 0
 bone_name = "right_hand_ik"
 
 [node name="Aim" type="Position3D" parent="." index="1"]
-transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.127231, 0.951031 )
+transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.127231, 0.808085 )
 
 [node name="Barrel" type="Position3D" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07826, -0.50648 )
 
 [node name="GunMachine" type="Node" parent="." index="3"]
 script = ExtResource( 3 )

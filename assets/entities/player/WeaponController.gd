@@ -105,8 +105,8 @@ var accuracy := {}#interpolateAccuracy(aim_spring.position)
 func _process(delta : float) -> void:
 	#stackable vars
 	var camera_transform = player._Camera.global_transform.basis
-	var pos := Vector3.ZERO
-	var rot := Vector3.ZERO
+	var pos : Vector3 = weapons[current_weapon].data["Weapon handling"]["Position"]
+	var rot : Vector3 = weapons[current_weapon].data["Weapon handling"]["Rotation"]
 	var speed : float = weapons[current_weapon].data["Weapon handling"]["Walkspeed"]
 	
 	
@@ -117,7 +117,7 @@ func _process(delta : float) -> void:
 	aim_spring.speed = weapons[current_weapon].data["Weapon handling"]["Aiming speed"]
 	
 	aim_spring.positionvelocity(delta)
-	pos -= aim_spring.position * (base_offset + weapons[current_weapon].aim_node.transform.origin)
+	pos -= aim_spring.position * (base_offset + weapons[current_weapon].aim_node.transform.origin - player._Camera.base_offset + weapons[current_weapon].data["Weapon handling"]["Position"])
 	
 	accuracy = interpolateAccuracy(aim_spring.position)
 	

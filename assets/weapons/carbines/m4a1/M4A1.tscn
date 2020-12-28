@@ -24,8 +24,11 @@
 [ext_resource path="res://assets/weapons/carbines/m4a1/EquipMachine/Inactive.gd" type="Script" id=22]
 
 [node name="M4A1" instance=ExtResource( 1 )]
-transform = Transform( 0.428849, -0.447262, 0.784886, 0.157379, 0.892539, 0.422618, -0.889562, -0.0577151, 0.453154, 0, -0.0845567, -0.335449 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 script = ExtResource( 7 )
+
+[node name="Armature" parent="." index="0"]
+transform = Transform( 1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, -0.0770987, -0.117315 )
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="34"]
 transform = Transform( 1, 1.42109e-14, -2.38419e-07, 2.38419e-07, -8.9407e-08, 1, 0, -1, -5.96046e-08, -0.115257, -0.221117, 0.0495666 )
@@ -36,10 +39,10 @@ transform = Transform( 1, 0, 0, 0, -0.368812, 0.929504, 0, -0.929504, -0.368812,
 bone_name = "hand_ik_r"
 
 [node name="Aim" type="Position3D" parent="." index="1"]
-transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.404, 0.793761 )
+transform = Transform( 10, 0, 0, 0, 9.99999, 0, 0, 0, 9.99999, 0, 0.327, 0.617813 )
 
 [node name="Barrel" type="Position3D" parent="." index="2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.196854, -1.06708 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.107367, -1.14473 )
 
 [node name="GunMachine" type="Node" parent="." index="3"]
 script = ExtResource( 4 )

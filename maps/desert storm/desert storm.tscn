@@ -246,3 +246,9 @@ directional_shadow_max_distance = 500.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="49"]
 environment = SubResource( 22 )
+
+[node name="CSGBox" type="CSGBox" parent="." index="50"]
+transform = Transform( 1, 0, 0, 0, 0.855816, -0.51728, 0, 0.51728, 0.855816, 169.909, 100.606, 155.097 )
+use_collision = true
+width = 14.277
+depth = 32.3178

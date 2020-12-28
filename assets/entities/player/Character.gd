@@ -117,24 +117,25 @@ func _physics_process(delta : float) -> void:
 	#world space axis
 	var xformed : Vector3 = RotationHelper.transform.xform(walk_spring.position)
 	
-	#gets translation basis for ground normal
+	#gets translation basis for ground normal translation
 	var basis : Basis = RotationHelper.get_global_transform().basis
 	
 	if is_on_floor():
 		#change floor normal to be average of slides
-		basis = get_ground_normal_translation(RotationHelper.get_global_transform().basis, get_floor_normal())
+		basis = get_ground_normal_translation(basis, get_floor_normal())
 	
 	#xform input vector by basis
 	var translated := basis.xform(walk_spring.position)
 	
+	if is_on_floor() and player_velocity.y > 0:
+		player_velocity.y *= 0
 	
 	#gravity
 	player_velocity.y += -14.8 * delta
 	
-	#change player_velocity to a spring
 	player_velocity *= Vector3(0, 1, 0)
 	
-	player_velocity = move_and_slide(translated + player_velocity, Vector3(0, 1, 0), true, 4, deg2rad(45), false)
+	player_velocity = move_and_slide(translated + player_velocity, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
 
 func jump() -> void:
 	if is_on_floor():

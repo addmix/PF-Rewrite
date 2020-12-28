@@ -2,7 +2,7 @@ extends Node
 
 var spawned_players := {}
 
-var player = preload("res://assets/entities/player/Player.tscn")
+var player = preload("res://assets/entities/player/Character.tscn")
 var plugin = preload("res://gamemodes/boilerplates/playerspawner/playerspawneruiplugin.tscn")
 var Plugin : Control
 

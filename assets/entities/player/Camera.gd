@@ -1,10 +1,14 @@
 extends Camera
 
+#nodes
 onready var player = get_parent().get_parent().get_parent().get_parent()
 onready var WeaponController = get_parent().get_node("WeaponController")
 
+#vars
 var rotation_delta := Vector3.ZERO
+var base_offset := transform.origin
 
+#springs
 var zoom_spring := Physics.Spring.new(1, 0, 1, .85, 12)
 var rotation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var translation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
@@ -56,7 +60,7 @@ func _process(delta : float) -> void:
 	
 	
 	
-	transform.origin = pos
+	transform.origin = pos + base_offset
 	rotation = rot
 
 #		"Min camera rotation": Vector3(-.1, -.1, 0),

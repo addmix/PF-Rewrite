@@ -3,15 +3,16 @@
 [ext_resource path="res://assets/entities/player/model/playermodel.gd" type="Script" id=1]
 [ext_resource path="res://addons/smoothing/smoothing.gd" type="Script" id=2]
 [ext_resource path="res://assets/entities/player/Camera.gd" type="Script" id=3]
-[ext_resource path="res://assets/entities/player/Player.gd" type="Script" id=4]
+[ext_resource path="res://assets/entities/player/Character.gd" type="Script" id=4]
 [ext_resource path="res://assets/entities/player/WeaponController.gd" type="Script" id=5]
 
 [sub_resource type="CapsuleShape" id=1]
-radius = 0.75
-height = 1.5
+radius = 0.8
+height = 3.1
 
 [sub_resource type="RayShape" id=2]
 length = 1.9973
+slips_on_slope = true
 
 [sub_resource type="ArrayMesh" id=3]
 surfaces/0 = {
@@ -83,16 +84,17 @@ bind/17/name = "toe_r"
 bind/17/bone = -1
 bind/17/pose = Transform( -1, 8.74228e-08, 0, 0, 0, 1, 8.74228e-08, 1, 0, -0.34433, 0, -0.0919839 )
 
-[node name="Player" type="KinematicBody"]
+[node name="Character" type="KinematicBody"]
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 3.42246, 0 )
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 2.35, 0 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 2, 0 )
 shape = SubResource( 2 )
+disabled = true
 
 [node name="Smoothing" type="Spatial" parent="."]
 script = ExtResource( 2 )
@@ -101,15 +103,16 @@ script = ExtResource( 2 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 0 )
 
 [node name="Head" type="Spatial" parent="Smoothing/RotationHelper"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.32078 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425351, 0 )
 
 [node name="Camera" type="Camera" parent="Smoothing/RotationHelper/Head"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.458991, -0.129674 )
 current = true
 far = 1000.0
 script = ExtResource( 3 )
 
 [node name="WeaponController" type="Spatial" parent="Smoothing/RotationHelper/Head"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.733662, -0.561311, -1.20499 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.733662, -0.196354, -1.32195 )
 script = ExtResource( 5 )
 
 [node name="Player" type="Spatial" parent="Smoothing/RotationHelper"]
@@ -230,8 +233,6 @@ tip_bone = "hand_r"
 use_magnet = true
 magnet = Vector3( -2, 3, -1 )
 max_iterations = 4
-
-[node name="SprintMachine" type="Node" parent="."]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Player_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Player_camera_movement"]
 [connection signal="set_process" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_set_process"]

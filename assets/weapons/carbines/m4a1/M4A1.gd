@@ -321,6 +321,9 @@ var data := {
 		"Crosshair spread rate": float(10.0),
 		"Crosshair recover rate": float(10.0),
 		
+		"Position": Vector3(0, -.1, 0),
+		"Rotation": Vector3(0, 0, 0),
+		
 		"Walkspeed": float(12.0),
 		
 		"Accel speed": float(6.0),
