@@ -43,19 +43,33 @@ func change_state(new_state : String) -> void:
 	states[new_state].enter()
 	
 	current_state = new_state
+	
+	if is_network_master():
+		rpc("syncState", new_state)
+
+puppet func syncState(new_state : String) -> void:
+	#exit current state
+	states[current_state].exit()
+	#enter new state from current state
+	states[new_state].enter()
+	#assing currentState to new state
+	current_state = new_state
+
+
 
 func _process(delta : float) -> void:
 	states[current_state].process(delta)
 
 func _unhandled_input(event : InputEvent) -> void:
-	#these are inputs we want to be disabled when the gun isnt ready
-#	if current_state != "Idle":
-#		if event.is_action_pressed("shoot"):
-#			get_tree().set_input_as_handled()
-#			return
-#		if event.is_action_pressed("reload"):
-#			get_tree().set_input_as_handled()
-#			return
-	
-	#pass inputs to current state
-	states[current_state].unhandled_input(event)
+	if is_network_master():
+		#these are inputs we want to be disabled when the gun isnt ready
+	#	if current_state != "Idle":
+	#		if event.is_action_pressed("shoot"):
+	#			get_tree().set_input_as_handled()
+	#			return
+	#		if event.is_action_pressed("reload"):
+	#			get_tree().set_input_as_handled()
+	#			return
+		
+		#pass inputs to current state
+		states[current_state].unhandled_input(event)

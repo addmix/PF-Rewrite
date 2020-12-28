@@ -44,7 +44,8 @@ func changeState(new_state : String) -> void:
 		emit_signal("stateChanged", self, currentState, new_state)
 		#assing currentState to new state
 		currentState = new_state
-		rpc("syncState", new_state)
+		if is_network_master():
+			rpc("syncState", new_state)
 
 puppet func syncState(new_state : String) -> void:
 	#exit current state

@@ -28,6 +28,5 @@ func unhandled_input(event : InputEvent) -> void:
 		get_tree().set_input_as_handled()
 
 func onReset() -> void:
-	if is_network_master():
-		if Input.is_action_pressed("shoot"):
-			get_parent().emit_signal("fire")
+	if is_network_master() and Input.is_action_pressed("shoot"):
+		get_parent().emit_signal("fire")

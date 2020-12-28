@@ -11,8 +11,6 @@ var player_id : int
 var character = preload("res://assets/entities/player/Character.tscn")
 var Character : Spatial
 
-
-
 #signals
 signal died
 
@@ -33,6 +31,8 @@ func instance_character() -> void:
 
 func initialize_character() -> void:
 	#give character a reference to player node
+	Character.name = str(player_id)
+	
 	Character.set_network_master(player_id)
 	
 	Character.Player = self
@@ -40,7 +40,12 @@ func initialize_character() -> void:
 	Character.add_to_group("characters")
 
 func connect_character_signals() -> void:
-	pass
+	Character.connect("died", self, "on_player_died")
+
+func on_player_died() -> void:
+	remove_character()
+	if is_network_master():
+		Server.GamemodeInstance.Spawner.show_menu()
 
 #call to gamemode player spawner
 func spawn_character(node : Position3D) -> void:
@@ -52,8 +57,6 @@ func spawn_character(node : Position3D) -> void:
 func remove_character() -> void:
 	Character.remove_from_group("characters")
 	Character.queue_free()
-	if is_network_master():
-		Server.GamemodeInstance.Spawner.show_menu()
 
 func _exit_tree() -> void:
 	if Character:

@@ -24,6 +24,9 @@ export var camera_sensitiviy := Vector2(.2, .2)
 onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftHandIK"
 onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
 
+#signals
+signal died
+
 func _ready() -> void:
 	call_deferred("deferred")
 
@@ -41,6 +44,13 @@ func _exit_tree() -> void:
 func shot(projectile : Spatial) -> void:
 	#calculate damage here
 	pass
+
+func kill() -> void:
+	
+	emit_signal("died")
+
+func reset() -> void:
+	emit_signal("died")
 
 
 #input
@@ -63,12 +73,14 @@ func _unhandled_input(event : InputEvent) -> void:
 			
 			var delta : Vector3 = current - Head.rotation_degrees
 			emit_signal("camera_movement", Vector3(delta.x, -relative.x, delta.z))
+			rset_unreliable("head_rotation", Vector3(Head.rotation.x, RotationHelper.rotation.y, 0))
 			
 		if event.is_action_pressed("jump"):
 			jump()
 		if event.is_action_pressed("reset_character"):
-			Player.remove_character()
+			reset()
 
+remote var puppet_axis := Vector3.ZERO
 func get_axis() -> Vector3:
 	var axis := Vector3.ZERO
 	if is_network_master():
@@ -76,9 +88,10 @@ func get_axis() -> Vector3:
 		axis += Vector3(0, 0, 1) * int(Input.is_action_pressed("walk_backward"))
 		axis += Vector3(-1, 0, 0) * int(Input.is_action_pressed("walk_left"))
 		axis += Vector3(1, 0, 0) * int(Input.is_action_pressed("walk_right"))
+		rset_unreliable("puppet_axis", axis)
+	else:
+		axis = puppet_axis
 	return axis
-
-
 
 func _process(delta : float) -> void:
 	set_delta_pos()
@@ -86,7 +99,6 @@ func _process(delta : float) -> void:
 
 #delta velocity
 var delta_vel := Vector3.ZERO
-
 var last_vel := Vector3.ZERO
 
 func set_delta_vel() -> void:
@@ -115,12 +127,21 @@ func set_last_pos() -> void:
 var walk_spring = Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8, 14)
 var player_velocity := Vector3.ZERO
 
+remote var puppet_pos := Vector3.ZERO
+remote var head_rotation := Vector3.ZERO
+
 func _physics_process(delta : float) -> void:
 	if !is_network_master():
-		return
+		Head.rotation.x = head_rotation.x
+		transform.origin = puppet_pos
+		RotationHelper.rotation.y = head_rotation.y
 	
 	#local space axis
 	var axis := get_axis()
+	
+	if !is_network_master():
+		axis = puppet_axis
+	
 	walk_spring.speed = WeaponController.accuracy["Walk accel"]
 	walk_spring.damper = WeaponController.accuracy["Walk damper"]
 	walk_spring.target = axis.normalized() * WeaponController.movement_speed
@@ -148,6 +169,9 @@ func _physics_process(delta : float) -> void:
 	player_velocity *= Vector3(0, 1, 0)
 	
 	player_velocity = move_and_slide(translated + player_velocity, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
+	
+	if is_network_master():
+		rset_unreliable("puppet_pos", transform.origin)
 
 func jump() -> void:
 	if is_on_floor():

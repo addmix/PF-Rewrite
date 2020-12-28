@@ -26,6 +26,9 @@ func initialize_states() -> void:
 func _process(delta : float) -> void:
 	states[currentState].process(delta)
 
+remote var puppet_shooting = false
+var shooting = false
+
 func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
 		states[currentState].unhandled_input(event)
@@ -40,7 +43,8 @@ func changeState(new_state : String) -> void:
 		emit_signal("stateChanged", self, currentState, new_state)
 		#assing currentState to new state
 		currentState = new_state
-#		rpc("syncState", new_state)
+		if is_network_master():
+			rpc("syncState", new_state)
 
 puppet func syncState(new_state : String) -> void:
 	#exit current state
@@ -52,9 +56,6 @@ puppet func syncState(new_state : String) -> void:
 	#assing currentState to new state
 	currentState = new_state
 	
-
-func input() -> void:
-	pass
 
 func _on_FiremodeMachine_fire() -> void:
 	states[currentState].fire()

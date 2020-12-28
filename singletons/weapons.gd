@@ -1,8 +1,8 @@
 extends Node
 
 var weapons := {}
-
 var manifest := {}
+var models := {}
 
 var base_dir := "res://assets/weapons/"
 
@@ -90,3 +90,7 @@ func scan_weapons() -> void:
 			weapons[manifest[weapon]["info"]["category"]] = {}
 		
 		weapons[manifest[weapon]["info"]["category"]][weapon] = manifest[weapon]
+	
+	#load all models for weapons
+	for weapon in manifest:
+		models[weapon] = load(manifest[weapon]["info"]["path"] + "/" + manifest[weapon]["info"]["scene"])

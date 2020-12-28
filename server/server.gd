@@ -40,7 +40,7 @@ func _connect_signals() -> void:
 #only on client
 func connection_succeeded() -> void:
 	emit_signal("connection_successful")
-	print("Successfully connected to server")
+#	print("Successfully connected to server")
 	
 	#get server info and load map n shit
 	yield(self, "recieved_game_data")
@@ -51,12 +51,12 @@ func connection_succeeded() -> void:
 #only on client
 func connection_failed() -> void:
 	emit_signal("connection_failed")
-	print("Failed to connect to server")
+#	print("Failed to connect to server")
 	get_tree().set_network_peer(null)
 
 func peer_connected(id : int) -> void:
 	emit_signal("peer_connected", id)
-	print("Peer connected with id: " + str(id))
+#	print("Peer connected with id: " + str(id))
 	
 	#only on server
 	if get_tree().is_network_server():
@@ -65,7 +65,7 @@ func peer_connected(id : int) -> void:
 
 func peer_disconnected(id : int) -> void:
 	emit_signal("peer_disconnected", id)
-	print("Peer disconnected with id: " + str(id))
+#	print("Peer disconnected with id: " + str(id))
 
 #start host player
 func start_host() -> void:
@@ -139,9 +139,16 @@ func close_server() -> void:
 	PauseMenu.queue_free()
 	PauseMenu = null
 	
+	#remove players
+	get_tree().call_group("characters", "queue_free")
+	get_tree().call_group("players", "queue_free")
+	
 	#load menu
 	var resource := load("res://scenes/menu/menu.tscn")
 	$"/root".add_child(resource.instance())
+
+func _exit_tree() -> void:
+	network.close_connection()
 
 #menu connection server starting funcs
 func set_server(address : String, port : int) -> void:
