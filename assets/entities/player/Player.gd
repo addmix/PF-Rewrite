@@ -1,5 +1,7 @@
 extends Node
 
+class_name Player
+
 #values
 var data : Dictionary
 var loadout := ["M4A1", "P38", null, null]
@@ -9,7 +11,7 @@ var player_id : int
 
 #nodes
 var character = preload("res://assets/entities/player/Character.tscn")
-var Character : Spatial
+var Character : Character
 
 #signals
 signal died

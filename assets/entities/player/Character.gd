@@ -1,7 +1,9 @@
 extends KinematicBody
 
+class_name Character
+
 #general data
-var Player : Node
+var Player
 
 #signals
 signal died
@@ -48,7 +50,7 @@ func damage(source, hp : float) -> void:
 	#damage player
 	health -= hp
 	#add damage history
-	damage_stack.append([source, hp])
+	damage_stack.append([source, hp, OS.get_ticks_msec()])
 	#do screen effect
 
 func shot(projectile : Spatial) -> void:
@@ -59,7 +61,7 @@ func kill() -> void:
 	emit_signal("died")
 
 func reset() -> void:
-	damage_stack.append([self, 100.0])
+	damage_stack.append([self, 100.0, OS.get_ticks_msec()])
 	emit_signal("died")
 
 

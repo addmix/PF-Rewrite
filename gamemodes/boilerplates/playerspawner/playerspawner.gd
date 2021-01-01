@@ -33,7 +33,7 @@ func hide_menu() -> void:
 func spawn_check(node : Position3D) -> bool:
 	return allow_spawning
 
-func on_Player_spawned(player : Node) -> void:
+func on_Player_spawned(player : Player) -> void:
 	pass
 
 func on_spawn_pressed() -> void:

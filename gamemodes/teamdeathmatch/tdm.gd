@@ -86,7 +86,7 @@ func init_Players() -> void:
 	for player in Players.players:
 		player.connect("died", self, "on_Player_died")
 
-func on_Player_added(player : Node) -> void:
+func on_Player_added(player : Player) -> void:
 	player.connect("died", self, "on_Player_died")
 
 func on_countdown_finished() -> void:
@@ -142,40 +142,65 @@ func on_game_won(team : int) -> void:
 	pass
 
 #when player dies
-func on_Player_died(player : Node) -> void:
-	print(player.player_id, " died")
+func on_Player_died(player : Player) -> void:
+#	print(player.player_id, " died")
 	
 	#get killer
-	var killer = player.Character.damage_stack[0]
+	var killer = player.Character.damage_stack[0][0]
 	
 	#if death related to player somehow
 	if killer.has_method("get_player"):
 		
-		if killer == player:
-			#reset
-			pass
-		elif killer.get_player() == player:
-			#suicide
-			pass
+		if killer.get_player() == player:
+			on_suicide(player)
 		else:
-			#killed by another player
-			pass
+			on_killed(player)
+	
+	#no player involved
 	else:
-		#no player involved
-		
-	
-	
-	#give killer points
-	
+		if killer == player.Character:
+			on_reset(player)
+		else:
+			on_natural(player)
 	
 	pass
 
 #when player scores
-func player_scored(player) -> void:
+func player_scored(player : Player) -> void:
 	#update score
 	scores[player.team] += 1
+	
+	print(scores)
 	
 	#check score
 	if scores[player.team] >= options["score"]:
 		#emit game ended signal if one team has won
 		emit_signal("game_ended")
+	
+
+func on_reset(player : Player) -> void:
+	print(player.player_id, " reset")
+
+func on_suicide(player : Player) -> void:
+	print(player.player_id, " committed suicide")
+	
+	#punish suicide
+	scores[player.team] -= 1
+	
+	print(scores)
+
+func on_killed(player : Player) -> void:
+	#get killer
+	var killer = player.Character.damage_stack[0][0]
+	
+	print(player.player_id, " was killed by ", killer.player.player_id)
+	
+	player_scored(killer.player)
+
+func on_natural(player : Player) -> void:
+	print(player.player_id, " died from natural causes")
+	
+	#punish dying from non-enemies
+	scores[player.team] -= 1
+	
+	print(scores)
