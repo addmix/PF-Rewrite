@@ -1,5 +1,7 @@
 extends Node
 
+signal player_added
+
 var player = preload("res://assets/entities/player/Player.tscn")
 
 #id: data
@@ -98,3 +100,6 @@ func add_player(id : int, data : Dictionary) -> void:
 	players[id] = instance
 	#adds player to the tree
 	add_child(instance)
+	
+	#emit player added signal
+	emit_signal("player_added", instance)

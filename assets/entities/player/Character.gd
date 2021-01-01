@@ -3,8 +3,12 @@ extends KinematicBody
 #general data
 var Player : Node
 
+#signals
+signal died
+
 #in game data
 export var health := 100
+var damage_stack := []
 
 #nodes
 onready var RotationHelper : Spatial = $Smoothing/RotationHelper
@@ -24,8 +28,7 @@ export var camera_sensitiviy := Vector2(.2, .2)
 onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftHandIK"
 onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
 
-#signals
-signal died
+
 
 func _ready() -> void:
 	call_deferred("deferred")
@@ -41,15 +44,22 @@ func _exit_tree() -> void:
 	if is_network_master():
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+func damage(source, hp : float) -> void:
+	#damage player
+	health -= hp
+	#add damage history
+	damage_stack.append([source, hp])
+	#do screen effect
+
 func shot(projectile : Spatial) -> void:
 	#calculate damage here
 	pass
 
 func kill() -> void:
-	
 	emit_signal("died")
 
 func reset() -> void:
+	damage_stack.append([self, 100.0])
 	emit_signal("died")
 
 

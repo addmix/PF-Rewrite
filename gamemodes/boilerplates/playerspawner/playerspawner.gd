@@ -1,5 +1,7 @@
 extends Node
 
+signal player_spawned
+
 var Gamemode : Node
 
 var plugin = preload("res://gamemodes/boilerplates/playerspawner/playerspawneruiplugin.tscn")
@@ -19,6 +21,9 @@ func _ready() -> void:
 	#adds plugin to tree
 	add_child(Plugin)
 
+func _connect_signals() -> void:
+	connect("player_spawned", self, "on_Player_spawned")
+
 func show_menu() -> void:
 	add_child(Plugin)
 
@@ -27,6 +32,9 @@ func hide_menu() -> void:
 
 func spawn_check(node : Position3D) -> bool:
 	return allow_spawning
+
+func on_Player_spawned(player : Node) -> void:
+	pass
 
 func on_spawn_pressed() -> void:
 	if get_tree().is_network_server():
@@ -47,7 +55,13 @@ remote func request_spawn(node : Position3D) -> void:
 		rpc("decline_spawn", get_tree().get_rpc_sender_id(), node)
 
 remotesync func accept_spawn(id : int, node : Position3D) -> void:
+	#spawn character
 	Players.players[id].spawn_character(node)
+	
+	#emit signal
+	emit_signal("player_spawned", Players.players[id])
+	
+	#remove menu
 	if id == get_tree().get_network_unique_id():
 		#removes menu when spawned
 		hide_menu()

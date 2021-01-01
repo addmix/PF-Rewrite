@@ -18,7 +18,7 @@ func _connect_signals() -> void:
 	pass
 
 func instance_character() -> void:
-	#remove preexisting character
+	#rove preexisting character
 	if Character:
 		Character.queue_free()
 	
@@ -43,7 +43,11 @@ func connect_character_signals() -> void:
 	Character.connect("died", self, "on_player_died")
 
 func on_player_died() -> void:
+	emit_signal("died", self)
+	
 	remove_character()
+	
+	#show menu
 	if is_network_master():
 		Server.GamemodeInstance.Spawner.show_menu()
 

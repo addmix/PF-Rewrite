@@ -45,6 +45,8 @@ func init() -> void:
 	#assigns players to teams
 	Teams.assign_to_teams_random()
 	
+	init_Players()
+	
 	#initialize timers
 	#countdown timer
 	countdown_timer.wait_time = options["countdown_time"]
@@ -67,12 +69,25 @@ func init() -> void:
 
 #connects signals
 func connect_signals() -> void:
+	#game signals
 	connect("game_started", self, "on_game_start")
 	connect("game_ended", self, "on_game_ended")
 	connect("game_won", self, "on_game_won")
+	
+	#timer signals
 	countdown_timer.connect("timeout", self, "on_countdown_finished")
 	game_timer.connect("timeout", self, "on_game_time_finished")
 	end_timer.connect("timeout", self, "on_end_time_finished")
+	
+	#player signals
+	Players.connect("player_added", self, "on_Player_added")
+
+func init_Players() -> void:
+	for player in Players.players:
+		player.connect("died", self, "on_Player_died")
+
+func on_Player_added(player : Node) -> void:
+	player.connect("died", self, "on_Player_died")
 
 func on_countdown_finished() -> void:
 	countdown_timer.queue_free()
@@ -98,6 +113,8 @@ func on_game_end() -> void:
 	
 	Spawner.set_spawning(false)
 	
+	#end player control
+	
 	var highest_team := -1
 	var highest_score := -1
 	
@@ -121,10 +138,34 @@ func on_game_end() -> void:
 #when the game is won
 func on_game_won(team : int) -> void:
 	print("Team " + str(team) + " won")
+	
 	pass
 
 #when player dies
-func on_player_died(player : int, cause : int) -> void:
+func on_Player_died(player : Node) -> void:
+	print(player.player_id, " died")
+	
+	#get killer
+	var killer = player.Character.damage_stack[0]
+	
+	#if death related to player somehow
+	if killer.has_method("get_player"):
+		
+		if killer == player:
+			#reset
+			pass
+		elif killer.get_player() == player:
+			#suicide
+			pass
+		else:
+			#killed by another player
+			pass
+	else:
+		#no player involved
+		
+	
+	
+	#give killer points
 	
 	
 	pass
