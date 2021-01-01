@@ -23,7 +23,7 @@ var burstCam = 0
 
 #start burst
 func unhandled_input(event : InputEvent) -> void:
-	if event.is_action_pressed("Shoot") and get_parent().get_parent().gunMachine.currentState == "Ready":
+	if event.is_action_pressed("shoot") and get_parent().get_parent().GunMachine.currentState == "Ready":
 		burstCam += 1
 		get_parent().emit_signal("fire")
 		get_tree().set_input_as_handled()

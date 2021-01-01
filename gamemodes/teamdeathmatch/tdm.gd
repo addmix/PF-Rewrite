@@ -15,7 +15,7 @@ var Spawner : Node
 
 export var options := {
 	"game_time" : 300,
-	"countdown_time": 15,
+	"countdown_time": .1,
 	"end_time": 10,
 	"score": 200,
 	"teams": 2,
@@ -34,7 +34,7 @@ func init() -> void:
 	#initializes player spawner
 	Spawner = spawner.instance()
 	add_child(Spawner, true)
-	
+	Spawner.Gamemode = self
 	
 	connect_signals()
 	
@@ -89,11 +89,14 @@ func on_end_time_finished() -> void:
 func on_game_start() -> void:
 	game_timer.start()
 	print("Game start")
+	Spawner.set_spawning(true)
 
 #when game ends
 func on_game_end() -> void:
 	print("Game end")
 	game_timer.stop()
+	
+	Spawner.set_spawning(false)
 	
 	var highest_team := -1
 	var highest_score := -1

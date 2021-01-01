@@ -236,10 +236,10 @@ export var data := {
 		"Max rotation": Vector3(2, 2, 2),
 		
 		#recoil force
-		"Min translation force": Vector3(-1.2, .2, 2.5),
-		"Max translation force": Vector3(1.6, 1.2, 4.0),
-		"Min rotation force": Vector3(.4, -1.2, 0),
-		"Max rotation force": Vector3(1.0, 1.4, 0),
+		"Min translation force": Vector3(-.2, .2, .5),
+		"Max translation force": Vector3(.24, .41, .7),
+		"Min rotation force": Vector3(1.0, -.2, 0),
+		"Max rotation force": Vector3(1.4, .35, 0),
 		
 		#recoil spring settings
 		"Recoil translation speed": float(13.0),
