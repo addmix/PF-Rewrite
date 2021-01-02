@@ -93,6 +93,7 @@ material/0 = ExtResource( 6 )
 shape = SubResource( 1 )
 
 [node name="Ground" parent="." index="1"]
+use_in_baked_light = true
 material/0 = ExtResource( 2 )
 
 [node name="StaticBody" type="StaticBody" parent="Ground" index="0"]
@@ -219,11 +220,11 @@ shape = SubResource( 17 )
 ]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 152.244, 99.2134, 175.871 )
 __meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true
+"_edit_group_": true
 }
 
 [node name="Building009" parent="." index="18"]
+use_in_baked_light = true
 material/0 = ExtResource( 6 )
 
 [node name="StaticBody" type="StaticBody" parent="Building009" index="0"]
@@ -276,6 +277,7 @@ depth = 32.3178
 [node name="Area" type="Area" parent="." index="51"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 154.66, 97.7863, 154.861 )
 monitorable = false
+collision_mask = 2
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_group_": true

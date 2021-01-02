@@ -81,6 +81,7 @@ bind/17/bone = -1
 bind/17/pose = Transform( -1, 8.74228e-08, 0, 0, 0, 1, 8.74228e-08, 1, 0, -0.34433, 0, -0.0919839 )
 
 [node name="Character" type="KinematicBody"]
+collision_layer = 2
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
