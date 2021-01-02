@@ -1,8 +1,9 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Maps/Desert Storm/desert storm.gltf" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Materials/sand.tres" type="Material" id=2]
 [ext_resource path="res://maps/desert storm/desert storm.gd" type="Script" id=3]
+[ext_resource path="res://maps/desert storm/Area.gd" type="Script" id=4]
 [ext_resource path="res://Assets/Materials/Building.tres" type="Material" id=6]
 
 [sub_resource type="ConcavePolygonShape" id=1]
@@ -72,6 +73,13 @@ background_mode = 2
 background_sky = SubResource( 21 )
 ambient_light_color = Color( 0.105882, 0.105882, 0.105882, 1 )
 ambient_light_sky_contribution = 0.4
+
+[sub_resource type="SpatialMaterial" id=23]
+flags_disable_ambient_light = true
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="BoxShape" id=24]
+extents = Vector3( 2.5, 0.5, 2.5 )
 
 [node name="desert storm" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
@@ -210,6 +218,10 @@ shape = SubResource( 17 )
 "Spawns",
 ]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 152.244, 99.2134, 175.871 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
 
 [node name="Building009" parent="." index="18"]
 material/0 = ExtResource( 6 )
@@ -239,12 +251,18 @@ shape = SubResource( 20 )
 transform = Transform( 1, 0, 0, 0, 0.802255, 0.596981, 0, -0.596981, 0.802255, 70, 400, 450 )
 fov = 50.0
 far = 2000.0
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="48"]
 transform = Transform( 0.258785, 0.874255, -0.410741, 0, 0.425226, 0.905087, 0.965935, -0.234223, 0.110042, 0, 174.4, 0 )
 shadow_enabled = true
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 500.0
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="49"]
 environment = SubResource( 22 )
@@ -254,3 +272,21 @@ transform = Transform( 1, 0, 0, 0, 0.855816, -0.51728, 0, 0.51728, 0.855816, 169
 use_collision = true
 width = 14.277
 depth = 32.3178
+
+[node name="Area" type="Area" parent="." index="51"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 154.66, 97.7863, 154.861 )
+monitorable = false
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CSGBox2" type="CSGBox" parent="Area" index="0"]
+width = 5.0
+height = 1.0
+depth = 5.0
+material = SubResource( 23 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Area" index="1"]
+shape = SubResource( 24 )
+[connection signal="body_entered" from="Area" to="Area" method="_on_Area_body_entered"]

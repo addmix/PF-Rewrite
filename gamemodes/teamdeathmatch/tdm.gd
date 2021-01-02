@@ -45,6 +45,9 @@ func init() -> void:
 	#assigns players to teams
 	Teams.assign_to_teams_random()
 	
+	#initialize scores for teams
+	init_scores()
+	
 	init_Players()
 	
 	#initialize timers
@@ -81,6 +84,10 @@ func connect_signals() -> void:
 	
 	#player signals
 	Players.connect("player_added", self, "on_Player_added")
+
+func init_scores() -> void:
+	for team in Teams.team_count:
+		scores.append(0)
 
 func init_Players() -> void:
 	for player in Players.players:

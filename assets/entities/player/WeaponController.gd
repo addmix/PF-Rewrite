@@ -40,7 +40,7 @@ func deferred() -> void:
 	accuracy = interpolateAccuracy(0.0)
 	
 	call_deferred("emit_signal", "weapon_changed", weapons[current_weapon])
-	print(weapons)
+#	print(weapons)
 	set_process(true)
 	emit_signal("set_process", true)
 

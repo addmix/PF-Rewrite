@@ -8,6 +8,7 @@ var loadout := ["M4A1", "P38", null, null]
 
 var player_name : String
 var player_id : int
+var team : int
 
 #nodes
 var character = preload("res://assets/entities/player/Character.tscn")

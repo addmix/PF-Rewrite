@@ -52,6 +52,9 @@ func damage(source, hp : float) -> void:
 	#add damage history
 	damage_stack.append([source, hp, OS.get_ticks_msec()])
 	#do screen effect
+	
+	if health <= 0:
+		kill()
 
 func shot(projectile : Spatial) -> void:
 	#calculate damage here
