@@ -36,8 +36,10 @@ func scan_weapons() -> void:
 	for d in categories:
 		#open to gamemode's folder
 		var category := Directory.new()
+# warning-ignore:return_value_discarded
 		category.open(base_dir + d)
 		
+# warning-ignore:return_value_discarded
 		category.list_dir_begin(true, true)
 		var weapon := category.get_next()
 		
@@ -46,6 +48,7 @@ func scan_weapons() -> void:
 			
 			#navigate into folder
 			var weapon_folder := Directory.new()
+# warning-ignore:return_value_discarded
 			weapon_folder.open(base_dir + d + "/" + weapon)
 			
 			#check for weapon.dat file

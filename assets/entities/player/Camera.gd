@@ -15,6 +15,7 @@ var translation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vecto
 var rotation_sway_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var bob_intensity_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 
+# warning-ignore:unused_argument
 func _on_WeaponController_shot_fired(aim : float) -> void:
 	rotation_spring.accelerate(MathUtils.v3RandfRange(WeaponController.accuracy["Min camera rotation force"], WeaponController.accuracy["Max camera rotation force"]))
 	translation_spring.accelerate(MathUtils.v3RandfRange(WeaponController.accuracy["Min camera translation force"], WeaponController.accuracy["Max camera translation force"]))
@@ -78,5 +79,6 @@ func _on_WeaponController_set_process(value : bool) -> void:
 	set_process(value)
 
 
+# warning-ignore:unused_argument
 func _on_WeaponController_weapon_changed(weapon):
 	pass # Replace with function body.

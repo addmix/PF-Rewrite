@@ -1,6 +1,8 @@
 extends Spatial
 
+# warning-ignore:unused_signal
 signal ammoChanged
+# warning-ignore:unused_signal
 signal shotFired
 
 signal equipped
@@ -53,6 +55,7 @@ func can_reload() -> bool:
 	return magazine < data["Misc"]["Magazine"]
 
 #spring stuff
+# warning-ignore:unused_argument
 func _process(delta : float) -> void:
 	var pos := Vector3.ZERO
 	var rot := Vector3.ZERO

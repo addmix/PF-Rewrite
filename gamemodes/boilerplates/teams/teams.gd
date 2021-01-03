@@ -1,10 +1,11 @@
 extends Node
 
 func _ready() -> void:
+# warning-ignore:return_value_discarded
 	Players.connect("player_added", self, "on_Player_added")
 
 func on_Player_added(player : Player) -> void:
-	print("Player ", player.player_id, " added")
+#	print("Player ", player.player_id, " added")
 	assign_to_team(player, get_team_with_least_players())
 
 #number of teams
@@ -15,12 +16,14 @@ var teams := []
 #creates teams
 func initialize_teams() -> void:
 	#adds an array for each team into the teams array
+# warning-ignore:unused_variable
 	for i in range(team_count):
 		teams.append([])
 
 #removes teams
 func denitialize_teams() -> void:
 	#remove players from teams
+# warning-ignore:unused_variable
 	var players = get_tree().get_nodes_in_group("players")
 	for player in Players.players:
 		remove_from_team(player)

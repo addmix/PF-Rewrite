@@ -59,13 +59,16 @@ func switch_weapon(index : int) -> void:
 var new_weapon := 0
 
 #pickup weapon to empty slot
+# warning-ignore:unused_argument
 func pickup_weapon(selected : Spatial) -> void:
 	pass
 
 #swap with weapon on ground
+# warning-ignore:unused_argument
 func change_weapon(selected : Spatial) -> void:
 	pass
 
+# warning-ignore:unused_argument
 func on_weapon_equipped(weapon : Spatial) -> void:
 	pass
 

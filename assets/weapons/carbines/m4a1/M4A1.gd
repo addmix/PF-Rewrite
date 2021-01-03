@@ -20,6 +20,10 @@ onready var EquipMachine = $EquipMachine
 
 onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
 
+#effects
+var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
+
+
 var base_offset := Vector3.ZERO
 
 func _ready():
@@ -64,6 +68,7 @@ func can_reload() -> bool:
 	return magazine < data["Misc"]["Magazine"]
 
 #spring stuff
+# warning-ignore:unused_argument
 func _process(delta : float) -> void:
 	var pos := Vector3.ZERO
 	var rot := Vector3.ZERO
@@ -87,6 +92,11 @@ func on_equipped() -> void:
 
 func on_dequipped() -> void:
 	emit_signal("dequipped", self)
+
+func _on_M4A1_shotFired():
+	var instance = muzzle_flash.instance()
+	$Barrel.add_child(instance)
+
 
 export var data := {
 	"Ballistics": {
@@ -343,3 +353,5 @@ export var data := {
 		"Path": "res://Assets/Weapons/Carbines/M4A1/",
 	},
 }
+
+

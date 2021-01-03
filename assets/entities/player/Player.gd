@@ -43,6 +43,7 @@ func initialize_character() -> void:
 	Character.add_to_group("characters")
 
 func connect_character_signals() -> void:
+# warning-ignore:return_value_discarded
 	Character.connect("died", self, "on_player_died")
 
 func on_player_died() -> void:
@@ -55,6 +56,7 @@ func on_player_died() -> void:
 		Server.GamemodeInstance.Spawner.show_menu()
 
 #call to gamemode player spawner
+# warning-ignore:unused_argument
 func spawn_character(node : Position3D) -> void:
 	instance_character()
 	$"/root".add_child(Character)

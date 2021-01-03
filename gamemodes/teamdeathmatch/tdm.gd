@@ -68,21 +68,28 @@ func init() -> void:
 	
 	#start countdown timer
 	countdown_timer.start()
-	print("Starting countdown")
+#	print("Starting countdown")
 
 #connects signals
 func connect_signals() -> void:
 	#game signals
+# warning-ignore:return_value_discarded
 	connect("game_started", self, "on_game_start")
+# warning-ignore:return_value_discarded
 	connect("game_ended", self, "on_game_ended")
+# warning-ignore:return_value_discarded
 	connect("game_won", self, "on_game_won")
 	
 	#timer signals
+# warning-ignore:return_value_discarded
 	countdown_timer.connect("timeout", self, "on_countdown_finished")
+# warning-ignore:return_value_discarded
 	game_timer.connect("timeout", self, "on_game_time_finished")
+# warning-ignore:return_value_discarded
 	end_timer.connect("timeout", self, "on_end_time_finished")
 	
 	#player signals
+# warning-ignore:return_value_discarded
 	Players.connect("player_added", self, "on_Player_added")
 
 func init_scores() -> void:
@@ -90,10 +97,12 @@ func init_scores() -> void:
 		scores.append(0)
 
 func init_Players() -> void:
+#	print(Players.players)
 	for player in Players.players:
 		player.connect("died", self, "on_Player_died")
 
 func on_Player_added(player : Player) -> void:
+# warning-ignore:return_value_discarded
 	player.connect("died", self, "on_Player_died")
 
 func on_countdown_finished() -> void:
@@ -110,12 +119,12 @@ func on_end_time_finished() -> void:
 #when game starts
 func on_game_start() -> void:
 	game_timer.start()
-	print("Game start")
+#	print("Game start")
 	Spawner.set_spawning(true)
 
 #when game ends
 func on_game_end() -> void:
-	print("Game end")
+#	print("Game end")
 	game_timer.stop()
 	
 	Spawner.set_spawning(false)

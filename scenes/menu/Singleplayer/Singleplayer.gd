@@ -49,8 +49,8 @@ func onLevelPressed(node : Node) -> void:
 #when load button pressed
 func onLoadPressed() -> void:
 	#if no selected level
-#	if selected_map == null or selected_mode == null:
-#		return
+	if selected_map == null:# or selected_mode == null:
+		return
 	
 	
 	loadSingleplayer()

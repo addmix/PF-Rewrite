@@ -1,6 +1,8 @@
 extends Node
 
+# warning-ignore:unused_signal
 signal equipped
+# warning-ignore:unused_signal
 signal dequipped
 
 var states := {}
@@ -26,7 +28,9 @@ func init_springs() -> void:
 
 
 func _connect_signals() -> void:
+# warning-ignore:return_value_discarded
 	connect("equipped", self, "equipped")
+# warning-ignore:return_value_discarded
 	connect("dequipped", self, "dequipped")
 
 func equipped() -> void:

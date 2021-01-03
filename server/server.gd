@@ -1,6 +1,7 @@
 #global node
 extends Node
 
+signal server_closed
 signal connection_successful
 signal connection_failed
 signal peer_connected
@@ -32,9 +33,13 @@ func _ready() -> void:
 	_connect_signals()
 
 func _connect_signals() -> void:
+# warning-ignore:return_value_discarded
 	network.connect("connection_succeeded", self, "connection_succeeded")
+# warning-ignore:return_value_discarded
 	network.connect("connection_failed", self, "connection_failed")
+# warning-ignore:return_value_discarded
 	network.connect("peer_connected", self, "peer_connected")
+# warning-ignore:return_value_discarded
 	network.connect("peer_disconnected", self, "peer_disconnected")
 
 #only on client
@@ -65,11 +70,11 @@ func peer_connected(id : int) -> void:
 
 func peer_disconnected(id : int) -> void:
 	emit_signal("peer_disconnected", id)
-#	print("Peer disconnected with id: " + str(id))
 
 #start host player
 func start_host() -> void:
 	#create server
+# warning-ignore:return_value_discarded
 	network.create_server(port, playerlimit, in_bandwidth, out_bandwidth)
 	get_tree().set_network_peer(network)
 	
@@ -87,17 +92,23 @@ func start_host() -> void:
 #start client player, connects to host player
 func start_client() -> void:
 	#connect to server
+# warning-ignore:return_value_discarded
 	network.create_client(ip, port, in_bandwidth, out_bandwidth)
 	get_tree().set_network_peer(network)
 
+# warning-ignore:unused_argument
+remote func kick(reason : String) -> void:
+	close_server()
+
 remote func return_game_data(data : Dictionary) -> void:
+	#makes sure we are getting data from the server
 	if get_tree().get_rpc_sender_id() == 1:
 		game_data = data
-	
-	emit_signal("recieved_game_data")
+		emit_signal("recieved_game_data")	
 
 #loads map and gamemode
 func load_game() -> void:
+	#game related stuff
 	#load map
 	var resource := Maps.load_map(game_data["map"])
 	MapInstance = resource.instance()
@@ -114,6 +125,8 @@ func load_game() -> void:
 	#initialize gamemode
 	GamemodeInstance.init()
 	
+	
+	#menus
 	#load pause menu
 	resource = load("res://scenes/ingame/pausemenu/pausemenu.tscn")
 	PauseMenu = resource.instance()
@@ -121,36 +134,40 @@ func load_game() -> void:
 	
 	#remove menu
 	$"/root/Menu".queue_free()
-	print("Started host")
+#	print("Started host")
 
 func close_server() -> void:
-	#close server
-	network.close_connection()
+	#server
+	if get_tree().is_network_server():
+		rpc("kick", "Server closed")
 	
-	#unload gamemode
+	emit_signal("server_closed")
+	
+	
+	
+	#null out variables
 	GamemodeInstance.queue_free()
 	GamemodeInstance = null
 	
-	#unload map
 	MapInstance.queue_free()
 	MapInstance = null
 	
-	#removes pause menu
+	#close server
+	network.call_deferred("close_connection")
+	
 	PauseMenu.queue_free()
 	PauseMenu = null
-	
-	#remove players
-	get_tree().call_group("characters", "queue_free")
-	get_tree().call_group("players", "queue_free")
 	
 	#load menu
 	var resource := load("res://scenes/menu/menu.tscn")
 	$"/root".add_child(resource.instance())
 
 func _exit_tree() -> void:
+	
 	network.close_connection()
 
 #menu connection server starting funcs
+# warning-ignore:shadowed_variable
 func set_server(address : String, port : int) -> void:
 	ip = address
 	self.port = port

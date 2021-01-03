@@ -18,10 +18,24 @@ func _ready() -> void:
 	_connect_signals()
 
 func _connect_signals() -> void:
+# warning-ignore:return_value_discarded
+	Server.connect("server_closed", self, "on_server_closed")
+# warning-ignore:return_value_discarded
 	Server.connect("connection_successful", self, "on_connection_succeeded")
+# warning-ignore:return_value_discarded
 	Server.connect("connection_failed", self, "on_connection_dailed")
+# warning-ignore:return_value_discarded
 	Server.connect("peer_connected", self, "on_peer_connected")
+# warning-ignore:return_value_discarded
 	Server.connect("peer_disconnected", self, "on_peer_disconnected")
+
+func on_server_closed() -> void:
+	#removes characters
+	get_tree().call_group("characters", "free")
+	#removes players
+	get_tree().call_group("players", "free")
+	#empties player dictionary
+	players.clear()
 
 #client only
 func on_connection_succeeded() -> void:
@@ -31,11 +45,13 @@ func on_connection_succeeded() -> void:
 func on_connection_failed() -> void:
 	pass
 
+# warning-ignore:unused_argument
 func on_peer_connected(id : int) -> void:
 	pass
 
 func on_peer_disconnected(id : int) -> void:
 	players[id].queue_free()
+	players.erase(id)
 
 #on server
 remote func send_player_data(data : Dictionary) -> void:

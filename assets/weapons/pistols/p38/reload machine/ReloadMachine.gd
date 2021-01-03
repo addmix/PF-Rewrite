@@ -11,7 +11,7 @@ func _ready() -> void:
 		child.connect("change_state", self, "change_state")
 
 func change_state(new_state : String) -> void:
-	print(new_state)
+#	print(new_state)
 	states[current_state].exit()
 	states[new_state].enter()
 	current_state = new_state

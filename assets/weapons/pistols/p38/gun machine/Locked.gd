@@ -1,5 +1,6 @@
 extends Node
 
+# warning-ignore:unused_signal
 signal change_state
 
 func release() -> void:
@@ -11,8 +12,10 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
+# warning-ignore:unused_argument
 func process(delta : float) -> void:
 	pass
 
+# warning-ignore:unused_argument
 func unhandled_input(event : InputEvent) -> void:
 	pass

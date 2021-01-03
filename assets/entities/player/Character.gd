@@ -9,7 +9,7 @@ var Player
 signal died
 
 #in game data
-export var health := 100
+export var health := 100.0
 var damage_stack := []
 
 #nodes
@@ -56,6 +56,7 @@ func damage(source, hp : float) -> void:
 	if health <= 0:
 		kill()
 
+# warning-ignore:unused_argument
 func shot(projectile : Spatial) -> void:
 	#calculate damage here
 	pass
@@ -108,6 +109,7 @@ func get_axis() -> Vector3:
 		axis = puppet_axis
 	return axis
 
+# warning-ignore:unused_argument
 func _process(delta : float) -> void:
 	set_delta_pos()
 	set_delta_vel()
@@ -139,6 +141,7 @@ func set_delta_pos() -> void:
 func set_last_pos() -> void:
 	last_pos = current_pos
 
+onready var gravity : Vector3 = ProjectSettings.get("physics/3d/default_gravity") * ProjectSettings.get("physics/3d/default_gravity_vector")
 var walk_spring = Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8, 14)
 var player_velocity := Vector3.ZERO
 
@@ -163,6 +166,7 @@ func _physics_process(delta : float) -> void:
 	walk_spring.positionvelocity(delta)
 	
 	#world space axis
+# warning-ignore:unused_variable
 	var xformed : Vector3 = RotationHelper.transform.xform(walk_spring.position)
 	
 	#gets translation basis for ground normal translation
@@ -179,7 +183,7 @@ func _physics_process(delta : float) -> void:
 		player_velocity.y *= 0
 	
 	#gravity
-	player_velocity.y += -14.8 * delta
+	player_velocity += gravity * delta
 	
 	player_velocity *= Vector3(0, 1, 0)
 	
@@ -226,6 +230,7 @@ func intersect_planes(p1 : Vector3, n1 : Vector3, p2 : Vector3, n2 : Vector3, p0
 		[b4],
 		[b5]]
 	
+# warning-ignore:unused_variable
 	var x := multiply(inverse(M), b)
 	
 	var p = 1
@@ -240,6 +245,7 @@ func zero_matrix(nX : int, nY : int) -> Array:
 	var matrix := []
 	for x in range(nX):
 		matrix.append([])
+# warning-ignore:unused_variable
 		for y in range(nY):
 			matrix[x].append(0)
 	return matrix

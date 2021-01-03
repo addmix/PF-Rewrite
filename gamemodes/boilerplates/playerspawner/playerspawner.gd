@@ -22,6 +22,7 @@ func _ready() -> void:
 	add_child(Plugin)
 
 func _connect_signals() -> void:
+# warning-ignore:return_value_discarded
 	connect("player_spawned", self, "on_Player_spawned")
 
 func show_menu() -> void:
@@ -30,9 +31,11 @@ func show_menu() -> void:
 func hide_menu() -> void:
 	remove_child(Plugin)
 
+# warning-ignore:unused_argument
 func spawn_check(node : Position3D) -> bool:
 	return allow_spawning
 
+# warning-ignore:unused_argument
 func on_Player_spawned(player : Player) -> void:
 	pass
 
@@ -66,5 +69,7 @@ remotesync func accept_spawn(id : int, node : Position3D) -> void:
 		#removes menu when spawned
 		hide_menu()
 
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
 remotesync func decline_spawn(id : int, node : Position3D) -> void:
 	pass

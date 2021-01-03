@@ -8,6 +8,7 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
+# warning-ignore:unused_argument
 func process(delta : float) -> void:
 	pass
 
