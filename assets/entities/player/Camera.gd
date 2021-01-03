@@ -64,13 +64,6 @@ func _process(delta : float) -> void:
 	transform.origin = pos + base_offset
 	rotation = rot
 
-#		"Min camera rotation": Vector3(-.1, -.1, 0),
-#		"Max camera rotation": Vector3(.2, .1, 0),
-
-#		"Min camera translation": Vector3.ZERO,
-#		"Max camera translation": Vector3(2, 2, 2),
-
-
 func _on_Player_camera_movement(relative : Vector3) -> void:
 	rotation_delta = relative
 

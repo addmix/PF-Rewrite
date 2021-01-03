@@ -21,8 +21,8 @@ onready var EquipMachine = $EquipMachine
 onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
 
 #effects
+var bullet = preload("res://assets/entities/bullets/556/556.tscn")
 var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
-
 
 var base_offset := Vector3.ZERO
 
@@ -94,11 +94,31 @@ func on_dequipped() -> void:
 	emit_signal("dequipped", self)
 
 func _on_M4A1_shotFired():
+	#muzzle flash
 	var instance = muzzle_flash.instance()
 	$Barrel.add_child(instance)
+	
+	#bullet
+	instance = bullet.instance()
+	instance.set_position($Barrel.get_global_transform().origin)
+	instance.velocity = get_parent().get_linear_velocity()
+	$".".add_child(instance)
 
 
 export var data := {
+	"Misc": {
+		"Name": "M4A1",
+		"Ammo type": "5.56x45mm NATO",
+		"Manufacturer": "Colt",
+		"Category": "Assault rifles",
+		"Description": "The Colt M4A1 is a firearm based off of Eugene Stoner's Armalite 15. Adopted by the US military in 1994 to replace the M16.",
+		
+		"Chamber": int(1),
+		"Magazine": int(30),
+		"Reserve": int(120),
+		
+		"Path": "res://Assets/Weapons/Carbines/M4A1/",
+	},
 	"Ballistics": {
 		"Head multiplier": float(1.5),
 		"Torso multipler": float(1.0),
@@ -108,7 +128,7 @@ export var data := {
 		"Damage": Vector2(32, 24),
 		
 		"Velocity": float(2200.0),
-		"Velocity variance": float(200.0),
+		"Velocity variance": float(100.0),
 		
 		"Penetration depth": float(0),
 		
@@ -118,22 +138,99 @@ export var data := {
 		"Firerate": float(0),
 		"Firerate variance": float(0),
 	},
-	"Hip accuracy": {
-		"Camera rotation damping": float(.8),
-		"Camera rotation speed": float(10.0),
+	"Weapon handling": {
 		
-		"Min camera rotation": Vector3(-.1, -.1, 0),
-		"Max camera rotation": Vector3(.2, .1, 0),
-		"Min camera rotation force": Vector3(.1, 0, 0),
-		"Max camera rotation force": Vector3(.3, 0, 0),
 		
-		"Camera translation damping": float(.8),
-		"Camera translation speed": float(10.0),
+		#state springs
 		
-		"Min camera translation": Vector3.ZERO,
-		"Max camera translation": Vector3(2, 2, 2),
-		"Min camera translation force": Vector3.ZERO,
-		"Max camera translation force": Vector3.ZERO,
+		
+		"Equip s": float(10.0),
+		"Equip d": float(.8),
+		
+		"Equip pos": Vector3(0, -1.5, 0),
+		"Equip rot": Vector3(-.7, 0, 0),
+		
+		"Dequip s": float(12.0),
+		"Dequip d": float(.8),
+		
+		"Dequip pos": Vector3(0, -1.5, 0),
+		"Dequip rot": Vector3(0, 0, 0),
+		
+		"Air s": float(3.0),
+		"Air d": float(.99),
+		
+		"Aim s": float(15.0),
+		"Aim d": float(.8),
+		
+		"Sprint s": float(8.0),
+		"Sprint d": float(.99),
+		
+		"Move s": float(6.0),
+		"Move d": float(.99),
+		
+		"Crouch s": float(10.0),
+		"Crouch d": float(.99),
+		
+		"Prone s": float(10.0),
+		"Prone d": float(.99),
+		
+		"Mount s": float(12.0),
+		"Mount d": float(.99),
+		
+		
+		#camera
+		
+		
+		#rotation
+		"Camera rot d": float(.8),
+		"Camera rot s": float(10.0),
+		
+		"Min camera rot": Vector3(-.1, -.1, 0),
+		"Max camera rot": Vector3(.2, .1, 0),
+		"Min camera rot force": Vector3(.1, 0, 0),
+		"Max camera rot force": Vector3(.3, 0, 0),
+		
+		#translation
+		"Camera pos d": float(.8),
+		"Camera pos s": float(10.0),
+		
+		"Min camera pos": Vector3.ZERO,
+		"Max camera pos": Vector3(2, 2, 2),
+		"Min camera pos force": Vector3.ZERO,
+		"Max camera pos force": Vector3.ZERO,
+		
+		
+		
+		#position
+		"Pos": Vector3(0, 0, 0),
+		"Rot": Vector3(0, 0, 0),
+		
+		#total bounds
+		"Min pos": Vector3(-.75, -.75, 0),
+		"Max pos": Vector3(.5, .5, 2.0),
+		"Min rot": Vector3(-2, -2, -2),
+		"Max rot": Vector3(2, 2, 2),
+		
+		
+		#recoil
+		
+		
+		#force
+		"Min pos force": Vector3(-1.2, .2, 2.5),
+		"Max pos force": Vector3(1.6, 1.2, 4.0),
+		"Min rot force": Vector3(.4, -1.2, 0),
+		"Max rot force": Vector3(1.0, 1.4, 0),
+		
+		#recoil spring settings
+		"Recoil translation speed": float(13.0),
+		"Recoil translation damping": float(.7),
+		
+		"Recoil rotation speed": float(13.0),
+		"Recoil rotation damping": float(.7),
+		
+		
+		#sway
+		
 		
 		"Camera rotation sway": Vector3(.005, .005, 0),
 		"Camera rotation sway speed": float(5.0),
@@ -145,26 +242,6 @@ export var data := {
 		"Camera bob speed": float(0.1),
 		"Camera bob intensity": Vector3(.01, .01, .01),
 		
-		#total bounds
-		"Min translation": Vector3(-.75, -.75, 0),
-		"Max translation": Vector3(.5, .5, 2.0),
-		"Min rotation": Vector3(-2, -2, -2),
-		"Max rotation": Vector3(2, 2, 2),
-		
-		#recoil force
-		"Min translation force": Vector3(-1.2, .2, 2.5),
-		"Max translation force": Vector3(1.6, 1.2, 4.0),
-		"Min rotation force": Vector3(.4, -1.2, 0),
-		"Max rotation force": Vector3(1.0, 1.4, 0),
-		
-		#recoil spring settings
-		"Recoil translation speed": float(13.0),
-		"Recoil translation damping": float(.7),
-		
-		"Recoil rotation speed": float(13.0),
-		"Recoil rotation damping": float(.7),
-		
-		#sway springs
 		"Translation sway": Vector3(.1, .1, 0),
 		"Translation sway speed": float(14.0),
 		"Translation sway damping": float(.6),
@@ -172,6 +249,17 @@ export var data := {
 		"Rotation sway": Vector3(.04, .04, 0),
 		"Rotation sway speed": float(12.0),
 		"Rotation sway damping": float(.7),
+		
+		"Accel sway speed": float(8.0),
+		"Accel sway damping": float(.9),
+		"Accel sway intensity": Vector3(.003, .004, .0015),
+		"Accel sway offset": Vector3(0, 0, -1.2),
+		
+		
+		#walk
+		
+		
+		"Walkspeed": float(12.0),
 		
 		"Gun bob position": Vector3(1.1, .7, 1),
 		"Gun bob position multiplier": float(0.04),
@@ -188,169 +276,56 @@ export var data := {
 		"Gun bob position damping": float(.7),
 		"Gun bob position speed": float(3.0),
 		
-		"Accel sway speed": float(6.0),
-		"Accel sway damping": float(.9),
-		"Accel sway intensity": Vector3(.3, .4, .15),
-		"Accel sway offset": Vector3(0, 0, -1.2),
 		
-		"Walk damper": float(.9),
-		"Walk accel": float(8.0),
-		"Walk multiplier": float(1.0),
 		
-		"Sprint damper": float(.9),
-		"Sprint speed": float(10.0),
-		"Sprint multiplier": float(1.7),
-		
-		"Sprint position": Vector3(-.2, -.1, 0),
-		"Sprint rotation": Vector3(-.4, 1, .2),
-		
-		"Spread factor": float(0),
-		"Choke": float(0),
-		
-		"Recoil speed": float(15.0),
-		"Recoil damping": float(.8),
-		
-		"Magnification": float(1.0),
-	},
-	"Sight accuracy": {
-		"Camera rotation damping": float(.8),
-		"Camera rotation speed": float(10.0),
-		
-		"Min camera rotation": Vector3(-.1, -.1, 0),
-		"Max camera rotation": Vector3(.2, .1, 0),
-		"Min camera rotation force": Vector3(.1, 0, 0),
-		"Max camera rotation force": Vector3(.3, 0, 0),
-		
-		"Camera translation damping": float(.8),
-		"Camera translation speed": float(10.0),
-		
-		"Min camera translation": Vector3.ZERO,
-		"Max camera translation": Vector3(2, 2, 2),
-		"Min camera translation force": Vector3.ZERO,
-		"Max camera translation force": Vector3.ZERO,
-		
-		"Camera rotation sway": Vector3(.05, .05, 0),
-		"Camera rotation sway speed": float(6.0),
-		"Camera rotation sway damping": float(.3),
-		
-		"Camera bob damper": float(.9),
-		"Camera bob idle speed": float(4.0),
-		"Camera bob idle intensity": Vector3(.1, .1, .1),
-		"Camera bob speed": float(0.1),
-		"Camera bob intensity": Vector3(.01, .01, .01),
-		
-		#total bounds
-		"Min translation": Vector3(-.75, -.75, 0),
-		"Max translation": Vector3(.5, .5, 2.0),
-		"Min rotation": Vector3(-2, -2, -2),
-		"Max rotation": Vector3(2, 2, 2),
-		
-		#recoil force
-		"Min translation force": Vector3(-.2, .2, .5),
-		"Max translation force": Vector3(.24, .41, .7),
-		"Min rotation force": Vector3(1.0, -.2, 0),
-		"Max rotation force": Vector3(1.4, .35, 0),
-		
-		#recoil spring settings
-		"Recoil translation speed": float(13.0),
-		"Recoil translation damping": float(.7),
-		
-		"Recoil rotation speed": float(13.0),
-		"Recoil rotation damping": float(.7),
-		
-		#sway springs
-		"Translation sway": Vector3(.02, .02, 0),
-		"Translation sway speed": float(18.0),
-		"Translation sway damping": float(.9),
-		
-		"Rotation sway": Vector3(.01, .01, 0),
-		"Rotation sway speed": float(18.0),
-		"Rotation sway damping": float(.9),
-		
-		"Gun bob position": Vector3(1.4, .7, 1),
-		"Gun bob position multiplier": float(0.001),
-		"Gun bob rotation": Vector3(1.4, .7, 1),
-		"Gun bob rotation multiplier": float(0.001),
-		"Gun bob idle": (1.5),
-		
-		"Gun bob intensity speed": float(10.0),
-		"Gun bob intensity damper": float(.9),
-		"Gun bob speed damper": float(.7),
-		"Gun bob speed speed": float(10.0),
-		
-		"Gun bob intensity multiplier": float(.01),
-		"Gun bob position damping": float(.7),
-		"Gun bob position speed": float(3.0),
-		
-		"Accel sway speed": float(8.0),
-		"Accel sway damping": float(.85),
-		"Accel sway intensity": Vector3(.1, .3, .1),
-		"Accel sway offset": Vector3(0, 0, -1),
-		
-		"Walk damper": float(.9),
-		"Walk accel": float(8.0),
-		"Walk multiplier": float(.8),
-		
-		"Sprint damper": float(.9),
-		"Sprint speed": float(6.0),
-		"Sprint multiplier": float(1.4),
-		
-		"Sprint position": Vector3(.1, -.2, 0),
-		"Sprint rotation": Vector3.ZERO,
-		
-		"Spread factor": float(0),
-		"Choke": float(0),
-		
-		"Recoil speed": float(15.0),
-		"Recoil damping": float(.8),
-		
-		"Magnification": float(1.2),
-	},
-	"Weapon handling": {
-		"Equip translation speed": float(10.0),
-		"Equip translation damping": float(.8),
-		"Equip rotation speed": float(8.0),
-		"Equip rotation damping": float(.7),
-		
-		"Equip position": Vector3(0, -1.5, 0),
-		"Equip rotation": Vector3(-.7, 0, 0),
-		
-		"Dequip translation speed": float(12.0),
-		"Dequip translation damping": float(.8),
-		"Dequip rotation speed": float(12.0),
-		"Dequip rotation damping": float(.8),
-		
-		"Dequip position": Vector3(0, -1.5, 0),
-		"Dequip rotation": Vector3(0, 0, 0),
-		
-		"Aiming speed": float(15.0),
-		"Aiming damping": float(.8),
-		
+		#crosshair spring
 		"Crosshair size": float(10.0),
 		"Crosshair spread size": float(10.0),
 		"Crosshair spread rate": float(10.0),
 		"Crosshair recover rate": float(10.0),
 		
-		"Position": Vector3(0, -.1, 0),
-		"Rotation": Vector3(0, 0, 0),
 		
-		"Walkspeed": float(12.0),
+		#camera magnification
+		"Magnification": float(1.0),
+		#
+		"Spread factor": float(0),
+		#
+		"Choke": float(0),
 		
-		"Accel speed": float(6.0),
-		"Accel damping": float(.9),
 	},
-	"Misc": {
-		"Name": "M4A1",
-		"Ammo type": "5.56x45mm NATO",
-		"Manufacturer": "Colt",
-		"Category": "Assault rifles",
-		"Description": "The Colt M4A1 is a firearm based off of Eugene Stoner's Armalite 15. Adopted by the US military in 1994 to replace the M16.",
+	#modifier states
+	"Equip": {
 		
-		"Chamber": int(1),
-		"Magazine": int(30),
-		"Reserve": int(120),
+	},
+	"Dequip": {
 		
-		"Path": "res://Assets/Weapons/Carbines/M4A1/",
+	},
+	"Air" : {
+		
+	},
+	"Aim" : {
+		
+	},
+	"Sprint" : {
+		
+	},
+	"Movement" : {
+		
+	},
+	"Accel" : {
+		
+	},
+	"Reload" : {
+		
+	},
+	"Crouch" : {
+		
+	},
+	"Prone" : {
+		
+	},
+	"Mounted": {
+		
 	},
 }
 

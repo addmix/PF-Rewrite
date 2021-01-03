@@ -36,11 +36,11 @@ func deferred() -> void:
 	add_child(weapons[current_weapon])
 	weapons[current_weapon].equip()
 	
-	#initialize
-	accuracy = interpolateAccuracy(0.0)
+	accuracy = weapons[current_weapon].data["Weapon handling"]
 	
 	call_deferred("emit_signal", "weapon_changed", weapons[current_weapon])
-#	print(weapons)
+	
+	
 	set_process(true)
 	emit_signal("set_process", true)
 
@@ -112,100 +112,10 @@ var sprint_spring := Physics.Spring.new(0, 0, 0, 0, 1)
 
 var accel_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 
-var accuracy := {
-		"Camera rotation damping": float(.8),
-		"Camera rotation speed": float(10.0),
-		
-		"Min camera rotation": Vector3(-.1, -.1, 0),
-		"Max camera rotation": Vector3(.2, .1, 0),
-		"Min camera rotation force": Vector3(.1, 0, 0),
-		"Max camera rotation force": Vector3(.3, 0, 0),
-		
-		"Camera translation damping": float(.8),
-		"Camera translation speed": float(10.0),
-		
-		"Min camera translation": Vector3.ZERO,
-		"Max camera translation": Vector3(2, 2, 2),
-		"Min camera translation force": Vector3.ZERO,
-		"Max camera translation force": Vector3.ZERO,
-		
-		"Camera rotation sway": Vector3(.005, .005, 0),
-		"Camera rotation sway speed": float(5.0),
-		"Camera rotation sway damping": float(.8),
-		
-		"Camera bob damper": float(.9),
-		"Camera bob idle speed": float(4.0),
-		"Camera bob idle intensity": Vector3(.1, .1, .1),
-		"Camera bob speed": float(0.1),
-		"Camera bob intensity": Vector3(.01, .01, .01),
-		
-		#total bounds
-		"Min translation": Vector3(-.75, -.75, 0),
-		"Max translation": Vector3(.5, .5, 2.0),
-		"Min rotation": Vector3(-2, -2, -2),
-		"Max rotation": Vector3(2, 2, 2),
-		
-		#recoil force
-		"Min translation force": Vector3(-1.2, .2, 2.5),
-		"Max translation force": Vector3(1.6, 1.2, 4.0),
-		"Min rotation force": Vector3(.4, -1.2, 0),
-		"Max rotation force": Vector3(1.0, 1.4, 0),
-		
-		#recoil spring settings
-		"Recoil translation speed": float(13.0),
-		"Recoil translation damping": float(.7),
-		
-		"Recoil rotation speed": float(13.0),
-		"Recoil rotation damping": float(.7),
-		
-		#sway springs
-		"Translation sway": Vector3(.1, .1, 0),
-		"Translation sway speed": float(14.0),
-		"Translation sway damping": float(.6),
-		
-		"Rotation sway": Vector3(.04, .04, 0),
-		"Rotation sway speed": float(12.0),
-		"Rotation sway damping": float(.7),
-		
-		"Gun bob position": Vector3(1.1, .7, 1),
-		"Gun bob position multiplier": float(0.04),
-		"Gun bob rotation": Vector3(.9, 1.4, 1),
-		"Gun bob rotation multiplier": float(0.02),
-		"Gun bob idle": float(1.0),
-		
-		"Gun bob intensity speed": float(10.0),
-		"Gun bob intensity damper": float(.9),
-		"Gun bob speed damper": float(.7),
-		"Gun bob speed speed": float(10.0),
-		
-		"Gun bob intensity multiplier": float(.01),
-		"Gun bob position damping": float(.7),
-		"Gun bob position speed": float(3.0),
-		
-		"Accel sway speed": float(6.0),
-		"Accel sway damping": float(.9),
-		"Accel sway intensity": Vector3(.3, .4, .15),
-		"Accel sway offset": Vector3(0, 0, -1.2),
-		
-		"Walk damper": float(.9),
-		"Walk accel": float(8.0),
-		"Walk multiplier": float(1.0),
-		
-		"Sprint damper": float(.9),
-		"Sprint speed": float(10.0),
-		"Sprint multiplier": float(1.7),
-		
-		"Sprint position": Vector3(-.2, -.1, 0),
-		"Sprint rotation": Vector3(-.4, 1, .2),
-		
-		"Spread factor": float(0),
-		"Choke": float(0),
-		
-		"Recoil speed": float(15.0),
-		"Recoil damping": float(.8),
-		
-		"Magnification": float(1.0),
-	}
+var accuracy := {}
+
+var delta_pos := Vector3.ZERO
+var delta_rot := Vector3.ZERO
 
 func _process(delta : float) -> void:
 	#stackable vars
@@ -213,6 +123,15 @@ func _process(delta : float) -> void:
 	var pos : Vector3 = weapons[current_weapon].data["Weapon handling"]["Position"]
 	var rot : Vector3 = weapons[current_weapon].data["Weapon handling"]["Rotation"]
 	var speed : float = weapons[current_weapon].data["Weapon handling"]["Walkspeed"]
+	
+	
+	#modifying springs
+	#sprinting
+	#aiming
+	
+	#modifying variables
+	#speed
+	#acceleration
 	
 	
 	if !is_network_master():
@@ -230,7 +149,8 @@ func _process(delta : float) -> void:
 	aim_spring.positionvelocity(delta)
 	pos -= aim_spring.position * (base_offset + weapons[current_weapon].aim_node.transform.origin - character._Camera.base_offset + weapons[current_weapon].data["Weapon handling"]["Position"])
 	
-	accuracy = interpolateAccuracy(aim_spring.position)
+#	accuracy = interpolateAccuracy(aim_spring.position)
+	accuracy = weapons[current_weapon].data["Weapon handling"]
 	
 	speed *= accuracy["Walk multiplier"]
 	
@@ -319,12 +239,25 @@ func _process(delta : float) -> void:
 	
 	#applies all combinative effects
 	
-	transform.origin = base_offset + pos - weapons[current_weapon].base_offset
+	delta_pos = transform.origin
+	delta_rot = rotation
 	
+	transform.origin = base_offset + pos - weapons[current_weapon].base_offset
 	rotation = rot
+	
+	delta_pos -= transform.origin / delta
+	delta_rot -= rotation / delta
+	
+	#resets mouse delta
 	rotation_delta = Vector3.ZERO
 	
 	movement_speed = speed
+
+func get_linear_velocity() -> Vector3:
+	return delta_pos + character.delta_pos
+
+func get_angular_velocity() -> Vector3:
+	return delta_rot
 
 func on_shot_fired() -> void:
 	emit_signal("shot_fired", aim_spring.position)

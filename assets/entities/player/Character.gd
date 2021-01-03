@@ -33,6 +33,8 @@ onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig
 
 
 func _ready() -> void:
+	set_physics_process(false)
+	set_process(false)
 	call_deferred("deferred")
 
 func deferred() -> void:
@@ -41,6 +43,9 @@ func deferred() -> void:
 		LeftHandIK.max_iterations = 20
 		RightHandIK.max_iterations = 20
 		_Camera.current = true
+	
+	set_physics_process(true)
+	set_process(true)
 
 func _exit_tree() -> void:
 	if is_network_master():
@@ -109,22 +114,17 @@ func get_axis() -> Vector3:
 		axis = puppet_axis
 	return axis
 
-# warning-ignore:unused_argument
-func _process(delta : float) -> void:
-	set_delta_pos()
-	set_delta_vel()
-
 #delta velocity
 var delta_vel := Vector3.ZERO
 var last_vel := Vector3.ZERO
 
-func set_delta_vel() -> void:
-	delta_vel = player_velocity - last_vel
+func set_delta_vel(delta : float) -> void:
+	#not normalized to time
+	delta_vel = (player_velocity - last_vel) / delta
 	call_deferred("set_last_vel")
 
 func set_last_vel() -> void:
 	last_vel = player_velocity
-
 
 #position/time
 var delta_pos := Vector3.ZERO
@@ -132,9 +132,10 @@ var delta_pos := Vector3.ZERO
 var last_pos := Vector3.ZERO
 var current_pos := Vector3.ZERO
 
-func set_delta_pos() -> void:
+func set_delta_pos(delta : float) -> void:
 	current_pos = get_global_transform().origin
-	delta_pos = current_pos - last_pos
+	#not normalized to time
+	delta_pos = (current_pos - last_pos) / delta
 	#set this at last possible moment
 	call_deferred("set_last_pos")
 
@@ -149,6 +150,7 @@ remote var puppet_pos := Vector3.ZERO
 remote var head_rotation := Vector3.ZERO
 
 func _physics_process(delta : float) -> void:
+	
 	if !is_network_master():
 		Head.rotation.x = head_rotation.x
 		transform.origin = puppet_pos
@@ -171,11 +173,11 @@ func _physics_process(delta : float) -> void:
 	
 	#gets translation basis for ground normal translation
 	var basis : Basis = RotationHelper.get_global_transform().basis
-#
-#	if is_on_floor():
-#		#change floor normal to be average of slides
-#		basis = get_ground_normal_translation(basis, get_floor_normal())
-#
+
+	if is_on_floor():
+		#change floor normal to be average of slides
+		basis = get_ground_normal_translation(basis, get_floor_normal())
+
 	#xform input vector by basis
 	var translated := basis.xform(walk_spring.position)
 	
@@ -191,6 +193,9 @@ func _physics_process(delta : float) -> void:
 	
 	if is_network_master():
 		rset_unreliable("puppet_pos", transform.origin)
+	
+	set_delta_pos(delta)
+	set_delta_vel(delta)
 
 func jump() -> void:
 	if is_on_floor():
