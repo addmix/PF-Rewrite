@@ -1,4 +1,3 @@
-tool
 class_name Trail3D, "../icons/icon_trail_3d.svg"
 extends ImmediateGeometry
 # author: miziziziz

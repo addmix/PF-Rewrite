@@ -171,11 +171,11 @@ func _physics_process(delta : float) -> void:
 	
 	#gets translation basis for ground normal translation
 	var basis : Basis = RotationHelper.get_global_transform().basis
-	
-	if is_on_floor():
-		#change floor normal to be average of slides
-		basis = get_ground_normal_translation(basis, get_floor_normal())
-	
+#
+#	if is_on_floor():
+#		#change floor normal to be average of slides
+#		basis = get_ground_normal_translation(basis, get_floor_normal())
+#
 	#xform input vector by basis
 	var translated := basis.xform(walk_spring.position)
 	
