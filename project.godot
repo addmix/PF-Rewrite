@@ -159,6 +159,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/global/singletons.gd"
 }, {
+"base": "Resource",
+"class": "Spring",
+"language": "GDScript",
+"path": "res://utils/spring.gd"
+}, {
 "base": "Line2D",
 "class": "Trail2D",
 "language": "GDScript",
@@ -178,6 +183,11 @@ _global_script_classes=[ {
 "class": "Tweener",
 "language": "GDScript",
 "path": "res://addons/godot-next/references/tween_sequence/tweener.gd"
+}, {
+"base": "Resource",
+"class": "V3Spring",
+"language": "GDScript",
+"path": "res://utils/v3spring.gd"
 }, {
 "base": "VBoxContainer",
 "class": "VBoxItemList",
@@ -230,10 +240,12 @@ _global_script_class_icons={
 "ResourceCollection": "",
 "ResourceSet": "",
 "Singletons": "",
+"Spring": "",
 "Trail2D": "res://addons/godot-next/icons/icon_trail_2d.svg",
 "Trail3D": "res://addons/godot-next/icons/icon_trail_3d.svg",
 "TweenSequence": "",
 "Tweener": "",
+"V3Spring": "",
 "VBoxItemList": "res://addons/godot-next/icons/icon_v_box_item_list.svg",
 "Variant": "",
 "VectorDisplay2D": "",
@@ -255,7 +267,6 @@ Maps="*res://singletons/maps.gd"
 Gamemodes="*res://singletons/gamemodes.gd"
 FileUtils="*res://utils/fileutils.gd"
 MathUtils="*res://utils/mathutils.gd"
-Physics="*res://utils/physics.gd"
 Server="*res://server/server.gd"
 Players="*res://singletons/players.gd"
 NodeUtils="*res://utils/nodeutils.gd"

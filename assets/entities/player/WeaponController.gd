@@ -90,24 +90,33 @@ var rotation_delta := Vector3.ZERO
 var movement_speed := 0.0
 
 
+
+#modifier variables
+var Equip := false
+var Dequip := false
+var Air := true
+remote var aim_spring_target := 0.0
+var Aim := Spring.new(0, 0, 0, .5, 1)
+remote var sprint_spring_target := 0.0
+var Sprint := Spring.new(0, 0, 0, 0, 1)
+var Movement := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+var Accel := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+var reload := false
+var crouch := Spring.new(0, 0, 0, 0, 1)
+var prone := Spring.new(0, 0, 0, 0, 1)
+var mounted := Spring.new(0, 0, 0, 0, 1)
+
 #springs
 
-remote var aim_spring_target := 0.0
-var aim_spring := Physics.Spring.new(0, 0, 0, .5, 1)
 
-var recoil_rotation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-var recoil_translation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+var recoil_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+var recoil_translation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 
-var rotation_sway_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-var translation_sway_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+var rotation_sway_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+var translation_sway_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 
 #allows for time-based spring stuff
 var walk_bob_tick := 0.0
-
-remote var sprint_spring_target := 0.0
-var sprint_spring := Physics.Spring.new(0, 0, 0, 0, 1)
-
-var accel_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 
 var accuracy := {}
 
@@ -116,6 +125,9 @@ var delta_rot := Vector3.ZERO
 
 func _process(delta : float) -> void:
 	var camera_transform = character._Camera.global_transform.basis
+	
+	accuracy = get_accuracy()
+	
 	
 	#stackable vars
 	var pos : Vector3 = weapons[current_weapon].data["Weapon handling"]["Pos"]
@@ -133,42 +145,39 @@ func _process(delta : float) -> void:
 	
 	
 	if !is_network_master():
-		aim_spring.target = aim_spring_target
-		sprint_spring.target = sprint_spring_target
+		Aim.target = aim_spring_target
+		Sprint.target = sprint_spring_target
 	
 	
 	#aiming
 	
 	
-	aim_spring.damper = weapons[current_weapon].data["Weapon handling"]["Aim d"]
-	aim_spring.speed = weapons[current_weapon].data["Weapon handling"]["Aim s"]
+	Aim.damper = weapons[current_weapon].data["Weapon handling"]["Aim d"]
+	Aim.speed = weapons[current_weapon].data["Weapon handling"]["Aim s"]
 	
-	aim_spring.positionvelocity(delta)
-	pos -= aim_spring.position * (base_offset + weapons[current_weapon].aim_node.transform.origin - character._Camera.base_offset + weapons[current_weapon].data["Weapon handling"]["Pos"])
+	Aim.positionvelocity(delta)
+	pos -= Aim.position * (base_offset + weapons[current_weapon].aim_node.transform.origin - character._Camera.base_offset + weapons[current_weapon].data["Weapon handling"]["Pos"])
 	
-#	accuracy = interpolateAccuracy(aim_spring.position)
-	accuracy = weapons[current_weapon].data["Weapon handling"]
 	
 	
 	#sprinting
 	
 	
-	sprint_spring.damper = accuracy["Sprint d"]
-	sprint_spring.speed = accuracy["Sprint s"]
-	
-	sprint_spring.positionvelocity(delta)
+	Sprint.damper = accuracy["Sprint d"]
+	Sprint.speed = accuracy["Sprint s"]
+	Sprint.positionvelocity(delta)
 	
 	
 	#acceleration
 	
 	
-	accel_spring.damper = accuracy["Accel sway d"]
-	accel_spring.speed = accuracy["Accel sway s"]
-	accel_spring.accelerate(camera_transform.xform_inv(character.delta_vel))
-	accel_spring.positionvelocity(delta)
+	Accel.damper = accuracy["Accel sway d"]
+	Accel.speed = accuracy["Accel sway s"]
+	Accel.accelerate(camera_transform.xform_inv(character.delta_vel))
+	Accel.positionvelocity(delta)
 	
 	#translate accel spring position to character local space and separate to pos/rot
-	pos -= accel_spring.position * accuracy["Accel sway i"]
+	pos -= Accel.position * accuracy["Accel sway i"]
 	
 	
 	#recoil
@@ -242,7 +251,7 @@ func get_angular_velocity() -> Vector3:
 	return delta_rot
 
 func on_shot_fired() -> void:
-	emit_signal("shot_fired", aim_spring.position)
+	emit_signal("shot_fired", Aim.position)
 	recoil_rotation_spring.accelerate(MathUtils.v3RandfRange(accuracy["Min rot force"], accuracy["Max rot force"]))
 	recoil_translation_spring.accelerate(MathUtils.v3RandfRange(accuracy["Min pos force"], accuracy["Max pos force"]))
 
@@ -255,6 +264,52 @@ func interpolateAccuracy(amount : float) -> Dictionary:
 		dict[key] = lerp(weapons[current_weapon].data["Hip accuracy"][key], weapons[current_weapon].data["Sight accuracy"][key], amount)
 	return dict
 
+func get_accuracy() -> Dictionary:
+	#make copy of data
+	var data : Dictionary = weapons[current_weapon].data["Weapon handling"]
+	
+	var copy := {}
+	#clone dictionary
+	for i in data.keys():
+		copy[i] = data[i]
+	
+	#each modifier
+	for modifier in weapons[current_weapon].modifiers.keys():
+		#get modifier's property
+		var prop = get(modifier)
+		
+		var value : float
+		#gets float from different datatypes
+		match typeof(prop):
+			TYPE_REAL:
+				value = prop
+			TYPE_BOOL:
+				value = float(prop)
+			TYPE_INT:
+				value = float(prop)
+			TYPE_VECTOR3:
+				value = prop.length()
+			TYPE_VECTOR2:
+				value = prop.length()
+			TYPE_OBJECT:
+				match prop.get_class():
+					"Spring":
+						value = prop.position
+					"V3Spring":
+						value = prop.position.length()
+					_:
+						push_error("Modifier " + modifier + " links to illegal variable  of the same name, with class " + prop.get_class())
+			_:
+				push_error("Modifier " + modifier + " links to illegal variable  of the same name, with type " + Variant.get_type(prop))
+		print(prop)
+		print(typeof(prop))
+		
+		#each property
+		for key in weapons[current_weapon].modifiers[modifier].keys():
+			copy[key] *= lerp(weapons[current_weapon].data[key], weapons[current_weapon].modifiers[modifier][key], value)
+	
+	return copy
+
 func _unhandled_input(event : InputEvent) -> void:
 	if !is_network_master():
 		return
@@ -262,20 +317,20 @@ func _unhandled_input(event : InputEvent) -> void:
 	
 	if event.is_action_pressed("aim"):
 		rset("aim_spring_target", 1)
-		aim_spring.target = 1
+		Aim.target = 1
 		get_tree().set_input_as_handled()
 	elif event.is_action_released("aim"):
 		rset("aim_spring_target", 0)
-		aim_spring.target = 0
+		Aim.target = 0
 		get_tree().set_input_as_handled()
 	
 	elif event.is_action_pressed("sprint"):
 		rset("sprint_spring_target", 1)
-		sprint_spring.target = 1
+		Sprint.target = 1
 		get_tree().set_input_as_handled()
 	elif event.is_action_released("sprint"):
 		rset("sprint_spring_target", 0)
-		sprint_spring.target = 0
+		Sprint.target = 0
 		get_tree().set_input_as_handled()
 	
 	#switch to next weapon

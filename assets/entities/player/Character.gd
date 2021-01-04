@@ -143,7 +143,7 @@ func set_last_pos() -> void:
 	last_pos = current_pos
 
 onready var gravity : Vector3 = ProjectSettings.get("physics/3d/default_gravity") * ProjectSettings.get("physics/3d/default_gravity_vector")
-var walk_spring = Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8, 14)
+var walk_spring = V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8, 14)
 var player_velocity := Vector3.ZERO
 
 remote var puppet_pos := Vector3.ZERO

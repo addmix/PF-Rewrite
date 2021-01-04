@@ -6,6 +6,8 @@ signal exited
 signal finished
 
 func enter() -> void:
+	get_parent().get_parent().get_parent().Equip = true
+	get_parent().get_parent().get_parent().Dequip = false
 	#pos
 	get_parent().EquipPosSpring.target = Vector3.ZERO
 	get_parent().EquipPosSpring.position = get_parent().get_parent().data["Weapon handling"]["Equip pos"]
