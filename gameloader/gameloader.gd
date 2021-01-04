@@ -1,6 +1,7 @@
 extends Node
 
 var SplashScreen = preload("res://scenes/splash_screen/splash_screen.tscn")
+var load_menu := true
 
 func _ready() -> void:
 	#load resources
@@ -16,13 +17,22 @@ func _ready() -> void:
 	
 	#loading commands
 	var args : Array = OS.get_cmdline_args()
-	cmdline_args(args)
+	
+	if args.has("--map"):
+		var index := args.find("--map")
+		
+		load_menu = false
+		#if no map
+		if index == args.size() - 1:
+			return
+		
+		Server.game_data["map"] == args[index + 1]
+		call_deferred("start_server")
 	
 	#load splash screen
-	$"/root".call_deferred("add_child", SplashScreen.instance())
+	if load_menu:
+		$"/root".call_deferred("add_child", SplashScreen.instance())
 	call_deferred("queue_free")
 
-# warning-ignore:unused_argument
-func cmdline_args(args : Array) -> void:
-	
-	pass
+func start_server() -> void:
+	Server.start_host()

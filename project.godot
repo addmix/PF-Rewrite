@@ -279,6 +279,10 @@ GunDebug="*res://singletons/gun_debug.gd"
 window/vsync/use_vsync=false
 window/stretch/aspect="keep_width"
 
+[editor]
+
+main_run_args="--map \"Desert Storm\""
+
 [editor_plugins]
 
 enabled=PoolStringArray( "godot-next", "gut", "smoothing" )
