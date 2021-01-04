@@ -150,6 +150,8 @@ var movement_spring = V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8,
 remote var puppet_pos := Vector3.ZERO
 remote var head_rotation := Vector3.ZERO
 
+
+var vel := Vector3.ZERO
 func _physics_process(delta : float) -> void:
 	
 	if !is_network_master():
@@ -177,7 +179,7 @@ func _physics_process(delta : float) -> void:
 	var translated := basis.xform(axis.normalized())
 	
 	if is_on_floor() and movement_spring.position.y > 0 and !Input.is_action_just_pressed("jump"):
-		movement_spring.position.y *= 0
+		vel.y = 0
 	
 	movement_spring.speed = WeaponController.accuracy["Walk s"]
 	movement_spring.damper = WeaponController.accuracy["Walk d"]
@@ -186,8 +188,13 @@ func _physics_process(delta : float) -> void:
 	
 	#gravity
 	movement_spring.position += gravity * delta
+	vel += gravity * delta
 	
-	movement_spring.position = move_and_slide(movement_spring.position, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
+	if is_on_floor():
+		vel = move_and_slide(movement_spring.position, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
+	else:
+		vel = move_and_slide(vel, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
+#	print(movement_spring.position.length())
 	
 	if is_network_master():
 		rset_unreliable("puppet_pos", transform.origin)

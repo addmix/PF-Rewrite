@@ -282,14 +282,6 @@ func get_accuracy() -> Dictionary:
 	
 	#modifiers only use multiplication
 	
-	#multiplicative
-	for modifier in weapons[current_weapon].multi.keys():
-		var value = get_modifier_value(modifier)
-	
-		#each property
-		for key in weapons[current_weapon].multi[modifier].keys():
-			#hacky way to normalize values and add
-			copy[key] *= lerp(weapons[current_weapon].multi[modifier][key] / weapons[current_weapon].multi[modifier][key], weapons[current_weapon].multi[modifier][key], value)
 	
 	#additive
 	for modifier in weapons[current_weapon].add.keys():
@@ -300,6 +292,14 @@ func get_accuracy() -> Dictionary:
 			#hacky way to normalize values and add
 			copy[key] += weapons[current_weapon].add[modifier][key] * value
 	
+	#multiplicative
+	for modifier in weapons[current_weapon].multi.keys():
+		var value = get_modifier_value(modifier)
+	
+		#each property
+		for key in weapons[current_weapon].multi[modifier].keys():
+			#hacky way to normalize values and add
+			copy[key] *= lerp(weapons[current_weapon].multi[modifier][key] / weapons[current_weapon].multi[modifier][key], weapons[current_weapon].multi[modifier][key], value)
 	
 	
 	return copy

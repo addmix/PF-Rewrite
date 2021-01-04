@@ -348,7 +348,8 @@ var multi := {
 	},
 	"Sprint" : {
 		"Walkspeed": float(1.6),
-		
+		"Pos": Vector3(.3, .3, 1),
+		"Rot": Vector3(.76, .2, 1),
 	},
 	"Movement" : {
 		"Gun bob pos i": Vector3(1.1, 1.1, 1.1),
