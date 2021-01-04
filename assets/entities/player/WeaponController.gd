@@ -103,7 +103,7 @@ remote var sprint_spring_target := 0.0
 var Sprint := Spring.new(0, 0, 0, 0, 1)
 var Movement := Vector3.ZERO
 var Accel := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
-var Reload := false
+var Reload := Spring.new(0, 0, 0, 0, 1)
 var Crouch := Spring.new(0, 0, 0, 0, 1)
 var Prone := Spring.new(0, 0, 0, 0, 1)
 var Mounted := Spring.new(0, 0, 0, 0, 1)
@@ -126,13 +126,16 @@ var delta_pos := Vector3.ZERO
 var delta_rot := Vector3.ZERO
 
 func _process(delta : float) -> void:
+	accuracy = get_accuracy()
+	
 	var camera_transform = character._Camera.global_transform.basis
 	
 	#stackable vars
-	
 	var pos : Vector3 = accuracy["Pos"]
 	var rot : Vector3 = accuracy["Rot"]
 	var s : float = weapons[current_weapon].data["Weapon handling"]["Walkspeed"]
+	
+	
 	
 	if !is_network_master():
 		Aim.target = aim_spring_target
@@ -146,7 +149,12 @@ func _process(delta : float) -> void:
 	Dequip = float(weapons[current_weapon].EquipMachine.current_state == "Dequip")
 	Air = float(character.is_on_floor())
 	Movement = character.movement_spring.position
-	Reload = float(weapons[current_weapon].ReloadMachine.currentState != "Ready")
+	
+	#reload
+	Reload.target = float(weapons[current_weapon].ReloadMachine.currentState != "Ready" and !weapons[current_weapon].ReloadMachine.states[weapons[current_weapon].ReloadMachine.currentState].stopped)
+	Reload.damper = accuracy["Reload d"]
+	Reload.speed = accuracy["Reload s"]
+	Reload.positionvelocity(delta)
 	
 	#aiming
 	Aim.damper = weapons[current_weapon].data["Weapon handling"]["Aim d"]
@@ -175,7 +183,6 @@ func _process(delta : float) -> void:
 #	Prone = Spring.new(0, 0, 0, 0, 1)
 #	Mounted = Spring.new(0, 0, 0, 0, 1)
 	
-	accuracy = get_accuracy()
 	
 	
 	

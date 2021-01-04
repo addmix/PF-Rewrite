@@ -30,7 +30,8 @@ export var camera_sensitiviy := Vector2(.2, .2)
 onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftHandIK"
 onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
 
-
+var crouch_spring = Spring.new(0, 0, 0, 0, 1)
+var prone_spring = Spring.new(0, 0, 0, 0, 1)
 
 func _ready() -> void:
 	set_physics_process(false)

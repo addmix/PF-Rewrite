@@ -94,14 +94,16 @@ func on_dequipped() -> void:
 
 func _on_M4A1_shotFired():
 	#muzzle flash
-	var instance = muzzle_flash.instance()
-	$Barrel.add_child(instance)
+	var instance
+	
+#	 instance = muzzle_flash.instance()
+#	$Barrel.add_child(instance)
 	
 	#bullet
 	instance = bullet.instance()
-	instance.set_position($Barrel.get_global_transform().origin)
-	instance.velocity = get_parent().get_linear_velocity()
-	$".".add_child(instance)
+	instance.transform.origin = $Barrel.get_global_transform().origin
+	instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
+	$"/root".add_child(instance)
 
 
 export var data := {
@@ -126,7 +128,7 @@ export var data := {
 		"Damage range": Vector2(40, 90),
 		"Damage": Vector2(32, 24),
 		
-		"Velocity": float(2200.0),
+		"Velocity": float(220.0),
 		"Velocity variance": float(100.0),
 		
 		"Penetration depth": float(0),
@@ -215,17 +217,17 @@ export var data := {
 		
 		
 		#force
-		"Min pos force": Vector3(-1.2, .2, 2.5),
+		"Min pos force": Vector3(-1.2, .6, 2.5),
 		"Max pos force": Vector3(1.6, 1.2, 4.0),
-		"Min rot force": Vector3(.4, -1.2, 0),
-		"Max rot force": Vector3(1.0, 1.4, 0),
+		"Min rot force": Vector3(.6, -0.8, 0),
+		"Max rot force": Vector3(2.5, 1, 0),
 		
 		#recoil spring settings
-		"Recoil pos s": float(13.0),
-		"Recoil pos d": float(.7),
+		"Recoil pos s": float(12.0),
+		"Recoil pos d": float(.5),
 		
 		"Recoil rot s": float(13.0),
-		"Recoil rot d": float(.7),
+		"Recoil rot d": float(.5),
 		
 		
 		#sway
@@ -249,20 +251,25 @@ export var data := {
 		
 		"Accel sway s": float(8.0),
 		"Accel sway d": float(.9),
-		"Accel sway i": Vector3(.003, .004, .0005),
+		"Accel sway i": Vector3(.0003, .0004, .0005),
 		"Accel sway offset": Vector3(0, 0, -1.2),
 		
 		
 		#walk
 		
 		
-		"Walkspeed": float(12.0),
+		"Walkspeed": float(10.0),
 		"Walk s": float(8.0),
 		"Walk d": float(0.99),
 		
 		"Gun bob s": float(.1),
 		"Gun bob pos i": Vector3(.02, .01, .001),
 		"Gun bob rot i": Vector3(.02, .02, .01),
+		
+		#reload
+		"Reload s": float(7.0),
+		"Reload d": float(0.6),
+		
 		
 		#camera magnification
 		"Magnification": float(1.0),
@@ -296,7 +303,8 @@ var add := {
 		
 	},
 	"Reload" : {
-		
+		"Pos": Vector3(0, .2, 0),
+		"Rot": Vector3(.7, 0, -.3),
 	},
 	"Crouch" : {
 		
@@ -320,22 +328,40 @@ var multi := {
 		
 	},
 	"Aim" : {
+		
+		"Recoil pos s": float(1),
+		"Recoil pos d": float(1),
+		
+		"Recoil rot s": float(1),
+		"Recoil rot d": float(1),
+		
+		"Min camera rot force": Vector3(1.5, 1, 1),
+		"Max camera rot force": Vector3(1.5, 1, 1),
+		
+		"Min pos force": Vector3(.1, .3, .3),
+		"Max pos force": Vector3(.1, .3, .3),
+		"Min rot force": Vector3(.6, .3, 1),
+		"Max rot force": Vector3(.4, .3, 1),
+		
 		"Gun bob pos i": Vector3(.1, .1, .1),
 		"Gun bob rot i": Vector3(.1, .1, .1),
 	},
 	"Sprint" : {
-		"Walkspeed": float(1.3),
+		"Walkspeed": float(1.6),
+		
 	},
 	"Movement" : {
-		"Gun bob pos i": Vector3(1.2, 1.2, 1.1),
+		"Gun bob pos i": Vector3(1.1, 1.1, 1.1),
 		"Gun bob rot i": Vector3(1.1, 1.1, 1.1),
-		"Gun bob s": float(10),
+		"Gun bob s": float(12),
 	},
 	"Accel" : {
 		
 	},
 	"Reload" : {
-		
+		"Gun bob s": float(1.3),
+		"Gun bob pos i": Vector3(1, 1, 1),
+		"Gun bob rot i": Vector3(0.5, 0.5, 0.5),
 	},
 	"Crouch" : {
 		
