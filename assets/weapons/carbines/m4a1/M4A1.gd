@@ -38,12 +38,6 @@ func _connect_signals() -> void:
 	EquipMachine.connect("equipped", self, "on_equipped")
 	EquipMachine.connect("dequipped", self, "on_dequipped")
 
-func update_data(dat : Dictionary, mods : Dictionary) -> void:
-	print("updated")
-	if Engine.editor_hint:
-		data = dat
-		modifiers = mods
-
 #properties
 onready var chamber : int = data["Misc"]["Chamber"] setget set_chamber, get_chamber
 func set_chamber(value : int) -> void:
@@ -167,6 +161,9 @@ export var data := {
 		"Sprint s": float(8.0),
 		"Sprint d": float(.99),
 		
+#		"Sprint pos": Vector3(-.3, -.3, 0),
+#		"Sprint rot": Vector3(-.76, 1.2, 0),
+		
 		"Move s": float(6.0),
 		"Move d": float(.99),
 		
@@ -252,7 +249,7 @@ export var data := {
 		
 		"Accel sway s": float(8.0),
 		"Accel sway d": float(.9),
-		"Accel sway i": Vector3(.003, .004, .0015),
+		"Accel sway i": Vector3(.003, .004, .0005),
 		"Accel sway offset": Vector3(0, 0, -1.2),
 		
 		
@@ -263,9 +260,9 @@ export var data := {
 		"Walk s": float(8.0),
 		"Walk d": float(0.99),
 		
-		"Gun bob s": float(0.1),
-		"Gun bob pos i": Vector3(.01, .01, .01),
-		"Gun bob rot i": Vector3(.01, .01, .01),
+		"Gun bob s": float(.1),
+		"Gun bob pos i": Vector3(.02, .01, .001),
+		"Gun bob rot i": Vector3(.02, .02, .01),
 		
 		#camera magnification
 		"Magnification": float(1.0),
@@ -274,7 +271,7 @@ export var data := {
 	},
 }
 
-export var modifiers := {
+var add := {
 	#modifier states
 	"Equip": {
 		
@@ -286,16 +283,14 @@ export var modifiers := {
 		
 	},
 	"Aim" : {
-		"Gun bob pos i": Vector3(.1, .1, .1),
-		"Gun bob rot i": Vector3(.1, .1, .1),
-	},
-	"Sprint" : {
 		
 	},
+	"Sprint" : {
+		"Pos": Vector3(-.3, -.3, 0),
+		"Rot": Vector3(-.76, 1.2, 0),
+	},
 	"Movement" : {
-		"Gun bob pos i": Vector3(.1, .1, .1),
-		"Gun bob rot i": Vector3(.1, .1, .1),
-		"Gun bob s": float(12),
+		
 	},
 	"Accel" : {
 		
@@ -314,3 +309,41 @@ export var modifiers := {
 	},
 }
 
+var multi := {
+	"Equip": {
+		
+	},
+	"Dequip": {
+		
+	},
+	"Air" : {
+		
+	},
+	"Aim" : {
+		"Gun bob pos i": Vector3(.1, .1, .1),
+		"Gun bob rot i": Vector3(.1, .1, .1),
+	},
+	"Sprint" : {
+		"Walkspeed": float(1.3),
+	},
+	"Movement" : {
+		"Gun bob pos i": Vector3(1.2, 1.2, 1.1),
+		"Gun bob rot i": Vector3(1.1, 1.1, 1.1),
+		"Gun bob s": float(10),
+	},
+	"Accel" : {
+		
+	},
+	"Reload" : {
+		
+	},
+	"Crouch" : {
+		
+	},
+	"Prone" : {
+		
+	},
+	"Mounted": {
+		
+	},
+}

@@ -173,7 +173,7 @@ func _physics_process(delta : float) -> void:
 		basis = get_ground_normal_translation(basis, get_floor_normal())
 	
 	#xform input vector by basis
-	var translated := basis.xform(axis)
+	var translated := basis.xform(axis.normalized())
 	
 	if is_on_floor() and movement_spring.position.y > 0 and !Input.is_action_just_pressed("jump"):
 		movement_spring.position.y *= 0

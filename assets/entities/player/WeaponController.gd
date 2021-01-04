@@ -130,8 +130,8 @@ func _process(delta : float) -> void:
 	
 	#stackable vars
 	
-	var pos : Vector3 = weapons[current_weapon].data["Weapon handling"]["Pos"]
-	var rot : Vector3 = weapons[current_weapon].data["Weapon handling"]["Rot"]
+	var pos : Vector3 = accuracy["Pos"]
+	var rot : Vector3 = accuracy["Rot"]
 	var s : float = weapons[current_weapon].data["Weapon handling"]["Walkspeed"]
 	
 	if !is_network_master():
@@ -158,6 +158,9 @@ func _process(delta : float) -> void:
 	Sprint.damper = accuracy["Sprint d"]
 	Sprint.speed = accuracy["Sprint s"]
 	Sprint.positionvelocity(delta)
+	
+#	pos += Sprint.position * accuracy["Sprint pos"]
+#	rot += Sprint.position * accuracy["Sprint rot"]
 	
 	#acceleration
 	Accel.damper = accuracy["Accel sway d"]
@@ -272,42 +275,58 @@ func get_accuracy() -> Dictionary:
 	
 	#modifiers only use multiplication
 	
-	#each modifier
-	for modifier in weapons[current_weapon].modifiers.keys():
-		#get modifier's property
-		var prop = get(modifier)
-		
-		var value : float
-		#gets float from different datatypes
-		match typeof(prop):
-			TYPE_REAL:
-				value = prop
-			TYPE_BOOL:
-				value = float(prop)
-			TYPE_INT:
-				value = float(prop)
-			TYPE_VECTOR3:
-				value = prop.length()
-			TYPE_VECTOR2:
-				value = prop.length()
-			TYPE_OBJECT:
-				#for custom classes
-				match prop.get_class():
-					"Spring":
-						value = prop.position
-					"V3Spring":
-						value = prop.position.length()
-					_:
-						push_error("Modifier " + modifier + " links to illegal variable  of the same name, with class " + prop.get_class())
-			_:
-				push_error("Modifier " + modifier + " links to illegal variable  of the same name, with type " + Variant.get_type(prop))
+	#multiplicative
+	for modifier in weapons[current_weapon].multi.keys():
+		var value = get_modifier_value(modifier)
+	
+		#each property
+		for key in weapons[current_weapon].multi[modifier].keys():
+			#hacky way to normalize values and add
+			copy[key] *= lerp(weapons[current_weapon].multi[modifier][key] / weapons[current_weapon].multi[modifier][key], weapons[current_weapon].multi[modifier][key], value)
+	
+	#additive
+	for modifier in weapons[current_weapon].add.keys():
+		var value = get_modifier_value(modifier)
 		
 		#each property
-		for key in weapons[current_weapon].modifiers[modifier].keys():
-			#hacky way to normalize values and multiply
-			copy[key] *= lerp(weapons[current_weapon].modifiers[modifier][key] / weapons[current_weapon].modifiers[modifier][key], weapons[current_weapon].modifiers[modifier][key], value)
+		for key in weapons[current_weapon].add[modifier].keys():
+			#hacky way to normalize values and add
+			copy[key] += weapons[current_weapon].add[modifier][key] * value
+	
+	
 	
 	return copy
+
+func get_modifier_value(modifier : String):
+	#get modifier's property
+	var prop = get(modifier)
+	
+	var value : float
+	#gets float from different datatypes
+	match typeof(prop):
+		TYPE_REAL:
+			value = prop
+		TYPE_BOOL:
+			value = float(prop)
+		TYPE_INT:
+			value = float(prop)
+		TYPE_VECTOR3:
+			value = prop.length()
+		TYPE_VECTOR2:
+			value = prop.length()
+		TYPE_OBJECT:
+			#for custom classes
+			match prop.get_class():
+				"Spring":
+					value = prop.position
+				"V3Spring":
+					value = prop.position.length()
+				_:
+					push_error("Modifier " + modifier + " links to illegal variable  of the same name, with class " + prop.get_class())
+		_:
+			push_error("Modifier " + modifier + " links to illegal variable  of the same name, with type " + Variant.get_type(prop))
+	
+	return value
 
 func _unhandled_input(event : InputEvent) -> void:
 	if !is_network_master():

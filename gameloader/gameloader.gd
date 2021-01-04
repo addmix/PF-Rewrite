@@ -4,6 +4,7 @@ var SplashScreen = preload("res://scenes/splash_screen/splash_screen.tscn")
 var load_menu := true
 
 func _ready() -> void:
+#	print(lerp(1.5/1.5, 1.5, ))
 	#load resources
 	ModLoader.load_resources()
 	#scan maps folder
