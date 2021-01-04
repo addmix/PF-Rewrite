@@ -29,9 +29,21 @@ export var camera_sensitiviy := Vector2(.2, .2)
 #skeleton and IK stuff
 onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftHandIK"
 onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
+onready var LeftLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftLegIK"
+onready var RightLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightLegIK"
 
-var crouch_spring = Spring.new(0, 0, 0, 0, 1)
-var prone_spring = Spring.new(0, 0, 0, 0, 1)
+#stances
+var crouch_spring = Spring.new(0, 0, 0, .999, 8)
+var prone_spring = Spring.new(0, 0, 0, .999, 8)
+
+var current_stance := 0
+var stances := {
+	"Stand": {},
+	"Crouch": {},
+	"Prone": {},
+	}
+
+
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -44,6 +56,9 @@ func deferred() -> void:
 		LeftHandIK.max_iterations = 20
 		RightHandIK.max_iterations = 20
 		_Camera.current = true
+	
+	LeftLegIK.start()
+	RightLegIK.start()
 	
 	set_physics_process(true)
 	set_process(true)
