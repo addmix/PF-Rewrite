@@ -17,7 +17,7 @@ var bob_intensity_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZER
 
 # warning-ignore:unused_argument
 func _on_WeaponController_shot_fired(aim : float) -> void:
-	rotation_spring.accelerate(MathUtils.v3RandfRange(WeaponController.accuracy["Min camera rotation force"], WeaponController.accuracy["Max camera rotation force"]))
+	rotation_spring.accelerate(MathUtils.v3RandfRange(WeaponController.accuracy["Min camera rot force"], WeaponController.accuracy["Max camera rot force"]))
 	translation_spring.accelerate(MathUtils.v3RandfRange(WeaponController.accuracy["Min camera pos force"], WeaponController.accuracy["Max camera pos force"]))
 
 func _process(delta : float) -> void:

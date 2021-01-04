@@ -101,10 +101,10 @@ remote var sprint_spring_target := 0.0
 var Sprint := Spring.new(0, 0, 0, 0, 1)
 var Movement := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var Accel := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
-var reload := false
-var crouch := Spring.new(0, 0, 0, 0, 1)
-var prone := Spring.new(0, 0, 0, 0, 1)
-var mounted := Spring.new(0, 0, 0, 0, 1)
+var Reload := false
+var Crouch := Spring.new(0, 0, 0, 0, 1)
+var Prone := Spring.new(0, 0, 0, 0, 1)
+var Mounted := Spring.new(0, 0, 0, 0, 1)
 
 #springs
 
@@ -273,6 +273,8 @@ func get_accuracy() -> Dictionary:
 	for i in data.keys():
 		copy[i] = data[i]
 	
+	#modifiers only use multiplication
+	
 	#each modifier
 	for modifier in weapons[current_weapon].modifiers.keys():
 		#get modifier's property
@@ -292,6 +294,7 @@ func get_accuracy() -> Dictionary:
 			TYPE_VECTOR2:
 				value = prop.length()
 			TYPE_OBJECT:
+				#for custom classes
 				match prop.get_class():
 					"Spring":
 						value = prop.position
@@ -301,12 +304,11 @@ func get_accuracy() -> Dictionary:
 						push_error("Modifier " + modifier + " links to illegal variable  of the same name, with class " + prop.get_class())
 			_:
 				push_error("Modifier " + modifier + " links to illegal variable  of the same name, with type " + Variant.get_type(prop))
-		print(prop)
-		print(typeof(prop))
 		
 		#each property
 		for key in weapons[current_weapon].modifiers[modifier].keys():
-			copy[key] *= lerp(weapons[current_weapon].data[key], weapons[current_weapon].modifiers[modifier][key], value)
+			#hacky way to normalize values and multiply
+			copy[key] *= lerp(weapons[current_weapon].modifiers[modifier][key] / weapons[current_weapon].modifiers[modifier][key], weapons[current_weapon].modifiers[modifier][key], value)
 	
 	return copy
 

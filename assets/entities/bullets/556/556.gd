@@ -7,7 +7,7 @@ onready var body : KinematicBody = $KinematicBody
 var gravity : Vector3 = ProjectSettings.get("physics/3d/default_gravity") * ProjectSettings.get("physics/3d/default_gravity_vector")
 
 func set_position(pos : Vector3) -> void:
-	body.transform.origin = pos
+	$KinematicBody.transform.origin = pos
 
 func _physics_process(delta : float) -> void:
 	velocity += gravity * delta

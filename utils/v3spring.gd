@@ -16,6 +16,9 @@ func _init(p : Vector3, v : Vector3, t : Vector3, d: float, s: float) -> void:
 	damper = d
 	speed = s
 
+func get_class() -> String:
+	return "V3Spring"
+
 #returns position, velocity
 func positionvelocity(delta : float) -> void:
 	if damper > 1:
