@@ -28,6 +28,8 @@ func deferred() -> void:
 		if character.Player.loadout[weapon] == null:
 			continue
 		set_weapon(weapon, character.Player.loadout[weapon])
+		weapons[weapon].add_to_group("weapons")
+		weapons[weapon].add_to_group(character.Player.loadout[weapon])
 		weapons[weapon].connect("shotFired", self, "on_shot_fired")
 		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
 		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")

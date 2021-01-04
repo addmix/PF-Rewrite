@@ -163,7 +163,6 @@ func close_server() -> void:
 	$"/root".add_child(resource.instance())
 
 func _exit_tree() -> void:
-	
 	network.close_connection()
 
 #menu connection server starting funcs

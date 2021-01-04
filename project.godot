@@ -272,6 +272,7 @@ Players="*res://singletons/players.gd"
 NodeUtils="*res://utils/nodeutils.gd"
 Weapons="*res://singletons/weapons.gd"
 ParticleLoader="*res://gameloader/particleloader.gd"
+GunDebug="*res://singletons/gun_debug.gd"
 
 [display]
 

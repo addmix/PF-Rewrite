@@ -1,114 +1,16 @@
-extends Spatial
+extends Node
 
-#signals
-# warning-ignore:unused_signal
-signal ammoChanged
-signal shotFired
+export var update := false setget set_update
 
-signal equipped
-signal dequipped
+func set_update(value : bool) -> void:
+	update_data()
+#	update = false
 
-#nodes
-onready var aim_node : Position3D = $Aim
-onready var LeftIK : BoneAttachment = $Armature/Skeleton/HandIKL
-onready var RightIK : BoneAttachment = $Armature/Skeleton/HandIKR
+export var weapon := "M4A1"
 
-onready var GunMachine = $GunMachine
-onready var ReloadMachine = $ReloadMachine
-onready var FiremodeMachine = $FiremodeMachine
-onready var EquipMachine = $EquipMachine
 
-onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
-
-#effects
-var bullet = preload("res://assets/entities/bullets/556/556.tscn")
-var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
-
-var base_offset := Vector3.ZERO
-
-func _ready():
-	base_offset = transform.origin
-	#play idle animation
-	_AnimationPlayer.call_deferred("play", "Ready")
-	#initializes ammo data for any interested nodes
-	call_deferred("emit_signal", "ammoChanged", chamber, magazine, reserve)
-	_connect_signals()
-
-func _connect_signals() -> void:
-	EquipMachine.connect("equipped", self, "on_equipped")
-	EquipMachine.connect("dequipped", self, "on_dequipped")
-
-func update_data(dat : Dictionary, mods : Dictionary) -> void:
-	print("updated")
-	if Engine.editor_hint:
-		data = dat
-		modifiers = mods
-
-#properties
-onready var chamber : int = data["Misc"]["Chamber"] setget set_chamber, get_chamber
-func set_chamber(value : int) -> void:
-	chamber = value
-	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
-func get_chamber() -> int:
-	return chamber
-
-onready var magazine : int = data["Misc"]["Magazine"] setget set_magazine, get_magazine
-func set_magazine(value : int) -> void:
-	magazine = value
-	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
-func get_magazine() -> int:
-	return magazine
-
-onready var reserve : int = data["Misc"]["Reserve"] setget set_reserve, get_reserve
-func set_reserve(value : int) -> void:
-	reserve = value
-	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
-func get_reserve() -> int:
-	return reserve
-
-func can_reload() -> bool:
-	return magazine < data["Misc"]["Magazine"]
-
-#spring stuff
-# warning-ignore:unused_argument
-func _process(delta : float) -> void:
-	var pos := Vector3.ZERO
-	var rot := Vector3.ZERO
-	
-	pos += EquipMachine.EquipPosSpring.position
-	rot += EquipMachine.EquipRotSpring.position
-	
-	transform.origin = pos + base_offset
-	rotation = rot
-
-#takes care of weapon-side equip protocol
-func equip() -> void:
-	EquipMachine.change_state("Equip")
-
-#takes care of weapon-side dequip protocol
-func dequip() -> void:
-	EquipMachine.change_state("Dequip")
-
-func on_equipped() -> void:
-	emit_signal("equipped", self)
-
-func on_dequipped() -> void:
-	emit_signal("dequipped", self)
-
-func _on_M4A1_shotFired():
-	#muzzle flash
-	var instance = muzzle_flash.instance()
-	$Barrel.add_child(instance)
-	
-	#bullet
-	instance = bullet.instance()
-	instance.set_position($Barrel.get_global_transform().origin)
-	instance.velocity = get_parent().get_linear_velocity()
-	$".".add_child(instance)
-
+func update_data() -> void:
+	get_tree().call_group(weapon, "update_data", data, modifiers)
 
 export var data := {
 	"Misc": {
@@ -313,4 +215,3 @@ export var modifiers := {
 		
 	},
 }
-
