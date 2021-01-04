@@ -1,7 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/entities/bullets/556/556.gd" type="Script" id=1]
 [ext_resource path="res://addons/godot-next/3d/trail_3d.gd" type="Script" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_transparent = true
+emission_enabled = true
+emission = Color( 1, 0, 0, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
 
 [node name="556" type="Spatial" groups=[
 "bullets",
@@ -15,9 +23,10 @@ collision_mask = 4
 collide_with_areas = true
 
 [node name="Trail3D" type="ImmediateGeometry" parent="."]
+material_override = SubResource( 1 )
 script = ExtResource( 3 )
-length = 6.0
+length = 15.0
 max_radius = 0.05
 density_lengthwise = 4
 density_around = 3
-shape = 1.8025
+shape = 1.36604

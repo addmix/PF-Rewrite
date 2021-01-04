@@ -180,10 +180,6 @@ func _physics_process(delta : float) -> void:
 	if !is_network_master():
 		axis = puppet_axis
 	
-	#world space axis
-# warning-ignore:unused_variable
-#	var xformed : Vector3 = RotationHelper.global_transform.basis.xform(axis)
-	
 	#gets pos basis for ground normal pos
 	var basis : Basis = RotationHelper.get_global_transform().basis
 	if is_on_floor():
@@ -194,25 +190,17 @@ func _physics_process(delta : float) -> void:
 	var translated := basis.xform(axis.normalized())
 	
 	if is_on_floor() and movement_spring.position.y > 0 and !Input.is_action_just_pressed("jump"):
-		vel.y = 0
+		movement_spring.velocity.y = 0
+
 	
 	movement_spring.speed = WeaponController.accuracy["Walk s"]
 	movement_spring.damper = WeaponController.accuracy["Walk d"]
-	movement_spring.target = translated * WeaponController.accuracy["Walkspeed"] - Vector3(0, 0.001, 0)
+	movement_spring.target = translated * WeaponController.accuracy["Walkspeed"] - Vector3(0, 10, 0)
 	movement_spring.positionvelocity(delta)
-	
-	#gravity
 #	movement_spring.position += gravity * delta
-	vel += gravity * delta
+#	movement_spring.accelerate(gravity )
 	
-	if is_on_floor():
-		movement_spring.position = move_and_slide(movement_spring.position, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
-		vel = movement_spring.position
-	else:
-		vel = move_and_slide(vel, Vector3(0, 1, 0), true, 4, deg2rad(45), false)
-#	print(movement_spring.position.length())
-	
-#	print(movement_spring.position)
+	movement_spring.position = move_and_slide(movement_spring.position, Vector3(0, 1, 0), true, 4, deg2rad(45), false)
 	
 	if is_network_master():
 		rset_unreliable("puppet_pos", transform.origin)

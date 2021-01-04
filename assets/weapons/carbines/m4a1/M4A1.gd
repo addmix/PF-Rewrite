@@ -160,6 +160,9 @@ export var data := {
 		"Aim s": float(15.0),
 		"Aim d": float(.8),
 		
+		"Air s": float(6.0),
+		"Air d": float(.8),
+		
 		"Sprint s": float(8.0),
 		"Sprint d": float(.99),
 		
@@ -251,7 +254,7 @@ export var data := {
 		
 		"Accel sway s": float(8.0),
 		"Accel sway d": float(.9),
-		"Accel sway i": Vector3(.0003, .0004, .0005),
+		"Accel sway i": Vector3(.0003, .0004, .0001),
 		"Accel sway offset": Vector3(0, 0, -1.2),
 		
 		
@@ -260,11 +263,11 @@ export var data := {
 		
 		"Walkspeed": float(10.0),
 		"Walk s": float(8.0),
-		"Walk d": float(0.95),
+		"Walk d": float(0.999),
 		
 		"Gun bob s": float(.1),
-		"Gun bob pos i": Vector3(.02, .01, .001),
-		"Gun bob rot i": Vector3(.02, .02, .01),
+		"Gun bob pos i": Vector3(.015, .01, .001),
+		"Gun bob rot i": Vector3(.015, .015, .01),
 		
 		#reload
 		"Reload s": float(7.0),
@@ -294,7 +297,7 @@ var add := {
 	},
 	"Sprint" : {
 		"Pos": Vector3(-.3, -.3, 0),
-		"Rot": Vector3(-.76, 1.2, 0),
+		"Rot": Vector3(-.4, .4, 0),
 	},
 	"Movement" : {
 		
@@ -304,7 +307,7 @@ var add := {
 	},
 	"Reload" : {
 		"Pos": Vector3(0, .2, 0),
-		"Rot": Vector3(.7, 0, -.3),
+		"Rot": Vector3(.9, .2, -.3),
 	},
 	"Crouch" : {
 		
@@ -325,15 +328,20 @@ var multi := {
 		
 	},
 	"Air" : {
-		
+		"Walkspeed": float(1.0),
+		"Walk s": float(10.0),
+		"Walk d": float(0.999),
 	},
 	"Aim" : {
+		"Recoil pos s": float(1.3),
+		"Recoil rot s": float(1.3),
 		
-		"Recoil pos s": float(1),
-		"Recoil pos d": float(1),
+		"Pos sway": Vector3(.1, .1, 1),
+		"Rot sway": Vector3(.5, .5, 1),
+		"Rot sway d": float(.65),
 		
-		"Recoil rot s": float(1),
-		"Recoil rot d": float(1),
+		"Pos": Vector3(0.001, 0.001, 0.001),
+		"Rot": Vector3(0.001, 0.001, 0.001),
 		
 		"Min camera rot force": Vector3(1.5, 1, 1),
 		"Max camera rot force": Vector3(1.5, 1, 1),
@@ -343,13 +351,13 @@ var multi := {
 		"Min rot force": Vector3(.6, .3, 1),
 		"Max rot force": Vector3(.4, .3, 1),
 		
-		"Gun bob pos i": Vector3(.1, .1, .1),
-		"Gun bob rot i": Vector3(.1, .1, .1),
+		"Accel sway i": Vector3(.1, .3, .1),
+		
+		"Gun bob pos i": Vector3(.07, .07, .1),
+		"Gun bob rot i": Vector3(.07, .07, .1),
 	},
 	"Sprint" : {
 		"Walkspeed": float(1.6),
-		"Pos": Vector3(.3, .3, 1),
-		"Rot": Vector3(.76, .2, 1),
 	},
 	"Movement" : {
 		"Gun bob pos i": Vector3(1.1, 1.1, 1.1),
@@ -363,6 +371,7 @@ var multi := {
 		"Gun bob s": float(1.3),
 		"Gun bob pos i": Vector3(1, 1, 1),
 		"Gun bob rot i": Vector3(0.5, 0.5, 0.5),
+		
 	},
 	"Crouch" : {
 		

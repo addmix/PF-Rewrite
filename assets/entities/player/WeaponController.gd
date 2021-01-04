@@ -96,7 +96,7 @@ var movement_speed := 0.0
 #modifier variables
 var Equip := false
 var Dequip := false
-var Air := true
+var Air := Spring.new(0, 0, 0, .5, 1)
 remote var aim_spring_target := 0.0
 var Aim := Spring.new(0, 0, 0, .5, 1)
 remote var sprint_spring_target := 0.0
@@ -147,8 +147,13 @@ func _process(delta : float) -> void:
 	
 	Equip = float(weapons[current_weapon].EquipMachine.current_state == "Equip")
 	Dequip = float(weapons[current_weapon].EquipMachine.current_state == "Dequip")
-	Air = float(character.is_on_floor())
 	Movement = character.movement_spring.position
+	
+	#in air
+	Air.target = float(!character.is_on_floor())
+	Air.damper = accuracy["Air d"]
+	Air.speed = accuracy["Air s"]
+	Air.positionvelocity(delta)
 	
 	#reload
 	Reload.target = float(weapons[current_weapon].ReloadMachine.currentState != "Ready" and !weapons[current_weapon].ReloadMachine.states[weapons[current_weapon].ReloadMachine.currentState].stopped)
@@ -282,7 +287,6 @@ func get_accuracy() -> Dictionary:
 	
 	#modifiers only use multiplication
 	
-	
 	#additive
 	for modifier in weapons[current_weapon].add.keys():
 		var value = get_modifier_value(modifier)
@@ -298,7 +302,7 @@ func get_accuracy() -> Dictionary:
 	
 		#each property
 		for key in weapons[current_weapon].multi[modifier].keys():
-			#hacky way to normalize values and add
+			#hacky way to normalize values and multiply
 			copy[key] *= lerp(weapons[current_weapon].multi[modifier][key] / weapons[current_weapon].multi[modifier][key], weapons[current_weapon].multi[modifier][key], value)
 	
 	

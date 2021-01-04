@@ -1,5 +1,6 @@
 extends Spatial
 
+var radius : float = 0.75
 var stride_size := Vector3(0, .5, 1)
 
 var character : KinematicBody
@@ -22,9 +23,7 @@ func deferred() -> void:
 var distance := 0.0
 func _physics_process(delta : float) -> void:
 	var movement : Vector3 = character.RotationHelper.get_global_transform().basis.xform_inv(character.delta_pos)
-	
 	var tangent := Vector3(1, 0, 0)
-#	print(movement.normalized())
 	
 	if movement.length() != 0 and movement.normalized().y != 1 and movement.normalized().y != -1:
 		#get tangent on horizon
@@ -33,15 +32,10 @@ func _physics_process(delta : float) -> void:
 	#walk backwards
 	distance += movement.length() * ((-1 * int(movement.z < 0)) + int(!movement.z < 0))
 	
-#	Vector3(-.6, cos(distance), -sin(distance))
-	
-	
-	var radius : float = 0.5
-#	var radius : float = distance / (2 * PI)
 	var radians := deg2rad(distance / (2 * PI * radius) * 360)
 	
 	l.rotation.x = radians
-	r.rotation.x = l.rotation.x + deg2rad(180)
+	r.rotation.x = radians + deg2rad(270)
 	left.rotation.x = -l.rotation.x + deg2rad(-90)
 	right.rotation.x =  -r.rotation.x + deg2rad(-90)
 	
