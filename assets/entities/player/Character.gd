@@ -219,7 +219,7 @@ func _physics_process(delta : float) -> void:
 
 func jump() -> void:
 	if is_on_floor():
-		movement_spring.position.y += 7.5
+		movement_spring.position.y += 10
 
 func get_ground_normal_translation(basis : Basis, normal : Vector3) -> Basis:
 	var zy := intersect_planes(Vector3.ZERO, normal, Vector3.ZERO, basis.x, Vector3.ZERO)
