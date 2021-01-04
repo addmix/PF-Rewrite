@@ -90,7 +90,7 @@ var rotation_delta := Vector3.ZERO
 var movement_speed := 0.0
 
 
-
+#we want to move these somewhere else
 #modifier variables
 var Equip := false
 var Dequip := false
@@ -99,7 +99,7 @@ remote var aim_spring_target := 0.0
 var Aim := Spring.new(0, 0, 0, .5, 1)
 remote var sprint_spring_target := 0.0
 var Sprint := Spring.new(0, 0, 0, 0, 1)
-var Movement := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+var Movement := Vector3.ZERO
 var Accel := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var Reload := false
 var Crouch := Spring.new(0, 0, 0, 0, 1)
@@ -126,51 +126,38 @@ var delta_rot := Vector3.ZERO
 func _process(delta : float) -> void:
 	var camera_transform = character._Camera.global_transform.basis
 	
-	accuracy = get_accuracy()
-	
-	
 	#stackable vars
+	
 	var pos : Vector3 = weapons[current_weapon].data["Weapon handling"]["Pos"]
 	var rot : Vector3 = weapons[current_weapon].data["Weapon handling"]["Rot"]
 	var s : float = weapons[current_weapon].data["Weapon handling"]["Walkspeed"]
-	
-	
-	#modifying springs
-	#sprinting
-	#aiming
-	
-	#modifying variables
-	#s
-	#acceleration
-	
 	
 	if !is_network_master():
 		Aim.target = aim_spring_target
 		Sprint.target = sprint_spring_target
 	
 	
+	#modifier variables
+	
+	
+	Equip = float(weapons[current_weapon].EquipMachine.current_state == "Equip")
+	Dequip = float(weapons[current_weapon].EquipMachine.current_state == "Dequip")
+	Air = float(character.is_on_floor())
+	Movement = character.movement_spring.position
+	Reload = float(weapons[current_weapon].ReloadMachine.currentState != "Ready")
+	
 	#aiming
-	
-	
 	Aim.damper = weapons[current_weapon].data["Weapon handling"]["Aim d"]
 	Aim.speed = weapons[current_weapon].data["Weapon handling"]["Aim s"]
-	
 	Aim.positionvelocity(delta)
 	pos -= Aim.position * (base_offset + weapons[current_weapon].aim_node.transform.origin - character._Camera.base_offset + weapons[current_weapon].data["Weapon handling"]["Pos"])
 	
-	
-	
 	#sprinting
-	
-	
 	Sprint.damper = accuracy["Sprint d"]
 	Sprint.speed = accuracy["Sprint s"]
 	Sprint.positionvelocity(delta)
 	
-	
 	#acceleration
-	
-	
 	Accel.damper = accuracy["Accel sway d"]
 	Accel.speed = accuracy["Accel sway s"]
 	Accel.accelerate(camera_transform.xform_inv(character.delta_vel))
@@ -178,6 +165,20 @@ func _process(delta : float) -> void:
 	
 	#translate accel spring position to character local space and separate to pos/rot
 	pos -= Accel.position * accuracy["Accel sway i"]
+	
+#	Crouch = Spring.new(0, 0, 0, 0, 1)
+#	Prone = Spring.new(0, 0, 0, 0, 1)
+#	Mounted = Spring.new(0, 0, 0, 0, 1)
+	
+	accuracy = get_accuracy()
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	#recoil
@@ -216,16 +217,10 @@ func _process(delta : float) -> void:
 	
 	#intensity
 	
-	var walk_bob_speed : float = accuracy["Gun bob s"]
-	var walk_bob_pos_i : Vector3 = accuracy["Gun bob pos i"]
-	var walk_bob_rot_i : Vector3 = accuracy["Gun bob rot i"]
+	walk_bob_tick += delta * (accuracy["Gun bob s"] + 1)
 	
-	walk_bob_speed *= character.player_velocity.length() * int(character.is_on_floor())
-	
-	walk_bob_tick += delta * (walk_bob_speed + 1)
-	
-	pos += Vector3(cos(walk_bob_tick / 2) * 2, sin(walk_bob_tick), 0) * (character.player_velocity.length() * accuracy["Gun bob pos i"])
-	rot += Vector3(cos(walk_bob_tick), sin(walk_bob_tick / 2), 0) * (character.player_velocity.length() * accuracy["Gun bob rot i"])
+	pos += Vector3(cos(walk_bob_tick / 2) * 2, sin(walk_bob_tick), 0) * accuracy["Gun bob pos i"]
+	rot += Vector3(cos(walk_bob_tick), sin(walk_bob_tick / 2), 0) * accuracy["Gun bob rot i"]
 	
 	
 	#applies all combinative effects

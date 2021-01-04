@@ -53,12 +53,11 @@ func _process(delta : float) -> void:
 	
 	#camera walk sway
 	bob_intensity_spring.damper = WeaponController.accuracy["Camera bob d"]
-	bob_intensity_spring.speed = WeaponController.accuracy["Camera bob idle s"] + (WeaponController.accuracy["Camera bob s"] * player.player_velocity.length())
-	bob_intensity_spring.target = WeaponController.accuracy["Camera bob idle i"] + (WeaponController.accuracy["Camera bob i"] * player.player_velocity.length())
+	bob_intensity_spring.speed = WeaponController.accuracy["Camera bob s"]
+	bob_intensity_spring.target = WeaponController.accuracy["Camera bob i"]
 	bob_intensity_spring.positionvelocity(delta)
 	
 	rot += Vector3(deg2rad(cos(WeaponController.walk_bob_tick)), deg2rad(sin(WeaponController.walk_bob_tick / 2)), 0) * bob_intensity_spring.position
-	
 	
 	
 	transform.origin = pos + base_offset

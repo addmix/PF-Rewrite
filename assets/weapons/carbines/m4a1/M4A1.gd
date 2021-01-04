@@ -156,9 +156,6 @@ export var data := {
 		"Dequip pos": Vector3(0, -1.5, 0),
 		"Dequip rot": Vector3(0, 0, 0),
 		
-		"Air s": float(3.0),
-		"Air d": float(.99),
-		
 		"Aim s": float(15.0),
 		"Aim d": float(.8),
 		
@@ -239,8 +236,6 @@ export var data := {
 		"Camera bob s": float(0.1),
 		"Camera bob d": float(.9),
 		"Camera bob i": Vector3(.01, .01, .01),
-		"Camera bob idle s": float(4.0),
-		"Camera bob idle i": Vector3(.1, .1, .1),
 		
 		"Pos sway": Vector3(.1, .1, 0),
 		"Pos sway s": float(14.0),
