@@ -162,8 +162,8 @@ func _physics_process(delta : float) -> void:
 	if !is_network_master():
 		axis = puppet_axis
 	
-	walk_spring.speed = WeaponController.accuracy["Walk accel"]
-	walk_spring.damper = WeaponController.accuracy["Walk damper"]
+	walk_spring.speed = WeaponController.accuracy["Walk s"]
+	walk_spring.damper = WeaponController.accuracy["Walk d"]
 	walk_spring.target = axis.normalized() * WeaponController.movement_speed
 	walk_spring.positionvelocity(delta)
 	
@@ -171,7 +171,7 @@ func _physics_process(delta : float) -> void:
 # warning-ignore:unused_variable
 	var xformed : Vector3 = RotationHelper.transform.xform(walk_spring.position)
 	
-	#gets translation basis for ground normal translation
+	#gets pos basis for ground normal pos
 	var basis : Basis = RotationHelper.get_global_transform().basis
 
 	if is_on_floor():

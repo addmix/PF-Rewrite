@@ -8,8 +8,8 @@ signal exited
 signal finished
 
 func enter() -> void:
-	get_parent().EquipPositionSpring.target = Vector3.ZERO
-	get_parent().EquipRotationSpring.target = Vector3.ZERO
+	get_parent().EquipPosSpring.target = Vector3.ZERO
+	get_parent().EquipRotSpring.target = Vector3.ZERO
 	
 	emit_signal("entered")
 

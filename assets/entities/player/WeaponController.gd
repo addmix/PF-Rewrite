@@ -101,9 +101,6 @@ var recoil_translation_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO
 var rotation_sway_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 var translation_sway_spring := Physics.V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 
-var walk_bob_speed_spring := Physics.Spring.new(0, 0, 0, 0, 1)
-var walk_bob_intensity := Physics.Spring.new(1, 0, 1, 0, 1)
-
 #allows for time-based spring stuff
 var walk_bob_tick := 0.0
 
@@ -118,11 +115,12 @@ var delta_pos := Vector3.ZERO
 var delta_rot := Vector3.ZERO
 
 func _process(delta : float) -> void:
-	#stackable vars
 	var camera_transform = character._Camera.global_transform.basis
-	var pos : Vector3 = weapons[current_weapon].data["Weapon handling"]["Position"]
-	var rot : Vector3 = weapons[current_weapon].data["Weapon handling"]["Rotation"]
-	var speed : float = weapons[current_weapon].data["Weapon handling"]["Walkspeed"]
+	
+	#stackable vars
+	var pos : Vector3 = weapons[current_weapon].data["Weapon handling"]["Pos"]
+	var rot : Vector3 = weapons[current_weapon].data["Weapon handling"]["Rot"]
+	var s : float = weapons[current_weapon].data["Weapon handling"]["Walkspeed"]
 	
 	
 	#modifying springs
@@ -130,67 +128,60 @@ func _process(delta : float) -> void:
 	#aiming
 	
 	#modifying variables
-	#speed
+	#s
 	#acceleration
 	
 	
 	if !is_network_master():
 		aim_spring.target = aim_spring_target
 		sprint_spring.target = sprint_spring_target
-		
 	
 	
 	#aiming
 	
 	
-	aim_spring.damper = weapons[current_weapon].data["Weapon handling"]["Aiming damping"]
-	aim_spring.speed = weapons[current_weapon].data["Weapon handling"]["Aiming speed"]
+	aim_spring.damper = weapons[current_weapon].data["Weapon handling"]["Aim d"]
+	aim_spring.speed = weapons[current_weapon].data["Weapon handling"]["Aim s"]
 	
 	aim_spring.positionvelocity(delta)
-	pos -= aim_spring.position * (base_offset + weapons[current_weapon].aim_node.transform.origin - character._Camera.base_offset + weapons[current_weapon].data["Weapon handling"]["Position"])
+	pos -= aim_spring.position * (base_offset + weapons[current_weapon].aim_node.transform.origin - character._Camera.base_offset + weapons[current_weapon].data["Weapon handling"]["Pos"])
 	
 #	accuracy = interpolateAccuracy(aim_spring.position)
 	accuracy = weapons[current_weapon].data["Weapon handling"]
-	
-	speed *= accuracy["Walk multiplier"]
 	
 	
 	#sprinting
 	
 	
-	sprint_spring.damper = accuracy["Sprint damper"]
-	sprint_spring.speed = accuracy["Sprint speed"]
+	sprint_spring.damper = accuracy["Sprint d"]
+	sprint_spring.speed = accuracy["Sprint s"]
 	
 	sprint_spring.positionvelocity(delta)
-	
-	pos += sprint_spring.position * accuracy["Sprint position"]
-	rot += sprint_spring.position * accuracy["Sprint rotation"]
-	speed *= lerp(1.0, accuracy["Sprint multiplier"], sprint_spring.position) 
 	
 	
 	#acceleration
 	
 	
-	accel_spring.damper = accuracy["Accel sway damping"]
-	accel_spring.speed = accuracy["Accel sway speed"]
+	accel_spring.damper = accuracy["Accel sway d"]
+	accel_spring.speed = accuracy["Accel sway s"]
 	accel_spring.accelerate(camera_transform.xform_inv(character.delta_vel))
 	accel_spring.positionvelocity(delta)
 	
 	#translate accel spring position to character local space and separate to pos/rot
-	pos -= accel_spring.position * accuracy["Accel sway intensity"]
+	pos -= accel_spring.position * accuracy["Accel sway i"]
 	
 	
 	#recoil
 	
 	
-	recoil_rotation_spring.damper = accuracy["Recoil rotation damping"]
-	recoil_rotation_spring.speed = accuracy["Recoil rotation speed"]
+	recoil_rotation_spring.damper = accuracy["Recoil rot d"]
+	recoil_rotation_spring.speed = accuracy["Recoil rot s"]
 	
 	recoil_rotation_spring.positionvelocity(delta)
 	rot += recoil_rotation_spring.position
 	
-	recoil_translation_spring.damper = accuracy["Recoil translation damping"]
-	recoil_translation_spring.speed = accuracy["Recoil translation speed"]
+	recoil_translation_spring.damper = accuracy["Recoil pos d"]
+	recoil_translation_spring.speed = accuracy["Recoil pos s"]
 	
 	recoil_translation_spring.positionvelocity(delta)
 	pos += recoil_translation_spring.position
@@ -199,42 +190,33 @@ func _process(delta : float) -> void:
 	#camera movement sway
 	
 	
-	rotation_sway_spring.accelerate(rotation_delta * accuracy["Rotation sway"])
-	rotation_sway_spring.damper = accuracy["Rotation sway damping"]
-	rotation_sway_spring.speed = accuracy["Rotation sway speed"]
+	rotation_sway_spring.accelerate(rotation_delta * accuracy["Rot sway"])
+	rotation_sway_spring.damper = accuracy["Rot sway d"]
+	rotation_sway_spring.speed = accuracy["Rot sway s"]
 	
 	rotation_sway_spring.positionvelocity(delta)
 	rot += Vector3(rotation_sway_spring.position.x, -rotation_sway_spring.position.y, rotation_sway_spring.position.z)
 	
-	translation_sway_spring.accelerate(rotation_delta * accuracy["Translation sway"])
-	translation_sway_spring.damper = accuracy["Translation sway damping"]
-	translation_sway_spring.speed = accuracy["Translation sway speed"]
+	translation_sway_spring.accelerate(rotation_delta * accuracy["Pos sway"])
+	translation_sway_spring.damper = accuracy["Pos sway d"]
+	translation_sway_spring.speed = accuracy["Pos sway s"]
 	
 	translation_sway_spring.positionvelocity(delta)
 	pos += Vector3(translation_sway_spring.position.y, translation_sway_spring.position.x, translation_sway_spring.position.z)
 	
 	
-	#walk bob speed
-	
-	
-	walk_bob_speed_spring.damper = accuracy["Gun bob speed damper"]
-	walk_bob_speed_spring.speed = accuracy["Gun bob speed speed"]
-	walk_bob_speed_spring.target = character.player_velocity.length() * int(character.is_on_floor())
-	walk_bob_speed_spring.positionvelocity(delta)
-	
-	
 	#intensity
 	
+	var walk_bob_speed : float = accuracy["Gun bob s"]
+	var walk_bob_pos_i : Vector3 = accuracy["Gun bob pos i"]
+	var walk_bob_rot_i : Vector3 = accuracy["Gun bob rot i"]
 	
-	walk_bob_intensity.damper = accuracy["Gun bob intensity damper"]
-	walk_bob_intensity.speed = accuracy["Gun bob intensity speed"]
-	walk_bob_intensity.target = character.player_velocity.length() * accuracy["Gun bob intensity multiplier"] + accuracy["Gun bob idle"]
-	walk_bob_intensity.positionvelocity(delta)
+	walk_bob_speed *= character.player_velocity.length() * int(character.is_on_floor())
 	
-	walk_bob_tick += delta * (walk_bob_speed_spring.position + 1)
+	walk_bob_tick += delta * (walk_bob_speed + 1)
 	
-	pos += Vector3(cos(walk_bob_tick / 2) * 2, sin(walk_bob_tick), 0) * accuracy["Gun bob position"] * accuracy["Gun bob position multiplier"] * walk_bob_intensity.position
-	rot += Vector3(cos(walk_bob_tick), sin(walk_bob_tick / 2), 0) * accuracy["Gun bob rotation"] * accuracy["Gun bob rotation multiplier"] * walk_bob_intensity.position
+	pos += Vector3(cos(walk_bob_tick / 2) * 2, sin(walk_bob_tick), 0) * (character.player_velocity.length() * accuracy["Gun bob pos i"])
+	rot += Vector3(cos(walk_bob_tick), sin(walk_bob_tick / 2), 0) * (character.player_velocity.length() * accuracy["Gun bob rot i"])
 	
 	
 	#applies all combinative effects
@@ -251,7 +233,7 @@ func _process(delta : float) -> void:
 	#resets mouse delta
 	rotation_delta = Vector3.ZERO
 	
-	movement_speed = speed
+	movement_speed = s
 
 func get_linear_velocity() -> Vector3:
 	return delta_pos + character.delta_pos
@@ -261,8 +243,8 @@ func get_angular_velocity() -> Vector3:
 
 func on_shot_fired() -> void:
 	emit_signal("shot_fired", aim_spring.position)
-	recoil_rotation_spring.accelerate(MathUtils.v3RandfRange(accuracy["Min rotation force"], accuracy["Max rotation force"]))
-	recoil_translation_spring.accelerate(MathUtils.v3RandfRange(accuracy["Min translation force"], accuracy["Max translation force"]))
+	recoil_rotation_spring.accelerate(MathUtils.v3RandfRange(accuracy["Min rot force"], accuracy["Max rot force"]))
+	recoil_translation_spring.accelerate(MathUtils.v3RandfRange(accuracy["Min pos force"], accuracy["Max pos force"]))
 
 #interpolate accuracy values between hip and ads
 func interpolateAccuracy(amount : float) -> Dictionary:

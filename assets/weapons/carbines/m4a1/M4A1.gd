@@ -73,8 +73,8 @@ func _process(delta : float) -> void:
 	var pos := Vector3.ZERO
 	var rot := Vector3.ZERO
 	
-	pos += EquipMachine.EquipPositionSpring.position
-	rot += EquipMachine.EquipRotationSpring.position
+	pos += EquipMachine.EquipPosSpring.position
+	rot += EquipMachine.EquipRotSpring.position
 	
 	transform.origin = pos + base_offset
 	rotation = rot
@@ -222,37 +222,37 @@ export var data := {
 		"Max rot force": Vector3(1.0, 1.4, 0),
 		
 		#recoil spring settings
-		"Recoil translation speed": float(13.0),
-		"Recoil translation damping": float(.7),
+		"Recoil pos s": float(13.0),
+		"Recoil pos d": float(.7),
 		
-		"Recoil rotation speed": float(13.0),
-		"Recoil rotation damping": float(.7),
+		"Recoil rot s": float(13.0),
+		"Recoil rot d": float(.7),
 		
 		
 		#sway
 		
 		
-		"Camera rotation sway": Vector3(.005, .005, 0),
-		"Camera rotation sway speed": float(5.0),
-		"Camera rotation sway damping": float(.8),
+		"Camera rot sway": Vector3(.005, .005, 0),
+		"Camera rot sway s": float(5.0),
+		"Camera rot sway d": float(.8),
 		
-		"Camera bob damper": float(.9),
-		"Camera bob idle speed": float(4.0),
-		"Camera bob idle intensity": Vector3(.1, .1, .1),
-		"Camera bob speed": float(0.1),
-		"Camera bob intensity": Vector3(.01, .01, .01),
+		"Camera bob s": float(0.1),
+		"Camera bob d": float(.9),
+		"Camera bob i": Vector3(.01, .01, .01),
+		"Camera bob idle s": float(4.0),
+		"Camera bob idle i": Vector3(.1, .1, .1),
 		
-		"Translation sway": Vector3(.1, .1, 0),
-		"Translation sway speed": float(14.0),
-		"Translation sway damping": float(.6),
+		"Pos sway": Vector3(.1, .1, 0),
+		"Pos sway s": float(14.0),
+		"Pos sway d": float(.6),
 		
-		"Rotation sway": Vector3(.04, .04, 0),
-		"Rotation sway speed": float(12.0),
-		"Rotation sway damping": float(.7),
+		"Rot sway": Vector3(.04, .04, 0),
+		"Rot sway s": float(12.0),
+		"Rot sway d": float(.7),
 		
-		"Accel sway speed": float(8.0),
-		"Accel sway damping": float(.9),
-		"Accel sway intensity": Vector3(.003, .004, .0015),
+		"Accel sway s": float(8.0),
+		"Accel sway d": float(.9),
+		"Accel sway i": Vector3(.003, .004, .0015),
 		"Accel sway offset": Vector3(0, 0, -1.2),
 		
 		
@@ -260,39 +260,21 @@ export var data := {
 		
 		
 		"Walkspeed": float(12.0),
+		"Walk s": float(8.0),
+		"Walk d": float(0.99),
 		
-		"Gun bob position": Vector3(1.1, .7, 1),
-		"Gun bob position multiplier": float(0.04),
-		"Gun bob rotation": Vector3(.9, 1.4, 1),
-		"Gun bob rotation multiplier": float(0.02),
-		"Gun bob idle": float(1.0),
-		
-		"Gun bob intensity speed": float(10.0),
-		"Gun bob intensity damper": float(.9),
-		"Gun bob speed damper": float(.7),
-		"Gun bob speed speed": float(10.0),
-		
-		"Gun bob intensity multiplier": float(.01),
-		"Gun bob position damping": float(.7),
-		"Gun bob position speed": float(3.0),
-		
-		
-		
-		#crosshair spring
-		"Crosshair size": float(10.0),
-		"Crosshair spread size": float(10.0),
-		"Crosshair spread rate": float(10.0),
-		"Crosshair recover rate": float(10.0),
-		
+		"Gun bob s": float(0.1),
+		"Gun bob pos i": Vector3(.01, .01, .01),
+		"Gun bob rot i": Vector3(.01, .01, .01),
 		
 		#camera magnification
 		"Magnification": float(1.0),
-		#
 		"Spread factor": float(0),
-		#
 		"Choke": float(0),
-		
 	},
+}
+
+var modifiers := {
 	#modifier states
 	"Equip": {
 		
@@ -328,5 +310,4 @@ export var data := {
 		
 	},
 }
-
 

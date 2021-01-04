@@ -6,8 +6,8 @@ signal dequipped
 var states := {}
 export var current_state : String = "Inactive"
 
-var EquipPositionSpring : Physics.V3Spring
-var EquipRotationSpring : Physics.V3Spring
+var EquipPosSpring : Physics.V3Spring
+var EquipRotSpring : Physics.V3Spring
 
 func _ready() -> void:
 	_connect_signals()
@@ -21,8 +21,8 @@ func _ready() -> void:
 	init_springs()
 
 func init_springs() -> void:
-	EquipPositionSpring = Physics.V3Spring.new(Vector3(0, -1.5, 0), Vector3.ZERO, Vector3.ZERO, get_parent().data["Weapon handling"]["Equip translation damping"], get_parent().data["Weapon handling"]["Equip translation speed"])
-	EquipRotationSpring = Physics.V3Spring.new(Vector3(0, -1.5, 0), Vector3.ZERO, Vector3.ZERO, get_parent().data["Weapon handling"]["Equip rotation damping"], get_parent().data["Weapon handling"]["Equip rotation speed"])
+	EquipPosSpring = Physics.V3Spring.new(get_parent().data["Weapon handling"]["Equip pos"], Vector3.ZERO, Vector3.ZERO, get_parent().data["Weapon handling"]["Equip d"], get_parent().data["Weapon handling"]["Equip s"])
+	EquipRotSpring = Physics.V3Spring.new(get_parent().data["Weapon handling"]["Equip pos"], Vector3.ZERO, Vector3.ZERO, get_parent().data["Weapon handling"]["Equip d"], get_parent().data["Weapon handling"]["Equip s"])
 
 
 func _connect_signals() -> void:
