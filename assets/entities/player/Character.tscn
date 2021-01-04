@@ -130,7 +130,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.4, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425351, 0 )
 
 [node name="Camera" type="Camera" parent="Smoothing/RotationHelper/Head"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.458991, -0.129674 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.458991, 7.39975 )
 far = 1000.0
 script = ExtResource( 3 )
 
@@ -512,7 +512,7 @@ root_bone = "thigh_l"
 tip_bone = "toe_l"
 use_magnet = true
 magnet = Vector3( 0.5, 1, 2 )
-target_node = NodePath("../../../../Foot controller/LeftLeg")
+target_node = NodePath("../../../../Foot controller/LSphere/LeftLeg")
 max_iterations = 4
 
 [node name="RightLegIK" type="SkeletonIK" parent="Smoothing/RotationHelper/Player/metarig/Skeleton"]
@@ -521,18 +521,24 @@ root_bone = "thigh_r"
 tip_bone = "toe_r"
 use_magnet = true
 magnet = Vector3( -0.5, 1, 2 )
-target_node = NodePath("../../../../Foot controller/RightLeg")
+target_node = NodePath("../../../../Foot controller/RSphere/RightLeg")
 max_iterations = 4
 
 [node name="Foot controller" type="Spatial" parent="Smoothing/RotationHelper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.4, 0 )
 script = ExtResource( 1 )
 
-[node name="LeftLeg" type="Position3D" parent="Smoothing/RotationHelper/Foot controller"]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, -0.4, 0, 0 )
+[node name="LSphere" type="Spatial" parent="Smoothing/RotationHelper/Foot controller"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.5, 0 )
 
-[node name="RightLeg" type="Position3D" parent="Smoothing/RotationHelper/Foot controller"]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0.4, 0, 0 )
+[node name="LeftLeg" type="Position3D" parent="Smoothing/RotationHelper/Foot controller/LSphere"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.5, 0 )
+
+[node name="RSphere" type="Spatial" parent="Smoothing/RotationHelper/Foot controller"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0 )
+
+[node name="RightLeg" type="Position3D" parent="Smoothing/RotationHelper/Foot controller/RSphere"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.5, 0 )
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Player_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Player_camera_movement"]
 [connection signal="set_process" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_set_process"]

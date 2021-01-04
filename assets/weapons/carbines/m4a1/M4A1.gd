@@ -260,7 +260,7 @@ export var data := {
 		
 		"Walkspeed": float(10.0),
 		"Walk s": float(8.0),
-		"Walk d": float(0.99),
+		"Walk d": float(0.95),
 		
 		"Gun bob s": float(.1),
 		"Gun bob pos i": Vector3(.02, .01, .001),

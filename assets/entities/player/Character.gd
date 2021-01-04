@@ -151,7 +151,7 @@ var current_pos := Vector3.ZERO
 func set_delta_pos(delta : float) -> void:
 	current_pos = get_global_transform().origin
 	#not normalized to time
-	delta_pos = (current_pos - last_pos) / delta
+	delta_pos = (current_pos - last_pos)
 	#set this at last possible moment
 	call_deferred("set_last_pos")
 
@@ -198,18 +198,21 @@ func _physics_process(delta : float) -> void:
 	
 	movement_spring.speed = WeaponController.accuracy["Walk s"]
 	movement_spring.damper = WeaponController.accuracy["Walk d"]
-	movement_spring.target = translated * WeaponController.accuracy["Walkspeed"]
+	movement_spring.target = translated * WeaponController.accuracy["Walkspeed"] - Vector3(0, 0.001, 0)
 	movement_spring.positionvelocity(delta)
 	
 	#gravity
-	movement_spring.position += gravity * delta
+#	movement_spring.position += gravity * delta
 	vel += gravity * delta
 	
 	if is_on_floor():
-		vel = move_and_slide(movement_spring.position, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
+		movement_spring.position = move_and_slide(movement_spring.position, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
+		vel = movement_spring.position
 	else:
-		vel = move_and_slide(vel, Vector3(0, 1, 0), false, 4, deg2rad(45), false)
+		vel = move_and_slide(vel, Vector3(0, 1, 0), true, 4, deg2rad(45), false)
 #	print(movement_spring.position.length())
+	
+#	print(movement_spring.position)
 	
 	if is_network_master():
 		rset_unreliable("puppet_pos", transform.origin)
