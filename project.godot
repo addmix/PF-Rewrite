@@ -285,7 +285,7 @@ main_run_args="--map \"Desert Storm\""
 
 [editor_plugins]
 
-enabled=PoolStringArray( "godot-next", "gut", "smoothing" )
+enabled=PoolStringArray( "godot-next", "gut", "scatter", "smoothing" )
 
 [input]
 

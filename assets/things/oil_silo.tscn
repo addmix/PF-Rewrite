@@ -5,7 +5,7 @@
 [ext_resource path="res://maps/desert storm/Materials/Material_010.material" type="Material" id=3]
 [ext_resource path="res://maps/desert storm/Materials/Material_002.material" type="Material" id=4]
 
-[sub_resource type="ArrayMesh" id=24]
+[sub_resource type="ArrayMesh" id=1]
 resource_name = "Silo"
 surfaces/0 = {
 "aabb": AABB( -11.9683, -24.2246, -9.34935, 21.3176, 28.0499, 21.3256 ),
@@ -58,7 +58,7 @@ surfaces/3 = {
 
 [node name="Silo" type="MeshInstance"]
 transform = Transform( 2.50679, 0, 0, 0, 1, 0, 0, 0, 2.50679, 0, 0, 0 )
-mesh = SubResource( 24 )
+mesh = SubResource( 1 )
 material/0 = null
 material/1 = null
 material/2 = null

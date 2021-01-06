@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="CubeMesh" id=30]
+size = Vector3( 10, 6, 1 )
+
+[sub_resource type="CubeMesh" id=31]
+size = Vector3( 1.5, 7, 1.5 )
+
+[node name="CSGBox" type="MeshInstance"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
+mesh = SubResource( 30 )
+material/0 = null
+
+[node name="CSGBox" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0 )
+mesh = SubResource( 31 )
+material/0 = null
+
+[node name="CSGBox2" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0 )
+mesh = SubResource( 31 )
+material/0 = null
+
+[node name="RigidBody" type="RigidBody" parent="."]
+
+[node name="CSGBox" type="CSGBox" parent="RigidBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.94381, 0 )
