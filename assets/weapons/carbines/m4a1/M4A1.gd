@@ -128,7 +128,7 @@ export var data := {
 		"Damage range": Vector2(40, 90),
 		"Damage": Vector2(32, 24),
 		
-		"Velocity": float(220.0),
+		"Velocity": float(2200.0),
 		"Velocity variance": float(100.0),
 		
 		"Penetration depth": float(0),
@@ -340,8 +340,8 @@ var multi := {
 		"Rot sway": Vector3(.5, .5, 1),
 		"Rot sway d": float(.65),
 		
-		"Pos": Vector3(0.001, 0.001, 0.001),
-		"Rot": Vector3(0.001, 0.001, 0.001),
+		"Pos": Vector3(0, 0, 0),
+		"Rot": Vector3(0, 0, 0),
 		
 		"Min camera rot force": Vector3(1.5, 1, 1),
 		"Max camera rot force": Vector3(1.5, 1, 1),

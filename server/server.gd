@@ -133,8 +133,8 @@ func load_game() -> void:
 	$"/root".add_child(PauseMenu)
 	
 	#remove menu
-	var menu = get_node("/root/Menu")
 	
+	var menu = $"/root".find_node("Menu")
 	if menu != null:
 		menu.queue_free()
 #	print("Started host")

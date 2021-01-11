@@ -289,7 +289,7 @@ func get_accuracy() -> Dictionary:
 	
 	#additive
 	for modifier in weapons[current_weapon].add.keys():
-		var value = get_modifier_value(modifier)
+		var value := get_modifier_value(modifier)
 		
 		#each property
 		for key in weapons[current_weapon].add[modifier].keys():
@@ -298,17 +298,25 @@ func get_accuracy() -> Dictionary:
 	
 	#multiplicative
 	for modifier in weapons[current_weapon].multi.keys():
-		var value = get_modifier_value(modifier)
-	
+		var value := get_modifier_value(modifier)
+		
 		#each property
 		for key in weapons[current_weapon].multi[modifier].keys():
-			#hacky way to normalize values and multiply
-			copy[key] *= lerp(weapons[current_weapon].multi[modifier][key] / weapons[current_weapon].multi[modifier][key], weapons[current_weapon].multi[modifier][key], value)
-	
+			var default
+			
+			match typeof(weapons[current_weapon].multi[modifier][key]):
+				TYPE_REAL:
+					default = 1.0
+				TYPE_VECTOR3:
+					default = Vector3(1, 1, 1)
+				_:
+					push_error("Modifier variable cannot be of type " + Variant.get_type(typeof(weapons[current_weapon].multi[modifier][key])))
+			
+			copy[key] *= lerp(default, weapons[current_weapon].multi[modifier][key], value)
 	
 	return copy
 
-func get_modifier_value(modifier : String):
+func get_modifier_value(modifier : String) -> float:
 	#get modifier's property
 	var prop = get(modifier)
 	
@@ -321,9 +329,9 @@ func get_modifier_value(modifier : String):
 			value = float(prop)
 		TYPE_INT:
 			value = float(prop)
-		TYPE_VECTOR3:
-			value = prop.length()
 		TYPE_VECTOR2:
+			value = prop.length()
+		TYPE_VECTOR3:
 			value = prop.length()
 		TYPE_OBJECT:
 			#for custom classes
@@ -338,6 +346,7 @@ func get_modifier_value(modifier : String):
 			push_error("Modifier " + modifier + " links to illegal variable  of the same name, with type " + Variant.get_type(prop))
 	
 	return value
+
 
 func _unhandled_input(event : InputEvent) -> void:
 	if !is_network_master():
@@ -400,3 +409,8 @@ func _unhandled_input(event : InputEvent) -> void:
 
 func _on_Player_camera_movement(relative : Vector3) -> void:
 	rotation_delta = relative
+
+func _exit_tree() -> void:
+	for weapon in weapons:
+		if weapon != null:
+			weapon.free()

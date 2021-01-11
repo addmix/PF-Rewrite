@@ -73,3 +73,6 @@ remotesync func accept_spawn(id : int, node : Position3D) -> void:
 # warning-ignore:unused_argument
 remotesync func decline_spawn(id : int, node : Position3D) -> void:
 	pass
+
+func _exit_tree() -> void:
+	Plugin.free()
