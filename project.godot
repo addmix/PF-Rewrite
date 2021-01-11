@@ -281,7 +281,7 @@ window/stretch/aspect="keep_width"
 
 [editor]
 
-main_run_args="--verbose --map \"Desert Storm\""
+main_run_args="--map \"Desert Storm\""
 
 [editor_plugins]
 
