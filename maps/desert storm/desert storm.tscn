@@ -85,8 +85,9 @@ albedo_color = Color( 1, 0, 0, 1 )
 extents = Vector3( 2.5, 0.5, 2.5 )
 
 [sub_resource type="Curve3D" id=26]
+bake_interval = 7.5
 _data = {
-"points": PoolVector3Array( 6.96396, -0.224121, -12.5078, -6.96396, 0.224121, 12.5078, -2.47862, -1.1532, -19.3921, 14.4073, -1.22023, 0, -14.4073, 1.22023, 0, -26.7791, 12.1831, 8.30899, 0, 0, 0, 0, 0, 0, -36.5701, -1.1532, -22.4129 ),
+"points": PoolVector3Array( 1.61493, 0, -1.26546, -1.61493, 0, 1.26546, -2.47862, -1.1532, -19.3921, 15.8856, 0, -1.22029, -15.8856, 0, 1.22029, -16.265, -1.1532, -7.20999, 8.77512, 0, -4.10626, -8.77512, 0, 4.10626, -10.0691, -1.1532, -28.3555 ),
 "tilts": PoolRealArray( 0, 0, 0 )
 }
 
@@ -107,9 +108,9 @@ surfaces/0 = {
 
 [sub_resource type="MultiMesh" id=27]
 transform_format = 1
-instance_count = 11
+instance_count = 6
 mesh = SubResource( 1 )
-transform_array = PoolVector3Array( -0.485018, 0.0094014, -0.874454, 0.01938, 0.999812, 1.86265e-09, 0.874289, -0.0169469, -0.485109, -2.47862, -1.1532, -19.3921, -0.413115, 0.0996342, -0.905212, 0.234456, 0.972127, 0, 0.879981, -0.212232, -0.42496, -5.59384, -0.230491, -13.2152, -0.404257, 0.159523, -0.900627, 0.367062, 0.930196, 2.98023e-08, 0.83776, -0.330586, -0.434593, -8.43409, 1.9154, -7.14296, -0.468187, 0.229525, -0.853299, 0.44019, 0.897905, 2.98023e-08, 0.766181, -0.375614, -0.521421, -11.4389, 4.7689, -1.49296, -0.62634, 0.315228, -0.712973, 0.449561, 0.89325, -5.96046e-08, 0.636863, -0.320524, -0.701192, -15.1694, 7.91251, 3.45608, -0.872922, 0.30367, -0.381826, 0.328564, 0.944482, -2.98023e-08, 0.360628, -0.125454, -0.924234, -20.3914, 10.761, 7.09693, -0.997012, 0.0656759, 0.0406746, 0.0657303, 0.997838, 1.62981e-09, -0.0405866, 0.00267356, -0.999172, -27.0822, 12.2067, 8.30439, -0.609727, -0.183869, 0.77099, -0.288717, 0.957414, 1.11759e-08, -0.738157, -0.222598, -0.636848, -33.1199, 11.3658, 5.3716, -0.245245, -0.103473, 0.963924, -0.388733, 0.921351, 1.49012e-08, -0.888111, -0.374708, -0.26618, -35.961, 8.91762, -0.459702, -0.0809063, -0.0365497, 0.996051, -0.411693, 0.911323, 0, -0.907724, -0.410068, -0.088779, -37.0486, 6.12158, -6.72345, 0.0141388, 0.00653717, 0.999879, -0.419672, 0.907676, -2.98023e-08, -0.907566, -0.419621, 0.0155769, -37.2668, 3.22809, -13.0388 )
+transform_array = PoolVector3Array( -0.30454, 0.0518644, -0.951086, -0.000834221, 0.998501, 0.0547171, 0.952499, 0.017457, -0.304041, -3.47857, -1.23907, -16.038, -0.857585, 0.031786, -0.513359, 0.000276033, 0.998117, 0.0613399, 0.514342, 0.0524624, -0.855979, -7.55116, -1.19261, -10.2909, -0.99717, -0.00143524, -0.075165, -0.000147085, 0.999853, -0.0171405, 0.0751786, -0.0170809, -0.997024, -14.3791, -1.1477, -7.7012, -0.0533535, -0.042647, 0.997665, -0.00219201, 0.99909, 0.0425907, -0.998573, 8.547e-05, -0.0533985, -18.5572, -1.30483, -10.7266, 0.601572, 0.0573248, 0.796759, -0.00163538, 0.997508, -0.0705334, -0.798817, 0.0411279, 0.600166, -16.7154, -1.22973, -17.5346, 0.664281, 0.0086249, 0.747433, -0.000384395, 0.999937, -0.011197, -0.747483, 0.00715064, 0.664242, -12.1235, -1.20593, -23.4669 )
 
 [node name="desert storm" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
@@ -325,10 +326,11 @@ bake_interval = 1.0
 global_seed = 0
 use_instancing = true
 disable_updates_in_game = true
-modifier_stack = Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/core/modifier_stack.gd" ),"stack":[ Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/modifiers/distribute_along_even.gd" ),"enabled":true,"display_name":"Distribute Along Path (Even)","warning":"","warning_ignore_no_transforms":true,"interval":7.0,"offset":0.0,"align_to_path":true,"align_up_axis":1.0,"restrict_x":false,"restrict_y":false,"restrict_z":false)
-, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/modifiers/apply_offset.gd" ),"enabled":true,"display_name":"Apply Offset","warning":"","warning_ignore_no_transforms":false,"local_space":true,"position":Vector3( 0, 0, 0 ),"rotation":Vector3( 0, 90, 0 ),"scale":Vector3( 1, 1, 1 ))
- ],"just_created":false,"undo_redo":Object(UndoRedo,"script":null)
-)
+modifier_stack = Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/core/modifier_stack.gd" ),"stack":[ Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/modifiers/distribute_along_even.gd" ),"enabled":true,"display_name":"Distribute Along Path (Even)","warning":"","warning_ignore_no_transforms":true,"interval":7.5,"offset":0.0,"align_to_path":true,"align_up_axis":1.0,"restrict_x":false,"restrict_y":false,"restrict_z":false)
+, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/modifiers/project_on_floor.gd" ),"enabled":true,"display_name":"Project On Floor","warning":"","warning_ignore_no_transforms":false,"ray_length":10.0,"ray_offset":1.0,"remove_points_on_miss":true,"align_with_floor_normal":true,"invert_ray_direction":false,"floor_direction":Vector3( 0, -1, 0 ))
+, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/modifiers/apply_offset.gd" ),"enabled":true,"display_name":"Apply Offset","warning":"","warning_ignore_no_transforms":false,"local_space":true,"position":Vector3( 3.5, -0.078, 0 ),"rotation":Vector3( 0, 90, 0 ),"scale":Vector3( 1, 1, 1 ))
+, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/scatter/src/modifiers/randomize_transforms.gd" ),"enabled":true,"display_name":"Randomize Transforms","warning":"","warning_ignore_no_transforms":false,"override_global_seed":false,"custom_seed":0,"local_space":true,"position":Vector3( 0, 0.141, 0 ),"rotation":Vector3( 4.187, 4.004, 0.166 ),"scale":Vector3( 0, 0, 0 ),"_rng":null)
+ ],"just_created":false,"undo_redo":null)
 
 
 [node name="ScatterItem" type="Spatial" parent="Scatter" index="0"]
