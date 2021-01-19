@@ -184,9 +184,6 @@ func _process(delta : float) -> void:
 	#translate accel spring position to character local space and separate to pos/rot
 	pos -= Accel.position * accuracy["Accel sway i"]
 	
-#	Crouch = Spring.new(0, 0, 0, 0, 1)
-#	Prone = Spring.new(0, 0, 0, 0, 1)
-#	Mounted = Spring.new(0, 0, 0, 0, 1)
 	
 	
 	
