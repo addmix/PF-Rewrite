@@ -307,10 +307,11 @@ var add := {
 		"Rot": Vector3(.9, .2, -.3),
 	},
 	"Crouch" : {
-		
+		"Rot": Vector3(0, 0, .4),
 	},
 	"Prone" : {
-		
+		"Pos": Vector3(0, 0, .2),
+		"Rot": Vector3(0, 0, 1.3),
 	},
 	"Mounted": {
 		
@@ -371,10 +372,10 @@ var multi := {
 		
 	},
 	"Crouch" : {
-		
+		"Walkspeed": float(0.6),
 	},
 	"Prone" : {
-		
+		"Walkspeed": float(0.3),
 	},
 	"Mounted": {
 		

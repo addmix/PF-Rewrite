@@ -39,10 +39,6 @@ onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig
 onready var LeftLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftLegIK"
 onready var RightLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightLegIK"
 
-#stances
-var crouch_spring = Spring.new(0, 0, 0, .9999, 8)
-var prone_spring = Spring.new(0, 0, 0, .9999, 8)
-
 func _ready() -> void:
 	set_physics_process(false)
 	set_process(false)
@@ -131,8 +127,8 @@ var Sprint := Spring.new(0, 0, 0, 0, 1)
 var Movement := Vector3.ZERO
 var Accel := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var Reload := Spring.new(0, 0, 0, 0, 1)
-var Crouch := Spring.new(0, 0, 0, 0, 1)
-var Prone := Spring.new(0, 0, 0, 0, 1)
+var Crouch := Spring.new(0, 0, 0, .99, 5)
+var Prone := Spring.new(0, 0, 0, .99, 5)
 var Mounted := Spring.new(0, 0, 0, 0, 1)
 
 var camera_transform := Transform()
@@ -180,6 +176,48 @@ func process_springs(delta : float) -> void:
 	Accel.speed = accuracy["Accel sway s"]
 	Accel.accelerate(camera_transform.xform_inv(delta_vel))
 	Accel.positionvelocity(delta)
+	
+	var capsule_height := 3.1
+	var capsule_y := 2.35
+	
+	var body_y := -4.45
+	var body_z := 0.0
+	var body_angle := 0.0
+	
+	var head_y := -.425
+	var head_z := 0.0
+	
+	Crouch.positionvelocity(delta)
+	capsule_height = lerp(capsule_height, 1.5, Crouch.position)
+	capsule_y = lerp(capsule_y, 1.55, Crouch.position)
+	
+	body_y = lerp(body_y, -6.1, Crouch.position)
+	body_z = lerp(body_z, 0, Crouch.position)
+	body_angle = lerp(body_angle, 0, Crouch.position)
+	
+	head_y = lerp(head_y, -2.05, Crouch.position)
+	head_z = lerp(head_z, 0, Crouch.position)
+	
+	Prone.positionvelocity(delta)
+	capsule_height = lerp(capsule_height, 0, Prone.position)
+	capsule_y = lerp(capsule_y, .8, Prone.position)
+	
+	body_y = lerp(body_y, -4.1, Prone.position)
+	body_z = lerp(body_z, 2.3, Prone.position)
+	body_angle = lerp(body_angle, 90, Prone.position)
+	
+	head_y = lerp(head_y, -4, Prone.position)
+	head_z = lerp(head_z, -4.025, Prone.position)
+	
+	$CollisionShape.shape.height = capsule_height
+	$CollisionShape.transform.origin.y = capsule_y
+	
+	$Smoothing/RotationHelper/Player.transform.origin.y = body_y
+	$Smoothing/RotationHelper/Player.transform.origin.z = body_z
+	$Smoothing/RotationHelper/Player.rotation_degrees.x = body_angle
+	
+	Head.transform.origin.y = head_y
+	Head.transform.origin.z = head_z
 
 func set_weapon(index : int, weapon : String) -> void:
 	#load weapon

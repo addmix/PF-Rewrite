@@ -4,8 +4,8 @@ signal change_state
 var character : KinematicBody
 
 func enter() -> void:
-	character.crouch_spring.target = 0
-	character.prone_spring.target = 1
+	character.Crouch.target = 0
+	character.Prone.target = 1
 
 func exit() -> void:
 	pass
