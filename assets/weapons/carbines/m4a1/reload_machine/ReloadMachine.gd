@@ -29,7 +29,7 @@ func initialize_states() -> void:
 		#connect node's signals
 		i.connect("changeState", self, "changeState")
 
-func _process(delta : float) -> void:
+func _physics_process(delta : float) -> void:
 	if Input.is_action_just_pressed("shoot"):
 		interrupt_reload()
 	states[currentState].process(delta)

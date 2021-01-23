@@ -12,10 +12,17 @@ signal died
 export var health := 100.0
 var damage_stack := []
 
+#state machines
+onready var StanceMachine : Node = $StanceMachine
+onready var MovementMachine : Node = $MovementMachine
+onready var AimMachine : Node = $AimMachine
+onready var AirMachine : Node = $AirMachine
+
 #nodes
 onready var RotationHelper : Spatial = $Smoothing/RotationHelper
 onready var Head : Spatial = $Smoothing/RotationHelper/Head
 onready var WeaponController : Spatial = $Smoothing/RotationHelper/Head/WeaponController
+onready var Smoothing = $Smoothing/RotationHelper/Head/Smoothing
 onready var _Camera : Camera = $Smoothing/RotationHelper/Head/Camera
 
 #control finess
@@ -33,39 +40,285 @@ onready var LeftLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/S
 onready var RightLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightLegIK"
 
 #stances
-var crouch_spring = Spring.new(0, 0, 0, .999, 8)
-var prone_spring = Spring.new(0, 0, 0, .999, 8)
-
-var current_stance := 0
-var stances := {
-	"Stand": {},
-	"Crouch": {},
-	"Prone": {},
-	}
-
-
+var crouch_spring = Spring.new(0, 0, 0, .9999, 8)
+var prone_spring = Spring.new(0, 0, 0, .9999, 8)
 
 func _ready() -> void:
 	set_physics_process(false)
 	set_process(false)
+	
 	call_deferred("deferred")
 
 func deferred() -> void:
-	if is_network_master():
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		LeftHandIK.max_iterations = 20
-		RightHandIK.max_iterations = 20
-		_Camera.current = true
+	#branchless set camera stuff
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED * int(is_network_master()) + Input.MOUSE_MODE_VISIBLE * int(!is_network_master()))
+	_Camera.current = is_network_master()
 	
-	LeftLegIK.start()
-	RightLegIK.start()
+	ready_weapons()
+	ready_ik()
 	
 	set_physics_process(true)
 	set_process(true)
 
+func ready_ik() -> void:
+	#branchless set IK precision
+	LeftHandIK.max_iterations = 20 * int(is_network_master()) + 4 * int(!is_network_master())
+	RightHandIK.max_iterations = 20 * int(is_network_master()) + 4 * int(!is_network_master())
+	LeftLegIK.max_iterations = 5 * int(is_network_master()) + 3 * int(!is_network_master())
+	RightLegIK.max_iterations = 5 * int(is_network_master()) + 3 * int(!is_network_master())
+	
+	#set IK target
+	LeftHandIK.set_target_node(current_weapon.LeftIK.get_path()) 
+	RightHandIK.set_target_node(current_weapon.RightIK.get_path())
+	
+	LeftHandIK.start()
+	RightHandIK.start()
+	
+	LeftLegIK.start()
+	RightLegIK.start()
+
+
+
+
+#weapon stuff
+signal shot_fired
+
+#primary, secondary, melee, grenade
+
+signal weapon_changed
+signal update_accuracy
+
+#weapon nodes
+var weapons := [null, null, null, null]
+#index of current weapon
+var weapon_index : int = 0
+var current_weapon : Spatial
+
+func ready_weapons() -> void:
+	#loads weapons
+	for weapon in range(Player.loadout.size()):
+		if Player.loadout[weapon] == null:
+			continue
+		set_weapon(weapon, Player.loadout[weapon])
+		weapons[weapon].add_to_group("weapons")
+		weapons[weapon].add_to_group(Player.loadout[weapon])
+		weapons[weapon].connect("shotFired", self, "on_shot_fired")
+		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
+		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")
+		weapons[weapon].set_network_master(Player.player_id)
+	
+	#set current weapon
+	current_weapon = weapons[weapon_index]
+	#add starter weapon to tree
+	Smoothing.add_child(current_weapon)
+	#start equip machine by equipping new gun
+	current_weapon.EquipMachine.change_state("Equip")
+	
+	update_accuracy()
+	
+	call_deferred("emit_signal", "weapon_changed", current_weapon)
+
+var accuracy = {}
+
+#weapon modifier springs
+var Equip := false
+var Dequip := false
+var Air := Spring.new(0, 0, 0, .5, 1)
+remote var aim_spring_target := 0.0
+var Aim := Spring.new(0, 0, 0, .5, 1)
+remote var sprint_spring_target := 0.0
+var Sprint := Spring.new(0, 0, 0, 0, 1)
+var Movement := Vector3.ZERO
+var Accel := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+var Reload := Spring.new(0, 0, 0, 0, 1)
+var Crouch := Spring.new(0, 0, 0, 0, 1)
+var Prone := Spring.new(0, 0, 0, 0, 1)
+var Mounted := Spring.new(0, 0, 0, 0, 1)
+
+var camera_transform := Transform()
+
+func process_springs(delta : float) -> void:
+	#branchless set spring targets
+	Aim.target = aim_spring_target * int(!is_network_master()) + Aim.target * int(is_network_master())
+	Sprint.target = sprint_spring_target * int(!is_network_master()) + Sprint.target * int(is_network_master())
+	
+	#used in some springs
+	camera_transform = _Camera.global_transform.basis
+	
+	#get accuracy
+	update_accuracy()
+	
+	#modifier variables
+	Equip = float(current_weapon.EquipMachine.current_state == "Equip")
+	Dequip = float(current_weapon.EquipMachine.current_state == "Dequip")
+	Movement = velocity
+	
+	#in air
+	Air.target = float(!is_on_floor())
+	Air.damper = accuracy["Air d"]
+	Air.speed = accuracy["Air s"]
+	Air.positionvelocity(delta)
+	
+	#reload
+	Reload.target = float(current_weapon.ReloadMachine.currentState != "Ready" and !current_weapon.ReloadMachine.states[current_weapon.ReloadMachine.currentState].stopped)
+	Reload.damper = accuracy["Reload d"]
+	Reload.speed = accuracy["Reload s"]
+	Reload.positionvelocity(delta)
+	
+	#aiming
+	Aim.damper = current_weapon.data["Weapon handling"]["Aim d"]
+	Aim.speed = current_weapon.data["Weapon handling"]["Aim s"]
+	Aim.positionvelocity(delta)
+	
+	#sprinting
+	Sprint.damper = accuracy["Sprint d"]
+	Sprint.speed = accuracy["Sprint s"]
+	Sprint.positionvelocity(delta)
+	
+	#acceleration
+	Accel.damper = accuracy["Accel sway d"]
+	Accel.speed = accuracy["Accel sway s"]
+	Accel.accelerate(camera_transform.xform_inv(delta_vel))
+	Accel.positionvelocity(delta)
+
+func set_weapon(index : int, weapon : String) -> void:
+	#load weapon
+	weapons[index] = Weapons.models[weapon].instance()
+
+#used for non-immediate weapon swapping
+var new_weapon := 0
+func switch_weapon(index : int) -> void:
+	if weapons[index] == null:
+		return
+	#do dequip animation
+	weapons[weapon_index].dequip()
+	new_weapon = index
+
+#pickup weapon to empty slot
+# warning-ignore:unused_argument
+func pickup_weapon(selected : Spatial) -> void:
+	pass
+
+#swap with weapon on ground
+# warning-ignore:unused_argument
+func change_weapon(selected : Spatial) -> void:
+	pass
+
+# warning-ignore:unused_argument
+func on_weapon_equipped(weapon : Spatial) -> void:
+	pass
+
+func on_weapon_dequipped(weapon : Spatial) -> void:
+	#set current weapon index
+	weapon_index = new_weapon
+	#remove old weapon
+	Smoothing.remove_child(weapon)
+	#add new weapon
+	Smoothing.add_child(weapons[weapon_index])
+	#start equip sequence for new weapon
+	weapons[weapon_index].equip()
+	#set current weapon
+	current_weapon = weapons[weapon_index]
+	#emit new weapon
+	emit_signal("weapon_changed", weapons[weapon_index])
+
+func on_shot_fired() -> void:
+	emit_signal("shot_fired", Aim.position, MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1)))
+
+func update_accuracy() -> void:
+	accuracy = get_accuracy()
+	emit_signal("update_accuracy", accuracy)
+
+#used to calculate accuracy
+func get_accuracy() -> Dictionary:
+	#make copy of data
+	var data : Dictionary = current_weapon.data["Weapon handling"]
+	
+	var copy := {}
+	#clone dictionary
+	for i in data.keys():
+		copy[i] = data[i]
+	
+	#additive
+	for modifier in current_weapon.add.keys():
+		var value := get_modifier_value(modifier)
+		
+		#each property
+		for key in current_weapon.add[modifier].keys():
+			#hacky way to normalize values and add
+			copy[key] += current_weapon.add[modifier][key] * value
+	
+	#multiplicative
+	for modifier in current_weapon.multi.keys():
+		var value := get_modifier_value(modifier)
+		
+		#each property
+		for key in current_weapon.multi[modifier].keys():
+			var default
+			
+			match typeof(current_weapon.multi[modifier][key]):
+				TYPE_REAL:
+					default = 1.0
+				TYPE_VECTOR3:
+					default = Vector3(1, 1, 1)
+				_:
+					push_error("Modifier variable cannot be of type " + Variant.get_type(typeof(current_weapon.multi[modifier][key])))
+			
+			copy[key] *= lerp(default, current_weapon.multi[modifier][key], value)
+	
+	return copy
+
+#gets value to interpolate modifier by
+func get_modifier_value(modifier : String) -> float:
+	#get modifier's property
+	var prop = get(modifier)
+	
+	var value : float
+	#gets float from different datatypes
+	match typeof(prop):
+		TYPE_REAL:
+			value = prop
+		TYPE_BOOL:
+			value = float(prop)
+		TYPE_INT:
+			value = float(prop)
+		TYPE_VECTOR2:
+			value = prop.length()
+		TYPE_VECTOR3:
+			value = prop.length()
+		TYPE_OBJECT:
+			#for custom classes
+			match prop.get_class():
+				"Spring":
+					value = prop.position
+				"V3Spring":
+					value = prop.position.length()
+				_:
+					push_error("Modifier " + modifier + " links to illegal variable  of the same name, with class " + prop.get_class())
+		_:
+			push_error("Modifier " + modifier + " links to illegal variable  of the same name, with type " + Variant.get_type(prop))
+	
+	return value
+#end of weapon stuff
+
+#walk bob stuff
+#allows for time-based spring stuff
+var walk_bob_tick := 0.0
+
+func process_walk(delta : float) -> void:
+	walk_bob_tick += delta * (accuracy["Gun bob s"] + 1)
+
+
+
+#when character is removed from the tree
 func _exit_tree() -> void:
-	if is_network_master():
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	#branchless change mouse mode
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE * int(is_network_master()) + Input.get_mouse_mode() * int(!is_network_master()))
+	
+	#cleanup weapons
+	for weapon in weapons:
+		if weapon != null:
+			weapon.free()
 
 func damage(source, hp : float) -> void:
 	#damage player
@@ -110,10 +363,9 @@ func _unhandled_input(event : InputEvent) -> void:
 			
 			var delta : Vector3 = current - Head.rotation_degrees
 			emit_signal("camera_movement", Vector3(delta.x, -relative.x, delta.z))
+			
 			rset_unreliable("head_rotation", Vector3(Head.rotation.x, RotationHelper.rotation.y, 0))
 			
-		if event.is_action_pressed("jump"):
-			jump()
 		if event.is_action_pressed("reset_character"):
 			reset()
 
@@ -159,7 +411,7 @@ func set_last_pos() -> void:
 	last_pos = current_pos
 
 onready var gravity : Vector3 = ProjectSettings.get("physics/3d/default_gravity") * ProjectSettings.get("physics/3d/default_gravity_vector")
-var movement_spring = V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .8, 14)
+var movement_spring = V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .99, 14)
 
 
 remote var puppet_pos := Vector3.ZERO
@@ -168,12 +420,23 @@ remote var head_rotation := Vector3.ZERO
 
 var vel := Vector3.ZERO
 func _physics_process(delta : float) -> void:
+	#update walk bob
+	process_walk(delta)
+	#calculate spring movement
+	process_springs(delta)
 	
-	if !is_network_master():
-		Head.rotation.x = head_rotation.x
-		transform.origin = puppet_pos
-		RotationHelper.rotation.y = head_rotation.y
+	WeaponController.process_recoil(delta)
+	#do movement step
+	process_movement(delta)
 	
+	#branchlessly apply puppet transform
+	Head.rotation.x = head_rotation.x * int(!is_network_master()) + Head.rotation.x * int(is_network_master())
+	transform.origin = puppet_pos  * int(!is_network_master()) + transform.origin * int(is_network_master())
+	RotationHelper.rotation.y = head_rotation.y * int(!is_network_master()) + RotationHelper.rotation.y * int(is_network_master())
+
+#persistent character velocity
+var velocity := Vector3.ZERO
+func process_movement(delta : float) -> void:
 	#local space axis
 	var axis := get_axis()
 	
@@ -187,30 +450,27 @@ func _physics_process(delta : float) -> void:
 		basis = get_ground_normal_translation(basis, get_floor_normal())
 	
 	#xform input vector by basis
-	var translated := basis.xform(axis.normalized())
+	var translated := (basis.xform(axis.normalized()) - Vector3(0, 0.1, 0)).normalized()
 	
-	if is_on_floor() and movement_spring.position.y > 0 and !Input.is_action_just_pressed("jump"):
-		movement_spring.velocity.y = 0
-
-	
-	movement_spring.speed = WeaponController.accuracy["Walk s"]
-	movement_spring.damper = WeaponController.accuracy["Walk d"]
-	movement_spring.target = translated * WeaponController.accuracy["Walkspeed"] - Vector3(0, 10, 0)
+	movement_spring.target = translated * accuracy["Walkspeed"]
 	movement_spring.positionvelocity(delta)
-#	movement_spring.position += gravity * delta
-#	movement_spring.accelerate(gravity )
 	
-	movement_spring.position = move_and_slide(movement_spring.position, Vector3(0, 1, 0), true, 4, deg2rad(45), false)
+	if is_on_floor():
+		velocity = move_and_slide(movement_spring.position, Vector3(0, 1, 0), true, 8, deg2rad(45), false)
+	else:
+		velocity = move_and_slide(movement_spring.position * 0.005 + velocity, Vector3(0, 1, 0), true, 8, deg2rad(45), false)
+	
+	velocity += (gravity * delta) * float(!is_on_floor())
+	velocity *= 1 - velocity.length() / 25000
+	
+	#keeps on ground so that it works
+	move_and_slide(Vector3(0, -.1, 0), Vector3(0, 1, 0), true, 1)
 	
 	if is_network_master():
 		rset_unreliable("puppet_pos", transform.origin)
 	
 	set_delta_pos(delta)
 	set_delta_vel(delta)
-
-func jump() -> void:
-	if is_on_floor():
-		movement_spring.position.y += 10
 
 func get_ground_normal_translation(basis : Basis, normal : Vector3) -> Basis:
 	var zy := intersect_planes(Vector3.ZERO, normal, Vector3.ZERO, basis.x, Vector3.ZERO)

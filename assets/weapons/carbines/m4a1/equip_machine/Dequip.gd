@@ -8,8 +8,6 @@ signal exited
 signal finished
 
 func enter() -> void:
-	get_parent().get_parent().get_parent().Equip = false
-	get_parent().get_parent().get_parent().Dequip = true
 	#set spring values
 	get_parent().EquipPosSpring.target = get_parent().get_parent().data["Weapon handling"]["Dequip pos"]
 	get_parent().EquipPosSpring.speed = get_parent().get_parent().data["Weapon handling"]["Dequip s"]

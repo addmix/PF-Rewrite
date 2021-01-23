@@ -34,7 +34,7 @@ func initialize_states() -> void:
 		#connect node's signals
 		i.connect("changeState", self, "changeState")
 
-func _process(delta : float) -> void:
+func _physics_process(delta : float) -> void:
 	states[currentState].process(delta)
 
 func changeState(new_state : String) -> void:

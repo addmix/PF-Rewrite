@@ -149,7 +149,7 @@ export var data := {
 		"Equip d": float(.8),
 		
 		"Equip pos": Vector3(0, -1.5, 0),
-		"Equip rot": Vector3(-.7, 0, 0),
+		"Equip rot": Vector3(-.7, 1, 0),
 		
 		"Dequip s": float(12.0),
 		"Dequip d": float(.8),
@@ -165,9 +165,6 @@ export var data := {
 		
 		"Sprint s": float(8.0),
 		"Sprint d": float(.99),
-		
-#		"Sprint pos": Vector3(-.3, -.3, 0),
-#		"Sprint rot": Vector3(-.76, 1.2, 0),
 		
 		"Move s": float(6.0),
 		"Move d": float(.99),
@@ -252,9 +249,9 @@ export var data := {
 		"Rot sway s": float(12.0),
 		"Rot sway d": float(.7),
 		
-		"Accel sway s": float(8.0),
+		"Accel sway s": float(5.0),
 		"Accel sway d": float(.9),
-		"Accel sway i": Vector3(.0003, .0004, .0001),
+		"Accel sway i": Vector3(.006, .004, .002),
 		"Accel sway offset": Vector3(0, 0, -1.2),
 		
 		
@@ -357,7 +354,7 @@ var multi := {
 		"Gun bob rot i": Vector3(.07, .07, .1),
 	},
 	"Sprint" : {
-		"Walkspeed": float(1.6),
+		"Walkspeed": float(1.8),
 	},
 	"Movement" : {
 		"Gun bob pos i": Vector3(1.1, 1.1, 1.1),

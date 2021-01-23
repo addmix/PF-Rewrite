@@ -59,9 +59,10 @@ func on_player_died() -> void:
 # warning-ignore:unused_argument
 func spawn_character(node : Position3D) -> void:
 	instance_character()
-	
+	call_deferred("spawn_deferred")
+
+func spawn_deferred() -> void:
 	$"/root".add_child(Character)
-	
 	Character.transform = get_tree().get_nodes_in_group("Spawns")[0].transform
 
 func remove_character() -> void:

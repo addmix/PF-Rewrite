@@ -30,6 +30,9 @@ static func v3max(v1 : Vector3, v2 : Vector3) -> Vector3:
 static func v3Bounds(vector : Vector3, lower : Vector3, upper : Vector3) -> Vector3:
 	return v3max(v3min(vector, upper), lower)
 
+static func v3lerp(v0 : Vector3, v1 : Vector3, v2 : Vector3) -> Vector3:
+	return Vector3(lerp(v0.x, v1.x, v2.x), lerp(v0.y, v1.y, v2.y), lerp(v0.z, v1.z, v2.z))
+
 #plane intersection fucntion
 #http://tbirdal.blogspot.com/2016/10/a-better-approach-to-plane-intersection.html
 static func intersect_planes(p1 : Vector3, n1 : Vector3, p2 : Vector3, n2 : Vector3, p0 : Vector3) -> PoolVector3Array:

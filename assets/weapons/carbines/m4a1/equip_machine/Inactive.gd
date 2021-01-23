@@ -9,7 +9,6 @@ signal finished
 
 func enter() -> void:
 	emit_signal("entered")
-	
 
 func exit() -> void:
 	emit_signal("exited")

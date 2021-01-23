@@ -41,6 +41,7 @@ func dequipped() -> void:
 
 func change_state(new_state : String) -> void:
 	if !is_inside_tree():
+		print("ree")
 		return
 	if is_network_master():
 		rpc("syncState", new_state)
@@ -64,7 +65,7 @@ puppet func syncState(new_state : String) -> void:
 
 
 
-func _process(delta : float) -> void:
+func _physics_process(delta : float) -> void:
 	states[current_state].process(delta)
 
 func _unhandled_input(event : InputEvent) -> void:

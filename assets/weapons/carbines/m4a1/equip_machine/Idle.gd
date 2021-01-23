@@ -8,11 +8,10 @@ signal exited
 signal finished
 
 func enter() -> void:
+	
+	
 	get_parent().EquipPosSpring.target = Vector3.ZERO
 	get_parent().EquipRotSpring.target = Vector3.ZERO
-	get_parent().get_parent().get_parent().Equip = false
-	get_parent().get_parent().get_parent().Dequip = false
-	
 	
 	emit_signal("entered")
 
@@ -21,7 +20,8 @@ func exit() -> void:
 
 # warning-ignore:unused_argument
 func process(delta : float) -> void:
-	pass
+	get_parent().EquipPosSpring.positionvelocity(delta)
+	get_parent().EquipRotSpring.positionvelocity(delta)
 
 # warning-ignore:unused_argument
 func unhandled_input(event : InputEvent) -> void:

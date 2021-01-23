@@ -6,8 +6,7 @@ signal exited
 signal finished
 
 func enter() -> void:
-	get_parent().get_parent().get_parent().Equip = true
-	get_parent().get_parent().get_parent().Dequip = false
+	
 	#pos
 	get_parent().EquipPosSpring.target = Vector3.ZERO
 	get_parent().EquipPosSpring.position = get_parent().get_parent().data["Weapon handling"]["Equip pos"]
@@ -20,7 +19,6 @@ func enter() -> void:
 	get_parent().EquipRotSpring.damper = get_parent().get_parent().data["Weapon handling"]["Equip d"]
 	
 	emit_signal("entered")
-	
 	emit_signal("finished")
 
 func exit() -> void:
@@ -30,7 +28,7 @@ func process(delta : float) -> void:
 	get_parent().EquipPosSpring.positionvelocity(delta)
 	get_parent().EquipRotSpring.positionvelocity(delta)
 	
-	if get_parent().EquipPosSpring.position.length() < 0.001 and get_parent().EquipRotSpring.position.length() < 0.001:
+	if get_parent().EquipPosSpring.position.length() < 0.1 and get_parent().EquipRotSpring.position.length() < 0.1:
 		emit_signal("change_state", "Idle")
 
 # warning-ignore:unused_argument
