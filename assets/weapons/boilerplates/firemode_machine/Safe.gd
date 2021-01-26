@@ -3,7 +3,7 @@ extends Node
 export(String) var stateName = "State"
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 
 # warning-ignore:unused_argument
 func enter(prev):
@@ -21,4 +21,4 @@ func unhandled_input(event):
 	pass
 
 func changeFiremode():
-	emit_signal("changeState", "Auto")
+	emit_signal("change_state", "Auto")

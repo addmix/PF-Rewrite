@@ -3,7 +3,7 @@ extends Node
 export(String) var stateName = "State"
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
@@ -20,7 +20,7 @@ func process(delta : float) -> void:
 	pass
 
 func changeFiremode() -> void:
-	emit_signal("changeState", "Auto")
+	emit_signal("change_state", "Auto")
 
 func unhandled_input(event : InputEvent) -> void:
 	if event.is_action_pressed("shoot"):

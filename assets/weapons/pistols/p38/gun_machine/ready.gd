@@ -2,13 +2,11 @@ extends Node
 
 # warning-ignore:unused_signal
 signal change_state
-
-func release() -> void:
-	call_deferred("emit_signal", "change_state", "Forward")
+signal reset
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
-	pass
+	call_deferred("emit_signal", "reset")
 
 func exit() -> void:
 	pass
@@ -22,7 +20,10 @@ func process(delta : float) -> void:
 
 # warning-ignore:unused_argument
 func unhandled_input(event : InputEvent) -> void:
-	pass
+	if event.is_action_pressed("shoot"):
+		emit_signal("change_state", "Fire")
+		get_tree().set_input_as_handled()
+
 
 func fire() -> void:
 	pass

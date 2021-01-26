@@ -1,7 +1,7 @@
 extends Node
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
@@ -9,7 +9,7 @@ func enter(prev : String) -> void:
 	var ammo : int = int(get_parent().get_parent().get_reserve() >= 1)
 	get_parent().get_parent().set_magazine(get_parent().get_parent().get_magazine() - ammo)
 	get_parent().get_parent().set_chamber(get_parent().get_parent().get_chamber() + ammo)
-	call_deferred("emit_signal", "changeState", "Ready")
+	call_deferred("emit_signal", "change_state", "Ready")
 
 func exit() -> void:
 	pass

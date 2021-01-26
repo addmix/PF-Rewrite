@@ -21,7 +21,7 @@ func initialize_states() -> void:
 		#create dictionary entry with name as key
 		states[i.name] = i
 		#connect node's signals
-		i.connect("changeState", self, "changeState")
+		i.connect("change_state", self, "change_state")
 
 func _physics_process(delta : float) -> void:
 	states[current_state].process(delta)
@@ -33,7 +33,7 @@ func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
 		states[current_state].unhandled_input(event)
 
-func changeState(new_state : String) -> void:
+func change_state(new_state : String) -> void:
 
 	#exit current state
 	states[current_state].exit()

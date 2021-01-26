@@ -3,7 +3,7 @@ extends Node
 export(String) var stateName = "State"
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
@@ -17,7 +17,7 @@ func process(delta : float) -> void:
 	pass
 
 func changeFiremode() -> void:
-	emit_signal("changeState", "Semi")
+	emit_signal("change_state", "Semi")
 
 var burstCam = 0
 

@@ -221,16 +221,16 @@ export var data := {
 		
 		
 		#force
-		"Min pos force": Vector3(-1.2, .6, 2.5),
-		"Max pos force": Vector3(1.6, 1.2, 4.0),
-		"Min rot force": Vector3(.6, -0.8, 0),
-		"Max rot force": Vector3(2.5, 1, 0),
+		"Min pos force": Vector3(-1.2, 2.4, 5.5),
+		"Max pos force": Vector3(1.6, 3.2, 7.0),
+		"Min rot force": Vector3(6.0, -2.8, 0),
+		"Max rot force": Vector3(8.8, 6, 0),
 		
 		#recoil spring settings
-		"Recoil pos s": float(12.0),
-		"Recoil pos d": float(.5),
+		"Recoil pos s": float(14.0),
+		"Recoil pos d": float(.6),
 		
-		"Recoil rot s": float(13.0),
+		"Recoil rot s": float(19.0),
 		"Recoil rot d": float(.5),
 		
 		
@@ -377,6 +377,7 @@ var multi := {
 		"Gun bob rot i": Vector3(.12, .15, .1),
 	},
 	"Breath": {
+		"Magnification": float(1.1),
 		"Breath s": float(2),
 		"Breath sway pos i": Vector3(0, 0, 0),
 		"Breath sway rot i": Vector3(0, 0, 0),

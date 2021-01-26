@@ -3,7 +3,7 @@ extends Node
 export(String) var stateName = "State"
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 
 var stopped := false
 
@@ -35,4 +35,4 @@ func unhandled_input(event : InputEvent) -> void:
 
 # warning-ignore:unused_argument
 func anim_finished(anim : String) -> void:
-	call_deferred("emit_signal", "changeState", "Ready")
+	call_deferred("emit_signal", "change_state", "Ready")

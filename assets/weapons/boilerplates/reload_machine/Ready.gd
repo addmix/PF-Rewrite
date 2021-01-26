@@ -3,7 +3,7 @@ extends Node
 export(String) var stateName = "State"
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 
 var stopped := true
 
@@ -18,7 +18,7 @@ func stop() -> void:
 	pass
 
 func resume() -> void:
-	emit_signal("changeState", "MagazineOut")
+	emit_signal("change_state", "MagazineOut")
 
 # warning-ignore:unused_argument
 func process(delta : float) -> void:

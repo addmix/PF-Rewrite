@@ -1,7 +1,7 @@
 extends Node
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 signal reset
 
 # warning-ignore:unused_argument
@@ -30,4 +30,4 @@ func fire() -> void:
 
 func _on_FiremodeMachine_fire() -> void:
 	if get_parent().current_state == name:
-		emit_signal("changeState", "Fire")
+		emit_signal("change_state", "Fire")

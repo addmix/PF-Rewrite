@@ -468,4 +468,8 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
+quality/filters/anisotropic_filter_level=8
+quality/shadows/filter_mode=2
+quality/reflections/irradiance_max_size=512
+quality/filters/msaa=3
 environment/default_environment="res://default_env.tres"

@@ -1,16 +1,17 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://assets/weapons/pistols/p38/P38bakcup.gd" type="Script" id=1]
 [ext_resource path="res://assets/weapons/pistols/p38/P38bakcup.gltf" type="PackedScene" id=2]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/GunMachine.gd" type="Script" id=3]
-[ext_resource path="res://assets/weapons/boilerplates/gun_machine/Ready.gd" type="Script" id=4]
+[ext_resource path="res://assets/weapons/pistols/p38/gun_machine/ready.gd" type="Script" id=4]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/Fire.gd" type="Script" id=5]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/Back.gd" type="Script" id=6]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/Locked.gd" type="Script" id=7]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/Forward.gd" type="Script" id=8]
 [ext_resource path="res://assets/weapons/boilerplates/reload_machine/ReloadMachine.gd" type="Script" id=9]
+[ext_resource path="res://assets/weapons/pistols/p38/reload machine/slide.gd" type="Script" id=10]
 [ext_resource path="res://assets/weapons/boilerplates/reload_machine/MagazineOut.gd" type="Script" id=11]
-[ext_resource path="res://assets/weapons/boilerplates/reload_machine/MagazineIn.gd" type="Script" id=12]
+[ext_resource path="res://assets/weapons/pistols/p38/reload machine/MagazineIn.gd" type="Script" id=12]
 [ext_resource path="res://assets/weapons/boilerplates/reload_machine/Ready.gd" type="Script" id=13]
 [ext_resource path="res://assets/weapons/boilerplates/aim_machine/sprint.gd" type="Script" id=14]
 [ext_resource path="res://assets/weapons/boilerplates/aim_machine/aim_machine.gd" type="Script" id=15]
@@ -40,7 +41,7 @@ transform = Transform( 0.964501, -0.264028, 0.00511488, -0.0413649, -0.131921, 0
 bone_name = "right_hand_ik"
 
 [node name="Barrel" type="Position3D" parent="." index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07826, -0.50648 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07826, -0.489544 )
 
 [node name="GunMachine" type="Node" parent="." index="2"]
 script = ExtResource( 3 )
@@ -73,6 +74,7 @@ script = ExtResource( 11 )
 script = ExtResource( 12 )
 
 [node name="Slide" type="Node" parent="ReloadMachine" index="3"]
+script = ExtResource( 10 )
 
 [node name="EquipMachine" type="Node" parent="." index="4"]
 script = ExtResource( 16 )
@@ -96,10 +98,10 @@ script = ExtResource( 15 )
 script = ExtResource( 21 )
 
 [node name="Aim" type="Position3D" parent="AimMachine/Aim" index="0"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127231, 0.808085 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.127231, 0.672816 )
 
 [node name="Sprint" type="Node" parent="AimMachine" index="1"]
 script = ExtResource( 14 )
 
 [node name="Sprint" type="Position3D" parent="AimMachine/Sprint" index="0"]
-transform = Transform( 0.727809, 0.68578, 0, -0.68578, 0.727809, 0, 0, 0, 1, -0.0731501, 0.53449, 0.808085 )
+transform = Transform( 0.727809, 0.68578, 0, -0.68578, 0.727809, 0, 0, 0, 1, -0.0731501, 0.53449, 0.672816 )

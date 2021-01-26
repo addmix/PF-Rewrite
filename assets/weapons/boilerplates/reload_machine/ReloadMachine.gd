@@ -2,7 +2,7 @@ extends Node
 
 onready var player = get_parent()
 
-signal state_changed
+signal change_state
 
 onready var gunMachine = get_parent().get_node("GunMachine")
 
@@ -15,7 +15,7 @@ func _ready() -> void:
 	call_deferred("set_process", true)
 
 func interrupt_reload() -> void:
-	get_parent()._AnimationPlayer.stop(true)
+#	get_parent()._AnimationPlayer.stop(true)
 	states[current_state].stop()
 
 func initialize_states() -> void:
@@ -27,14 +27,14 @@ func initialize_states() -> void:
 		#create dictionary entry with name as key
 		states[i.name] = i
 		#connect node's signals
-		i.connect("changeState", self, "changeState")
+		i.connect("change_state", self, "change_state")
 
 func _physics_process(delta : float) -> void:
 	if Input.is_action_just_pressed("shoot"):
 		interrupt_reload()
 	states[current_state].process(delta)
 
-func changeState(new_state : String) -> void:
+func change_state(new_state : String) -> void:
 	if is_network_master():
 		#exit current state
 		states[current_state].exit()
@@ -47,7 +47,7 @@ func changeState(new_state : String) -> void:
 		if is_network_master():
 			rpc("syncState", new_state)
 
-puppet func syncState(new_state : String) -> void:
+puppet func sync_state(new_state : String) -> void:
 	#exit current state
 	states[current_state].exit()
 	#enter new state from current state

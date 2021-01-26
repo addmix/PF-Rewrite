@@ -31,12 +31,12 @@ func initialize_states() -> void:
 		#create dictionary entry with name as key
 		states[i.stateName] = i
 		#connect node's signals
-		i.connect("changeState", self, "changeState")
+		i.connect("change_state", self, "change_state")
 
 func _physics_process(delta : float) -> void:
 	states[current_state].process(delta)
 
-func changeState(new_state : String) -> void:
+func change_state(new_state : String) -> void:
 	if is_network_master():
 #		print(new_state)
 		#add state to state stack

@@ -3,7 +3,7 @@ extends Node
 export(String) var stateName = "State"
 
 # warning-ignore:unused_signal
-signal changeState
+signal change_state
 
 var stopped := false
 
@@ -44,7 +44,7 @@ func anim_finished(anim : String) -> void:
 		get_parent().get_parent().set_magazine(get_parent().get_parent().data["Misc"]["Magazine"])
 	
 	if get_parent().gunMachine.current_state == "Locked":
-		call_deferred("emit_signal", "changeState", "BoltRelease")
+		call_deferred("emit_signal", "change_state", "BoltRelease")
 	else:
-		call_deferred("emit_signal", "changeState", "Ready")
+		call_deferred("emit_signal", "change_state", "Ready")
 		get_parent().get_parent()._AnimationPlayer.play("Return")
