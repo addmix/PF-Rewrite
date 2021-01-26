@@ -94,7 +94,7 @@ signal weapon_changed
 signal update_accuracy
 
 #weapon nodes
-var weapons := [null, null, null, null]
+var weapons := [null, null]
 #index of current weapon
 var weapon_index : int = 0
 var current_weapon : Spatial
@@ -280,7 +280,7 @@ func on_weapon_dequipped(weapon : Spatial) -> void:
 	emit_signal("weapon_changed", weapons[weapon_index])
 
 func on_shot_fired() -> void:
-	emit_signal("shot_fired", Aim.position, MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1)))
+	emit_signal("shot_fired", MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1)))
 
 func update_accuracy() -> void:
 	accuracy = get_accuracy()
@@ -670,4 +670,4 @@ func _on_WeaponController_weapon_changed(weapon : Spatial) -> void:
 
 
 func _on_AirMachine_jump():
-	velocity.y += 6
+	velocity.y += 10

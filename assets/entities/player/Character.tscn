@@ -548,12 +548,6 @@ magnet = Vector3( -0.5, 1, 2 )
 target_node = NodePath("../../../../Foot controller/RSphere/RightLeg")
 max_iterations = 4
 
-[node name="RootIK" type="SkeletonIK" parent="Smoothing/RotationHelper/Player/metarig/Skeleton"]
-process_priority = 1
-root_bone = "spine_3"
-tip_bone = "spine_1"
-target_node = NodePath("../../../../../../Position3D")
-
 [node name="Foot controller" type="Spatial" parent="Smoothing/RotationHelper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.4, 0 )
 script = ExtResource( 1 )
@@ -626,9 +620,6 @@ script = ExtResource( 22 )
 
 [node name="Hold" type="Node" parent="BreathMachine"]
 script = ExtResource( 23 )
-
-[node name="Position3D" type="Position3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.05938, -1.45885 )
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]
 [connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_shot_fired"]

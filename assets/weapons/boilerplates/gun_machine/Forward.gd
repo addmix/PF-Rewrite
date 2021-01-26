@@ -1,14 +1,14 @@
 extends Node
 
-export(String) var stateName = "State"
-
 # warning-ignore:unused_signal
 signal changeState
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
-	get_parent().get_parent().set_magazine(get_parent().get_parent().get_magazine() - 1)
-	get_parent().get_parent().set_chamber(get_parent().get_parent().get_chamber() + 1)
+	#this fixes infinite ammo bug
+	var ammo : int = int(get_parent().get_parent().get_reserve() >= 1)
+	get_parent().get_parent().set_magazine(get_parent().get_parent().get_magazine() - ammo)
+	get_parent().get_parent().set_chamber(get_parent().get_parent().get_chamber() + ammo)
 	call_deferred("emit_signal", "changeState", "Ready")
 
 func exit() -> void:

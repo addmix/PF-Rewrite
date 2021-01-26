@@ -25,7 +25,7 @@ func initialize_states() -> void:
 	#go through all descendants
 	for i in descendants:
 		#create dictionary entry with name as key
-		states[i.stateName] = i
+		states[i.name] = i
 		#connect node's signals
 		i.connect("changeState", self, "changeState")
 

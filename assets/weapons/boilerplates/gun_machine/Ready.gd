@@ -1,7 +1,5 @@
 extends Node
 
-export(String) var stateName = "State"
-
 # warning-ignore:unused_signal
 signal changeState
 signal reset
@@ -31,5 +29,5 @@ func fire() -> void:
 
 
 func _on_FiremodeMachine_fire() -> void:
-	if get_parent().current_state == stateName:
+	if get_parent().current_state == name:
 		emit_signal("changeState", "Fire")

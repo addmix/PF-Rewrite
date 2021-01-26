@@ -62,7 +62,8 @@ func spawn_character(node : Position3D) -> void:
 	call_deferred("spawn_deferred")
 
 func spawn_deferred() -> void:
-	$"/root".add_child(Character)
+	add_child(Character)
+	
 	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
 	Character.transform.origin = spawn_point.origin
 	Character.rotation.y = spawn_point.basis.get_euler().y

@@ -146,7 +146,7 @@ func _on_Character_update_accuracy(new : Dictionary) -> void:
 	accuracy = new
 
 #when gun fires
-func _on_Character_shot_fired(aim : float, direction : Vector3) -> void:
+func _on_Character_shot_fired(direction : Vector3) -> void:
 	recoil_rotation_spring.accelerate(MathUtils.v3lerp(accuracy["Min rot force"], accuracy["Max rot force"], direction))
 	recoil_translation_spring.accelerate(MathUtils.v3lerp(accuracy["Min pos force"], accuracy["Max pos force"], direction))
 

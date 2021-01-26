@@ -1,7 +1,5 @@
 extends Node
 
-export(String) var stateName = "State"
-
 # warning-ignore:unused_signal
 signal changeState
 
