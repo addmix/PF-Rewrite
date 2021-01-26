@@ -132,7 +132,7 @@ script = ExtResource( 25 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.327, 0.617813 )
 
 [node name="Aim2" type="Position3D" parent="AimMachine/Aim" index="1"]
-transform = Transform( 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.099477, 0.117338, 0.617813 )
+transform = Transform( 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, 0.0813525, 0.211413, 0.617813 )
 
 [node name="Sprint" type="Node" parent="AimMachine" index="1"]
 script = ExtResource( 24 )

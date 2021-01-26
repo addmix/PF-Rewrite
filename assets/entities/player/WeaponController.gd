@@ -112,7 +112,7 @@ func process_recoil(delta : float) -> void:
 	aim_position_spring.target = aim_transform.origin
 	aim_position_spring.positionvelocity(delta)
 	
-	
+	#factors in rotation now
 	rot -= character.Aim.position * aim_rotation_spring.position
 	pos -= character.Aim.position * Basis(character.Aim.position * aim_rotation_spring.position).xform_inv(aim_position_spring.position) + character.Aim.position * base_offset
 	
