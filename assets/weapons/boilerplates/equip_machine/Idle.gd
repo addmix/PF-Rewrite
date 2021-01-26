@@ -8,19 +8,20 @@ signal exited
 signal finished
 
 func enter() -> void:
-	get_parent().EquipPositionSpring.target = Vector3.ZERO
-	get_parent().EquipRotationSpring.target = Vector3.ZERO
+	
+	
+	get_parent().EquipPosSpring.target = Vector3.ZERO
+	get_parent().EquipRotSpring.target = Vector3.ZERO
 	
 	emit_signal("entered")
-#	yield()
 
 func exit() -> void:
 	emit_signal("exited")
-#	yield()
 
 # warning-ignore:unused_argument
 func process(delta : float) -> void:
-	pass
+	get_parent().EquipPosSpring.positionvelocity(delta)
+	get_parent().EquipRotSpring.positionvelocity(delta)
 
 # warning-ignore:unused_argument
 func unhandled_input(event : InputEvent) -> void:

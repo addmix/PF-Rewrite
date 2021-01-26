@@ -153,7 +153,7 @@ far = 1000.0
 script = ExtResource( 3 )
 
 [node name="WeaponController" type="Spatial" parent="Smoothing/RotationHelper/Head"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.535547, -0.177936, -1.29312 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.535547, -0.551402, -1.06965 )
 script = ExtResource( 5 )
 
 [node name="Smoothing" type="Spatial" parent="Smoothing/RotationHelper/Head"]

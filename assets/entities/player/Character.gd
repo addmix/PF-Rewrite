@@ -64,17 +64,25 @@ func ready_ik() -> void:
 	LeftLegIK.max_iterations = 5 * int(is_network_master()) + 3 * int(!is_network_master())
 	RightLegIK.max_iterations = 5 * int(is_network_master()) + 3 * int(!is_network_master())
 	
-	#set IK target
-	LeftHandIK.set_target_node(current_weapon.LeftIK.get_path()) 
-	RightHandIK.set_target_node(current_weapon.RightIK.get_path())
-	
-	LeftHandIK.start()
-	RightHandIK.start()
+	update_ik()
 	
 	LeftLegIK.start()
 	RightLegIK.start()
 
+func start_ik() -> void:
+	LeftHandIK.start()
+	RightHandIK.start()
 
+func stop_ik() -> void:
+	LeftHandIK.stop()
+	RightHandIK.stop()
+
+func update_ik() -> void:
+	#set IK target
+	LeftHandIK.set_target_node(current_weapon.LeftIK.get_path()) 
+	RightHandIK.set_target_node(current_weapon.RightIK.get_path())
+	
+	start_ik()
 
 
 #weapon stuff
@@ -159,7 +167,7 @@ func process_springs(delta : float) -> void:
 	Air.positionvelocity(delta)
 	
 	#reload
-	Reload.target = float(current_weapon.ReloadMachine.currentState != "Ready" and !current_weapon.ReloadMachine.states[current_weapon.ReloadMachine.currentState].stopped)
+	Reload.target = float(current_weapon.ReloadMachine.current_state != "Ready" and !current_weapon.ReloadMachine.states[current_weapon.ReloadMachine.current_state].stopped)
 	Reload.damper = accuracy["Reload d"]
 	Reload.speed = accuracy["Reload s"]
 	Reload.positionvelocity(delta)
@@ -234,11 +242,11 @@ func set_weapon(index : int, weapon : String) -> void:
 #used for non-immediate weapon swapping
 var new_weapon := 0
 func switch_weapon(index : int) -> void:
-	if weapons[index] == null:
+	if weapons[index % weapons.size()] == null:
 		return
 	#do dequip animation
 	weapons[weapon_index].dequip()
-	new_weapon = index
+	new_weapon = index % weapons.size()
 
 #pickup weapon to empty slot
 # warning-ignore:unused_argument
@@ -257,12 +265,15 @@ func on_weapon_equipped(weapon : Spatial) -> void:
 func on_weapon_dequipped(weapon : Spatial) -> void:
 	#set current weapon index
 	weapon_index = new_weapon
+	stop_ik()
 	#remove old weapon
 	Smoothing.remove_child(weapon)
 	#add new weapon
 	Smoothing.add_child(weapons[weapon_index])
+	
+	call_deferred("update_ik")
 	#start equip sequence for new weapon
-	weapons[weapon_index].equip()
+	weapons[weapon_index].call_deferred("equip")
 	#set current weapon
 	current_weapon = weapons[weapon_index]
 	#emit new weapon
@@ -415,14 +426,27 @@ func _unhandled_input(event : InputEvent) -> void:
 			
 			rset_unreliable("head_rotation", Vector3(Head.rotation.x, RotationHelper.rotation.y, 0))
 			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("weapon_next"):
+			switch_weapon(weapon_index + 1)
+			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("weapon_prev"):
+			switch_weapon(weapon_index - 1)
+			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("weapon_1"):
+			switch_weapon(0)
+			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("weapon_2"):
+			switch_weapon(1)
+			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("weapon_3"):
+			switch_weapon(2)
+			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("weapon_4"):
+			switch_weapon(3)
+			get_tree().set_input_as_handled()
+		
 		elif event.is_action_pressed("reset_character"):
 			reset()
-			get_tree().set_input_as_handled()
-		elif event.is_action_pressed("hold_breath"):
-			Breath.target = 1
-			get_tree().set_input_as_handled()
-		elif event.is_action_released("hold_breath"):
-			Breath.target = 0
 			get_tree().set_input_as_handled()
 
 remote var puppet_axis := Vector3.ZERO

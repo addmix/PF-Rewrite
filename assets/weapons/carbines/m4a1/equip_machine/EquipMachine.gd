@@ -10,7 +10,7 @@ var EquipPosSpring : V3Spring
 var EquipRotSpring : V3Spring
 
 func _ready() -> void:
-	_connect_signals()
+	
 	#add states to machine
 	var children := get_children()
 	for child in children:
@@ -24,25 +24,7 @@ func init_springs() -> void:
 	EquipPosSpring = V3Spring.new(get_parent().data["Weapon handling"]["Equip pos"], Vector3.ZERO, Vector3.ZERO, get_parent().data["Weapon handling"]["Equip d"], get_parent().data["Weapon handling"]["Equip s"])
 	EquipRotSpring = V3Spring.new(get_parent().data["Weapon handling"]["Equip pos"], Vector3.ZERO, Vector3.ZERO, get_parent().data["Weapon handling"]["Equip d"], get_parent().data["Weapon handling"]["Equip s"])
 
-
-func _connect_signals() -> void:
-# warning-ignore:return_value_discarded
-	connect("equipped", self, "equipped")
-# warning-ignore:return_value_discarded
-	connect("dequipped", self, "dequipped")
-
-func equipped() -> void:
-	change_state("Idle")
-	emit_signal("equipped")
-
-func dequipped() -> void:
-	change_state("Inactive")
-	emit_signal("dequipped")
-
 func change_state(new_state : String) -> void:
-	if !is_inside_tree():
-		print("ree")
-		return
 	if is_network_master():
 		rpc("syncState", new_state)
 	#exit current state
@@ -60,7 +42,7 @@ puppet func syncState(new_state : String) -> void:
 	states[current_state].exit()
 	#enter new state from current state
 	states[new_state].enter()
-	#assing currentState to new state
+	#assing current_state to new state
 	current_state = new_state
 
 

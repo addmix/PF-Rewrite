@@ -21,13 +21,13 @@ func deferred() -> void:
 	call_deferred("set_physics_process", true)
 
 var distance := 0.0
-func _physics_process(delta : float) -> void:
+func _physics_process(_delta : float) -> void:
 	var movement : Vector3 = character.RotationHelper.get_global_transform().basis.xform_inv(character.delta_pos)
-	var tangent := Vector3(1, 0, 0)
-	
-	if movement.length() != 0 and movement.normalized().y != 1 and movement.normalized().y != -1:
-		#get tangent on horizon
-		tangent = MathUtils.intersect_planes(Vector3(0, 0, 0), movement.normalized(), Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(1, 1, 1))[1]
+#	var tangent := Vector3(1, 0, 0)
+#
+#	if movement.length() != 0 and movement.normalized().y != 1 and movement.normalized().y != -1:
+#		#get tangent on horizon
+#		tangent = MathUtils.intersect_planes(Vector3(0, 0, 0), movement.normalized(), Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(1, 1, 1))[1]
 	
 	#walk backwards
 	distance += movement.length() * ((-1 * int(movement.z < 0)) + int(!movement.z < 0))

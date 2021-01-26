@@ -100,8 +100,7 @@ func process_recoil(delta : float) -> void:
 	
 	
 	var aim_transform : Transform = current_weapon.get_aim()
-	
-	#aim springs
+	#itnerpolate position and rotation between sights
 	aim_rotation_spring.damper = accuracy["Sight swap d"]
 	aim_rotation_spring.speed = accuracy["Sight swap s"]
 	aim_rotation_spring.target = aim_transform.basis.get_euler()

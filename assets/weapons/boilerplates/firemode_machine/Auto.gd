@@ -12,26 +12,21 @@ func enter(prev : String) -> void:
 func exit() -> void:
 	pass
 
+func stop() -> void:
+	pass
+
 # warning-ignore:unused_argument
 func process(delta : float) -> void:
 	pass
 
 func changeFiremode() -> void:
-	emit_signal("changeState", "Semi")
+	emit_signal("changeState", "Burst")
 
-var burstCam = 0
-
-#start burst
 func unhandled_input(event : InputEvent) -> void:
-	if event.is_action_pressed("shoot") and get_parent().get_parent().GunMachine.current_state == "Ready":
-		burstCam += 1
+	if event.is_action_pressed("shoot"):
 		get_parent().emit_signal("fire")
-		get_tree().set_input_as_handled()
-	if event.is_action_released("shoot") and burstCam >= 3:
-		burstCam = 0
 		get_tree().set_input_as_handled()
 
 func onReset() -> void:
-	if burstCam < 3 and Input.is_action_pressed("shoot") and is_network_master():
-		burstCam += 1
+	if is_network_master() and Input.is_action_pressed("shoot"):
 		get_parent().emit_signal("fire")

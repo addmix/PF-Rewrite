@@ -1,15 +1,21 @@
 extends Node
 
+export(String) var stateName = "State"
+
 # warning-ignore:unused_signal
-signal change_state
+signal changeState
 
 func release() -> void:
-	call_deferred("emit_signal", "change_state", "Forward")
+	call_deferred("emit_signal", "changeState", "Forward")
 
-func enter() -> void:
+# warning-ignore:unused_argument
+func enter(prev : String) -> void:
 	pass
 
 func exit() -> void:
+	pass
+
+func stop() -> void:
 	pass
 
 # warning-ignore:unused_argument
@@ -18,4 +24,7 @@ func process(delta : float) -> void:
 
 # warning-ignore:unused_argument
 func unhandled_input(event : InputEvent) -> void:
+	pass
+
+func fire() -> void:
 	pass

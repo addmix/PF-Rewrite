@@ -31,5 +31,5 @@ func fire() -> void:
 
 
 func _on_FiremodeMachine_fire() -> void:
-	if get_parent().currentState == stateName:
+	if get_parent().current_state == stateName:
 		emit_signal("changeState", "Fire")

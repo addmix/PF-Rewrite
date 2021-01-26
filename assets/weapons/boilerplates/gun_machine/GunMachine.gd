@@ -2,9 +2,9 @@ extends Node
 
 onready var player = get_parent()
 
-signal stateChanged
+signal state_changed
 
-export var currentState := "State"
+export var current_state := "Ready"
 var states := {}
 
 func _ready() -> void:
@@ -24,35 +24,35 @@ func initialize_states() -> void:
 		i.connect("changeState", self, "changeState")
 
 func _physics_process(delta : float) -> void:
-	states[currentState].process(delta)
+	states[current_state].process(delta)
 
 remote var puppet_shooting = false
 var shooting = false
 
 func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
-		states[currentState].unhandled_input(event)
+		states[current_state].unhandled_input(event)
 
 func changeState(new_state : String) -> void:
 
 	#exit current state
-	states[currentState].exit()
+	states[current_state].exit()
 	#enter new state from current state
-	states[new_state].enter(currentState)
-	#emit stateChanged signal
-	emit_signal("stateChanged", self, currentState, new_state)
-	#assing currentState to new state
-	currentState = new_state
+	states[new_state].enter(current_state)
+	#emit state_changed signal
+	emit_signal("state_changed", self, current_state, new_state)
+	#assing current_state to new state
+	current_state = new_state
 	if is_network_master():
 		rpc("syncState", new_state)
 
 puppet func syncState(new_state : String) -> void:
 	#exit current state
-	states[currentState].exit()
+	states[current_state].exit()
 	#enter new state from current state
-	states[new_state].enter(currentState)
-	#emit stateChanged signal
-	emit_signal("stateChanged", self, currentState, new_state)
-	#assing currentState to new state
-	currentState = new_state
+	states[new_state].enter(current_state)
+	#emit state_changed signal
+	emit_signal("state_changed", self, current_state, new_state)
+	#assing current_state to new state
+	current_state = new_state
 	

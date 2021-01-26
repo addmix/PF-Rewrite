@@ -26,10 +26,7 @@ var WeaponController : Spatial
 var bullet = preload("res://assets/entities/bullets/556/556.tscn")
 var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
 
-var base_offset := Vector3.ZERO
-
 func _ready():
-	base_offset = transform.origin
 	#play idle animation
 	_AnimationPlayer.call_deferred("play", "Ready")
 	#initializes ammo data for any interested nodes
@@ -80,7 +77,7 @@ func _process(delta : float) -> void:
 	pos += EquipMachine.EquipPosSpring.position
 	rot += EquipMachine.EquipRotSpring.position
 	
-	transform.origin = pos + base_offset
+	transform.origin = pos
 	rotation = rot
 
 #takes care of weapon-side equip protocol
@@ -245,9 +242,9 @@ export var data := {
 		"Camera rot sway s": float(5.0),
 		"Camera rot sway d": float(.8),
 		
-		"Camera bob s": float(0.1),
-		"Camera bob d": float(.9),
-		"Camera bob i": Vector3(.01, .01, .01),
+		"Camera bob s": float(8),
+		"Camera bob d": float(.85),
+		"Camera bob i": Vector3(.2, .2, .2),
 		
 		"Pos sway": Vector3(.1, .1, 0),
 		"Pos sway s": float(14.0),
@@ -316,9 +313,9 @@ var add := {
 		"Rot": Vector3(-.4, .4, 0),
 	},
 	"Movement" : {
-		"Gun bob s": float(1.15),
-		"Gun bob pos i": Vector3(.0035, .002, .003),
-		"Gun bob rot i": Vector3(.0035, .003, .01),
+		"Gun bob s": float(1.07),
+		"Gun bob pos i": Vector3(.0025, .001, .003),
+		"Gun bob rot i": Vector3(.002, .002, .01),
 	},
 	"Accel" : {
 		
@@ -351,7 +348,7 @@ var multi := {
 		"Walk s": float(10.0),
 		"Walk d": float(0.999),
 		"Gun bob s": float(0.005),
-		"Gun bob pos i": Vector3(0.5, 0.5, 0.5),
+		"Gun bob pos i": Vector3(0.3, 0.3, 0.5),
 		"Gun bob rot i": Vector3(1, 0.05, 0.5),
 	},
 	"Aim" : {
@@ -389,8 +386,8 @@ var multi := {
 		"Walkspeed": float(1.8),
 	},
 	"Movement" : {
-		"Gun bob pos i": Vector3(1.05, 1.05, 1.05),
-		"Gun bob rot i": Vector3(1.15, 1.15, 1.15),
+		"Gun bob pos i": Vector3(1.04, 1.04, 1.05),
+		"Gun bob rot i": Vector3(1.07, 1.1, 1.1),
 	},
 	"Accel" : {
 		
