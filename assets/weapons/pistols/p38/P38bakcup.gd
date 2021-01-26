@@ -17,7 +17,7 @@ onready var ReloadMachine = $ReloadMachine
 onready var EquipMachine = $EquipMachine
 onready var AimMachine = $AimMachine
 
-#onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
+onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
 
 var WeaponController : Spatial
 
@@ -27,7 +27,7 @@ var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
 
 func _ready():
 	#play idle animation
-#	_AnimationPlayer.call_deferred("play", "Ready")
+	_AnimationPlayer.call_deferred("play", "Ready")
 	#initializes ammo data for any interested nodes
 	call_deferred("emit_signal", "ammoChanged", chamber, magazine, reserve)
 	_connect_signals()
@@ -321,7 +321,7 @@ var add := {
 	},
 	"Reload" : {
 		"Pos": Vector3(0, .2, 0),
-		"Rot": Vector3(.9, .2, -.3),
+		"Rot": Vector3(.3, .1, -.3),
 	},
 	"Crouch" : {
 		"Rot": Vector3(0, 0, .4),

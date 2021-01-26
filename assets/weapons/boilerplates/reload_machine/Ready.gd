@@ -9,7 +9,7 @@ var stopped := true
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
-	pass
+	get_parent().get_parent()._AnimationPlayer.play("Return", 0.4)
 
 func exit() -> void:
 	pass

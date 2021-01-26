@@ -15,7 +15,9 @@ func _ready() -> void:
 	call_deferred("set_process", true)
 
 func interrupt_reload() -> void:
-#	get_parent()._AnimationPlayer.stop(true)
+	get_parent()._AnimationPlayer.stop(true)
+	get_parent()._AnimationPlayer.play("Ready", .3)
+	
 	states[current_state].stop()
 
 func initialize_states() -> void:

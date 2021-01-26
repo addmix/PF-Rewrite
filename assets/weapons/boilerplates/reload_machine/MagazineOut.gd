@@ -9,7 +9,7 @@ var stopped := false
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
-	get_parent().get_parent()._AnimationPlayer.play("MagazineOut")
+	get_parent().get_parent()._AnimationPlayer.play("MagazineOut", 0.5)
 
 func exit() -> void:
 	#to magazine in
@@ -20,8 +20,7 @@ func stop() -> void:
 
 func resume() -> void:
 	stopped = false
-	get_parent().get_parent()._AnimationPlayer.play("MagazineOut")
-
+	get_parent().get_parent()._AnimationPlayer.play("MagazineOut", 0.3)
 
 # warning-ignore:unused_argument
 func process(delta : float) -> void:

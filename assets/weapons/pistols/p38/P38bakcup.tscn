@@ -33,12 +33,12 @@ bones/6/bound_children = [ NodePath("HandIKL") ]
 bones/7/bound_children = [ NodePath("HandIKR") ]
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="16"]
-transform = Transform( 0.899793, 0.406763, 0.157848, 0.0194702, -0.398847, 0.916811, 0.435882, -0.821867, -0.366799, -0.197831, -0.173427, 0.380892 )
-bone_name = "left_hand_ik"
+transform = Transform( 0.661055, 0.197888, -0.723772, 0.733306, 0.0339667, 0.67905, 0.15896, -0.979636, -0.122659, -0.123958, -0.380398, 0.37283 )
+bone_name = "hand_ik_l"
 
 [node name="HandIKR" type="BoneAttachment" parent="Armature/Skeleton" index="17"]
-transform = Transform( 0.964501, -0.264028, 0.00511488, -0.0413649, -0.131921, 0.990397, -0.260818, -0.955451, -0.138159, 0.151971, -0.229348, 0.49993 )
-bone_name = "right_hand_ik"
+transform = Transform( 0.813411, -0.554555, 0.175586, -0.167526, 0.0657314, 0.983674, -0.557043, -0.829547, -0.0394361, 0.337004, -0.278255, 0.423936 )
+bone_name = "hand_ik_r"
 
 [node name="Barrel" type="Position3D" parent="." index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07826, -0.489544 )
@@ -105,3 +105,4 @@ script = ExtResource( 14 )
 
 [node name="Sprint" type="Position3D" parent="AimMachine/Sprint" index="0"]
 transform = Transform( 0.727809, 0.68578, 0, -0.68578, 0.727809, 0, 0, 0, 1, -0.0731501, 0.53449, 0.672816 )
+[connection signal="animation_finished" from="AnimationPlayer" to="ReloadMachine" method="_on_AnimationPlayer_animation_finished"]
