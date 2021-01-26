@@ -29,6 +29,8 @@ var movement_speed := 0.0
 var current_weapon : Spatial
 
 #springs
+var aim_position_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+var aim_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 
 var recoil_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 var recoil_translation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
@@ -50,11 +52,12 @@ func process_recoil(delta : float) -> void:
 	var rot : Vector3 = accuracy["Rot"]
 	var s : float = current_weapon.data["Weapon handling"]["Walkspeed"]
 	
-	#aim spring
-	pos -= character.Aim.position * (base_offset + current_weapon.aim_node.transform.origin - character._Camera.base_offset)
 	#accel spring
-	#translate accel spring position to character local space and separate to pos/rot
-	pos -= character.Accel.position * accuracy["Accel sway i"]
+#	#translate accel spring position to character local space and separate to pos/rot
+	pos -= character.Accel.position * accuracy["Accel sway pos i"]
+	var x : Vector3 = character.Accel.position * accuracy["Accel sway rot i"]
+	rot += Vector3(-x.y, x.x, x.z)
+	
 	#recoil
 	recoil_rotation_spring.damper = accuracy["Recoil rot d"]
 	recoil_rotation_spring.speed = accuracy["Recoil rot s"]
@@ -91,13 +94,34 @@ func process_recoil(delta : float) -> void:
 	pos += Vector3(cos(character.walk_bob_tick / 2) * 2, sin(character.walk_bob_tick), 0) * accuracy["Gun bob pos i"]
 	rot += Vector3(cos(character.walk_bob_tick), sin(character.walk_bob_tick / 2), 0) * accuracy["Gun bob rot i"]
 	
+	#breath sway
+	pos += Vector3(cos(character.breath_sway_tick / 2) * 2, sin(character.breath_sway_tick), 0) * accuracy["Breath sway pos i"]
+	rot += Vector3(cos(character.breath_sway_tick), sin(character.breath_sway_tick / 2), 0) * accuracy["Breath sway rot i"]
+	
+	
+	var aim_transform : Transform = current_weapon.get_aim()
+	
+	#aim springs
+	aim_rotation_spring.damper = accuracy["Sight swap d"]
+	aim_rotation_spring.speed = accuracy["Sight swap s"]
+	aim_rotation_spring.target = aim_transform.basis.get_euler()
+	aim_rotation_spring.positionvelocity(delta)
+	
+	aim_position_spring.damper = accuracy["Sight swap d"]
+	aim_position_spring.speed = accuracy["Sight swap s"]
+	aim_position_spring.target = aim_transform.origin
+	aim_position_spring.positionvelocity(delta)
+	
+	
+	rot -= character.Aim.position * aim_rotation_spring.position
+	pos -= character.Aim.position * Basis(character.Aim.position * aim_rotation_spring.position).xform_inv(aim_position_spring.position) + character.Aim.position * base_offset
 	
 	#applies all combinative effects
 	
 	delta_pos = transform.origin
 	delta_rot = rotation
 	
-	transform.origin = base_offset + pos - current_weapon.base_offset
+	transform.origin = pos + character._Camera.base_transform.origin + base_offset
 	rotation = rot
 	
 	delta_pos -= transform.origin / delta

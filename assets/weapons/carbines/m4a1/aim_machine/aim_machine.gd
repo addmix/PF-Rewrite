@@ -1,16 +1,16 @@
 extends Node
 
-onready var character : KinematicBody = get_parent()
+onready var gun = get_parent()
 
 var states := {}
-var current_state := "Hip"
+var current_state := "Aim"
 
 func _ready() -> void:
 	#add all states to the states dictionary
 	var children := get_children()
 	for i in children:
 		states[i.name] = i
-		i.character = character
+		i.gun = gun
 		i.connect("change_state", self, "change_state")
 
 func change_state(new_state : String) -> void:
@@ -44,3 +44,6 @@ func _process(delta : float) -> void:
 	
 	#process current state
 	states[current_state].process(delta)
+
+func get_aim() -> Transform:
+	return states[current_state].get_aim()

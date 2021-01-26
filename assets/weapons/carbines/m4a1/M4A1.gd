@@ -9,7 +9,6 @@ signal equipped
 signal dequipped
 
 #nodes
-onready var aim_node : Position3D = $Aim
 onready var LeftIK : BoneAttachment = $Armature/Skeleton/HandIKL
 onready var RightIK : BoneAttachment = $Armature/Skeleton/HandIKR
 
@@ -17,8 +16,11 @@ onready var GunMachine = $GunMachine
 onready var ReloadMachine = $ReloadMachine
 onready var FiremodeMachine = $FiremodeMachine
 onready var EquipMachine = $EquipMachine
+onready var AimMachine = $AimMachine
 
 onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
+
+var WeaponController : Spatial
 
 #effects
 var bullet = preload("res://assets/entities/bullets/556/556.tscn")
@@ -65,6 +67,9 @@ func get_reserve() -> int:
 
 func can_reload() -> bool:
 	return magazine < data["Misc"]["Magazine"]
+
+func get_aim() -> Transform:
+	return AimMachine.get_aim()
 
 #spring stuff
 # warning-ignore:unused_argument
@@ -160,6 +165,9 @@ export var data := {
 		"Aim s": float(15.0),
 		"Aim d": float(.8),
 		
+		"Breath s": float(3.0),
+		"Breath d": float(.99999),
+		
 		"Air s": float(6.0),
 		"Air d": float(.8),
 		
@@ -249,11 +257,15 @@ export var data := {
 		"Rot sway s": float(12.0),
 		"Rot sway d": float(.7),
 		
-		"Accel sway s": float(5.0),
+		"Accel sway s": float(6.5),
 		"Accel sway d": float(.9),
-		"Accel sway i": Vector3(.006, .004, .002),
+		"Accel sway pos i": Vector3(.004, .004, .002),
+		"Accel sway rot i": Vector3(.003, .0035, .002),
 		"Accel sway offset": Vector3(0, 0, -1.2),
 		
+		"Breath sway s": float(3),
+		"Breath sway pos i": Vector3(0.002, 0.002, 0.002),
+		"Breath sway rot i": Vector3(0.002, 0.002, 0.002),
 		
 		#walk
 		
@@ -262,9 +274,9 @@ export var data := {
 		"Walk s": float(8.0),
 		"Walk d": float(0.999),
 		
-		"Gun bob s": float(.1),
-		"Gun bob pos i": Vector3(.015, .01, .001),
-		"Gun bob rot i": Vector3(.015, .015, .01),
+		"Gun bob s": float(0),
+		"Gun bob pos i": Vector3(0, 0, 0),
+		"Gun bob rot i": Vector3(0, 0, 0),
 		
 		#reload
 		"Reload s": float(7.0),
@@ -275,6 +287,10 @@ export var data := {
 		"Magnification": float(1.0),
 		"Spread factor": float(0),
 		"Choke": float(0),
+		
+		#sight change speed
+		"Sight swap s": float(12),
+		"Sight swap d": float(.875),
 	},
 }
 
@@ -292,12 +308,17 @@ var add := {
 	"Aim" : {
 		
 	},
+	"Breath": {
+		
+	},
 	"Sprint" : {
 		"Pos": Vector3(-.3, -.3, 0),
 		"Rot": Vector3(-.4, .4, 0),
 	},
 	"Movement" : {
-		
+		"Gun bob s": float(1.15),
+		"Gun bob pos i": Vector3(.0035, .002, .003),
+		"Gun bob rot i": Vector3(.0035, .003, .01),
 	},
 	"Accel" : {
 		
@@ -329,6 +350,9 @@ var multi := {
 		"Walkspeed": float(1.0),
 		"Walk s": float(10.0),
 		"Walk d": float(0.999),
+		"Gun bob s": float(0.005),
+		"Gun bob pos i": Vector3(0.5, 0.5, 0.5),
+		"Gun bob rot i": Vector3(1, 0.05, 0.5),
 	},
 	"Aim" : {
 		"Recoil pos s": float(1.3),
@@ -349,18 +373,24 @@ var multi := {
 		"Min rot force": Vector3(.6, .3, 1),
 		"Max rot force": Vector3(.4, .3, 1),
 		
-		"Accel sway i": Vector3(.1, .3, .1),
+		"Accel sway s": float(1.3),
+		"Accel sway pos i": Vector3(.2, .2, .4),
+		"Accel sway rot i": Vector3(.6, .6, .8),
 		
-		"Gun bob pos i": Vector3(.07, .07, .1),
-		"Gun bob rot i": Vector3(.07, .07, .1),
+		"Gun bob pos i": Vector3(.12, .12, .1),
+		"Gun bob rot i": Vector3(.12, .15, .1),
+	},
+	"Breath": {
+		"Breath s": float(2),
+		"Breath sway pos i": Vector3(0, 0, 0),
+		"Breath sway rot i": Vector3(0, 0, 0),
 	},
 	"Sprint" : {
 		"Walkspeed": float(1.8),
 	},
 	"Movement" : {
-		"Gun bob pos i": Vector3(1.1, 1.1, 1.1),
-		"Gun bob rot i": Vector3(1.1, 1.1, 1.1),
-		"Gun bob s": float(12),
+		"Gun bob pos i": Vector3(1.05, 1.05, 1.05),
+		"Gun bob rot i": Vector3(1.15, 1.15, 1.15),
 	},
 	"Accel" : {
 		
@@ -376,6 +406,9 @@ var multi := {
 	},
 	"Prone" : {
 		"Walkspeed": float(0.3),
+		
+		"Gun bob pos i": Vector3(3, 7, 3),
+		"Gun bob rot i": Vector3(0.5, 0.5, 0.5),
 	},
 	"Mounted": {
 		

@@ -10,12 +10,13 @@ func exit() -> void:
 	pass
 
 func unhandled_input(event : InputEvent) -> void:
-	if event.is_action_pressed("sprint"):
+	if character.movement_spring.target.length() > 0 and event.is_action_pressed("sprint"):
 		call_deferred("emit_signal", "change_state", "Sprint")
 		get_tree().set_input_as_handled()
-	elif event.is_action_pressed("toggle_sprint"):
+	elif character.movement_spring.target.length() > 0 and event.is_action_pressed("toggle_sprint"):
 		call_deferred("emit_signal", "change_state", "Sprint")
 		get_tree().set_input_as_handled()
 
 func process(delta : float) -> void:
-	pass
+	if Input.is_action_pressed("sprint"):
+		call_deferred("emit_signal", "change_state", "Sprint")

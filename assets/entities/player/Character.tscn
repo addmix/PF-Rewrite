@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://assets/entities/player/foot_controller.gd" type="Script" id=1]
 [ext_resource path="res://addons/smoothing/smoothing.gd" type="Script" id=2]
@@ -7,7 +7,12 @@
 [ext_resource path="res://assets/entities/player/WeaponController.gd" type="Script" id=5]
 [ext_resource path="res://assets/entities/player/movement_machine/movement_machine.gd" type="Script" id=6]
 [ext_resource path="res://assets/entities/player/stance_machine/stance_machine.gd" type="Script" id=7]
+[ext_resource path="res://assets/entities/player/air_machine/up.gd" type="Script" id=8]
 [ext_resource path="res://assets/entities/player/aim_machine/aim_machine.gd" type="Script" id=9]
+[ext_resource path="res://assets/entities/player/air_machine/land.gd" type="Script" id=10]
+[ext_resource path="res://assets/entities/player/air_machine/ground.gd" type="Script" id=11]
+[ext_resource path="res://assets/entities/player/air_machine/down.gd" type="Script" id=12]
+[ext_resource path="res://assets/entities/player/breath_machine/breath_machine.gd" type="Script" id=13]
 [ext_resource path="res://assets/entities/player/aim_machine/aim.gd" type="Script" id=14]
 [ext_resource path="res://assets/entities/player/aim_machine/hip.gd" type="Script" id=15]
 [ext_resource path="res://assets/entities/player/movement_machine/walk.gd" type="Script" id=16]
@@ -16,6 +21,9 @@
 [ext_resource path="res://assets/entities/player/stance_machine/crouch.gd" type="Script" id=19]
 [ext_resource path="res://assets/entities/player/stance_machine/stand.gd" type="Script" id=20]
 [ext_resource path="res://assets/entities/player/air_machine/air_machine.gd" type="Script" id=21]
+[ext_resource path="res://assets/entities/player/breath_machine/release.gd" type="Script" id=22]
+[ext_resource path="res://assets/entities/player/breath_machine/hold.gd" type="Script" id=23]
+[ext_resource path="res://assets/entities/player/movement_machine/idle.gd" type="Script" id=24]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.8
@@ -577,6 +585,9 @@ script = ExtResource( 18 )
 [node name="MovementMachine" type="Node" parent="."]
 script = ExtResource( 6 )
 
+[node name="Idle" type="Node" parent="MovementMachine"]
+script = ExtResource( 24 )
+
 [node name="Walk" type="Node" parent="MovementMachine"]
 script = ExtResource( 16 )
 
@@ -596,21 +607,35 @@ script = ExtResource( 15 )
 script = ExtResource( 21 )
 
 [node name="Ground" type="Node" parent="AirMachine"]
+script = ExtResource( 11 )
 
 [node name="Up" type="Node" parent="AirMachine"]
+script = ExtResource( 8 )
 
 [node name="Down" type="Node" parent="AirMachine"]
+script = ExtResource( 12 )
 
 [node name="Land" type="Node" parent="AirMachine"]
+script = ExtResource( 10 )
+
+[node name="BreathMachine" type="Node" parent="."]
+script = ExtResource( 13 )
+
+[node name="Release" type="Node" parent="BreathMachine"]
+script = ExtResource( 22 )
+
+[node name="Hold" type="Node" parent="BreathMachine"]
+script = ExtResource( 23 )
 
 [node name="Position3D" type="Position3D" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.05938, -1.45885 )
-[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_camera_movement"]
-[connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_shot_fired"]
+[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]
 [connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_shot_fired"]
-[connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_update_accuracy"]
+[connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_shot_fired"]
 [connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_update_accuracy"]
+[connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_update_accuracy"]
 [connection signal="weapon_changed" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_weapon_changed"]
 [connection signal="set_process" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_set_process"]
 [connection signal="shot_fired" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_shot_fired"]
+[connection signal="jump" from="AirMachine" to="." method="_on_AirMachine_jump"]

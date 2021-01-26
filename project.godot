@@ -32,7 +32,7 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "Bullet",
 "language": "GDScript",
-"path": "res://assets/entities/bullets/556/556.gd"
+"path": "res://assets/entities/bullets/bullet_class.gd"
 }, {
 "base": "Reference",
 "class": "CSVFile",
@@ -208,6 +208,11 @@ _global_script_classes=[ {
 "class": "VectorDisplay3D",
 "language": "GDScript",
 "path": "res://addons/godot-next/3d/vector_display_3d.gd"
+}, {
+"base": "Bullet",
+"class": "b556x45NATO",
+"language": "GDScript",
+"path": "res://assets/entities/bullets/556/556.gd"
 } ]
 _global_script_class_icons={
 "Array2D": "",
@@ -249,7 +254,8 @@ _global_script_class_icons={
 "VBoxItemList": "res://addons/godot-next/icons/icon_v_box_item_list.svg",
 "Variant": "",
 "VectorDisplay2D": "",
-"VectorDisplay3D": ""
+"VectorDisplay3D": "",
+"b556x45NATO": ""
 }
 
 [application]
@@ -259,6 +265,15 @@ run/main_scene="res://gameloader/gameloader.tscn"
 boot_splash/image="res://assets/warning_low_tides_logos/wlt2.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
+
+[audio]
+
+enable_audio_input=true
+volume/master_volume=0.0
+volume/ambient_volume=0.0
+volume/sfx_volume=0.0
+volume/music_volume=0.0
+volume/voice_volume=0.0
 
 [autoload]
 
@@ -273,10 +288,12 @@ NodeUtils="*res://utils/nodeutils.gd"
 Weapons="*res://singletons/weapons.gd"
 ParticleLoader="*res://gameloader/particleloader.gd"
 GunDebug="*res://singletons/gun_debug.gd"
+AlgorithmUtils="*res://utils/algorithmutils.gd"
 
 [display]
 
 window/vsync/use_vsync=false
+window/stretch/mode="2d"
 window/stretch/aspect="keep_width"
 
 [editor]
@@ -289,6 +306,18 @@ enabled=PoolStringArray( "godot-next", "gut", "smoothing" )
 
 [input]
 
+ui_accept={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777221,"unicode":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777222,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
+ui_select={
+"deadzone": 0.5,
+"events": [ Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":3,"pressure":0.0,"pressed":false,"script":null)
+ ]
+}
 ui_pause={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777217,"unicode":0,"echo":false,"script":null)
@@ -297,8 +326,7 @@ ui_pause={
 }
 spawn={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
-, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
+"events": [ Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
 reset_character={
@@ -406,7 +434,7 @@ stance_down={
 }
 stand={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
  ]
 }
 crouch={
@@ -417,11 +445,27 @@ prone={
 "deadzone": 0.5,
 "events": [  ]
 }
+hold_breath={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"unicode":0,"echo":false,"script":null)
+ ]
+}
+change_sight={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":84,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
+[logging]
+
+file_logging/enable_file_logging=true
 
 [physics]
 
+3d/active_soft_world=false
 3d/default_gravity=14.8
 
 [rendering]
 
+threads/thread_model=2
 environment/default_environment="res://default_env.tres"

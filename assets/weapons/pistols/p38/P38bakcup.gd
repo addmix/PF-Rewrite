@@ -8,13 +8,14 @@ signal shotFired
 signal equipped
 signal dequipped
 
-onready var aim_node : Position3D = $Aim
 onready var LeftIK : BoneAttachment = $Armature/Skeleton/HandIKL
 onready var RightIK : BoneAttachment = $Armature/Skeleton/HandIKR
 
 onready var GunMachine = $GunMachine
 onready var ReloadMachine = $ReloadMachine
 onready var EquipMachine = $EquipMachine
+
+var WeaponController : Spatial
 
 var base_offset := Vector3.ZERO
 

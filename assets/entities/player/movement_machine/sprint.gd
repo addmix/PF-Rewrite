@@ -18,4 +18,5 @@ func unhandled_input(event : InputEvent) -> void:
 		get_tree().set_input_as_handled()
 
 func process(delta : float) -> void:
-	pass
+	if character.movement_spring.target.length() < 0.01:
+		emit_signal("change_state", "Idle")

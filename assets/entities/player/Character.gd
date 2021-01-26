@@ -6,6 +6,7 @@ class_name Character
 var Player
 
 #signals
+signal loaded
 signal died
 
 #in game data
@@ -96,6 +97,7 @@ func ready_weapons() -> void:
 		if Player.loadout[weapon] == null:
 			continue
 		set_weapon(weapon, Player.loadout[weapon])
+		weapons[weapon].WeaponController = WeaponController
 		weapons[weapon].add_to_group("weapons")
 		weapons[weapon].add_to_group(Player.loadout[weapon])
 		weapons[weapon].connect("shotFired", self, "on_shot_fired")
@@ -123,6 +125,7 @@ var Air := Spring.new(0, 0, 0, .5, 1)
 remote var aim_spring_target := 0.0
 var Aim := Spring.new(0, 0, 0, .5, 1)
 remote var sprint_spring_target := 0.0
+var Breath := Spring.new(0, 0, 0, .5, 1)
 var Sprint := Spring.new(0, 0, 0, 0, 1)
 var Movement := Vector3.ZERO
 var Accel := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
@@ -166,6 +169,11 @@ func process_springs(delta : float) -> void:
 	Aim.speed = current_weapon.data["Weapon handling"]["Aim s"]
 	Aim.positionvelocity(delta)
 	
+	#holding breath
+	Breath.damper = current_weapon.data["Weapon handling"]["Breath d"]
+	Breath.speed = current_weapon.data["Weapon handling"]["Breath s"]
+	Breath.positionvelocity(delta)
+	
 	#sprinting
 	Sprint.damper = accuracy["Sprint d"]
 	Sprint.speed = accuracy["Sprint s"]
@@ -203,11 +211,11 @@ func process_springs(delta : float) -> void:
 	capsule_y = lerp(capsule_y, .8, Prone.position)
 	
 	body_y = lerp(body_y, -4.1, Prone.position)
-	body_z = lerp(body_z, 2.3, Prone.position)
+	body_z = lerp(body_z, 4.5, Prone.position)
 	body_angle = lerp(body_angle, 90, Prone.position)
 	
 	head_y = lerp(head_y, -4, Prone.position)
-	head_z = lerp(head_z, -4.025, Prone.position)
+	head_z = lerp(head_z, 0, Prone.position)
 	
 	$CollisionShape.shape.height = capsule_height
 	$CollisionShape.transform.origin.y = capsule_y
@@ -346,7 +354,10 @@ var walk_bob_tick := 0.0
 func process_walk(delta : float) -> void:
 	walk_bob_tick += delta * (accuracy["Gun bob s"] + 1)
 
+var breath_sway_tick := 0.0
 
+func process_breath(delta : float) -> void:
+	breath_sway_tick += delta * (accuracy["Breath sway s"])
 
 #when character is removed from the tree
 func _exit_tree() -> void:
@@ -403,9 +414,16 @@ func _unhandled_input(event : InputEvent) -> void:
 			emit_signal("camera_movement", Vector3(delta.x, -relative.x, delta.z))
 			
 			rset_unreliable("head_rotation", Vector3(Head.rotation.x, RotationHelper.rotation.y, 0))
-			
-		if event.is_action_pressed("reset_character"):
+			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("reset_character"):
 			reset()
+			get_tree().set_input_as_handled()
+		elif event.is_action_pressed("hold_breath"):
+			Breath.target = 1
+			get_tree().set_input_as_handled()
+		elif event.is_action_released("hold_breath"):
+			Breath.target = 0
+			get_tree().set_input_as_handled()
 
 remote var puppet_axis := Vector3.ZERO
 func get_axis() -> Vector3:
@@ -426,11 +444,11 @@ var last_vel := Vector3.ZERO
 
 func set_delta_vel(delta : float) -> void:
 	#not normalized to time
-	delta_vel = (movement_spring.position - last_vel) / delta
+	delta_vel = (velocity - last_vel) / delta
 	call_deferred("set_last_vel")
 
 func set_last_vel() -> void:
-	last_vel = movement_spring.position
+	last_vel = velocity
 
 #position/time
 var delta_pos := Vector3.ZERO
@@ -460,6 +478,8 @@ var vel := Vector3.ZERO
 func _physics_process(delta : float) -> void:
 	#update walk bob
 	process_walk(delta)
+	#update breath sway
+	process_breath(delta)
 	#calculate spring movement
 	process_springs(delta)
 	
@@ -488,18 +508,18 @@ func process_movement(delta : float) -> void:
 		basis = get_ground_normal_translation(basis, get_floor_normal())
 	
 	#xform input vector by basis
-	var translated := (basis.xform(axis.normalized()) - Vector3(0, 0.1, 0)).normalized()
+	var translated := basis.xform(axis.normalized())
 	
 	movement_spring.target = translated * accuracy["Walkspeed"]
 	movement_spring.positionvelocity(delta)
 	
-	if is_on_floor():
-		velocity = move_and_slide(movement_spring.position, Vector3(0, 1, 0), true, 8, deg2rad(45), false)
+	if is_on_floor() and AirMachine.current_state != "Up":
+		velocity = move_and_slide(movement_spring.position - Vector3(0, 0.1, 0), Vector3(0, 1, 0), true, 8, deg2rad(45), false)
 	else:
 		velocity = move_and_slide(movement_spring.position * 0.005 + velocity, Vector3(0, 1, 0), true, 8, deg2rad(45), false)
 	
 	velocity += (gravity * delta) * float(!is_on_floor())
-	velocity *= 1 - velocity.length() / 25000
+	velocity -= velocity.normalized() * 0.5 * air_density * (velocity * velocity) * drag_coefficient * 1.5
 	
 	#keeps on ground so that it works
 	move_and_slide(Vector3(0, -.1, 0), Vector3(0, 1, 0), true, 1)
@@ -509,6 +529,9 @@ func process_movement(delta : float) -> void:
 	
 	set_delta_pos(delta)
 	set_delta_vel(delta)
+
+var drag_coefficient := 0.7
+var air_density := 0.00002
 
 func get_ground_normal_translation(basis : Basis, normal : Vector3) -> Basis:
 	var zy := intersect_planes(Vector3.ZERO, normal, Vector3.ZERO, basis.x, Vector3.ZERO)
@@ -620,3 +643,7 @@ func _on_WeaponController_weapon_changed(weapon : Spatial) -> void:
 	RightHandIK.target_node = weapon.RightIK.get_path()
 	LeftHandIK.start()
 	RightHandIK.start()
+
+
+func _on_AirMachine_jump():
+	velocity.y += 6

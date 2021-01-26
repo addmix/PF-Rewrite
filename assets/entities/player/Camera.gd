@@ -17,7 +17,7 @@ func deferred() -> void:
 
 #vars
 var rotation_delta := Vector3.ZERO
-var base_offset := transform.origin
+var base_transform := transform
 
 #springs
 var zoom_spring := Spring.new(1, 0, 1, .85, 12)
@@ -65,7 +65,7 @@ func _process(delta : float) -> void:
 	
 	rot += Vector3(deg2rad(cos(character.walk_bob_tick)), deg2rad(sin(character.walk_bob_tick / 2)), 0) * bob_intensity_spring.position
 	
-	transform.origin = pos + base_offset
+	transform.origin = pos + base_transform.origin
 	rotation = rot
 
 #update accuracy

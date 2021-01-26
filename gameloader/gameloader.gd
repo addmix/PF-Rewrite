@@ -27,7 +27,7 @@ func _ready() -> void:
 		if index == args.size() - 1:
 			return
 		
-		Server.game_data["map"] == args[index + 1]
+		Server.game_data["map"] = args[index + 1]
 		call_deferred("start_server")
 	
 	#load splash screen

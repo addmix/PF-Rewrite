@@ -3,7 +3,7 @@ extends Node
 onready var character : KinematicBody = get_parent()
 
 var states := {}
-var current_state := "Hip"
+var current_state := "Release"
 
 func _ready() -> void:
 	#add all states to the states dictionary
@@ -33,7 +33,6 @@ puppet func sync_state(new_state : String) -> void:
 
 func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
-		
 		#equip machine input
 		
 		#pass input to state
