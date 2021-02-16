@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/references/array_2d.gd"
 }, {
+"base": "Reference",
+"class": "ArrayUtils",
+"language": "GDScript",
+"path": "res://addons/SIsilicon.3d.text/array_utils.gd"
+}, {
 "base": "Resource",
 "class": "Behavior",
 "language": "GDScript",
@@ -29,10 +34,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/references/bitset.gd"
 }, {
+"base": "BoneAttachment",
+"class": "BodyPart",
+"language": "GDScript",
+"path": "res://assets/entities/humanoid/body_part.gd"
+}, {
 "base": "Spatial",
 "class": "Bullet",
 "language": "GDScript",
-"path": "res://assets/entities/bullets/bullet_class.gd"
+"path": "res://assets/entities/projectiles/bullets/bullet_class.gd"
 }, {
 "base": "Reference",
 "class": "CSVFile",
@@ -47,7 +57,7 @@ _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "Character",
 "language": "GDScript",
-"path": "res://assets/entities/player/Character.gd"
+"path": "res://assets/entities/player/character.gd"
 }, {
 "base": "Reference",
 "class": "ClassType",
@@ -89,6 +99,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/2d/geometry_2d.gd"
 }, {
+"base": "Skeleton",
+"class": "HumanoidSkeleton",
+"language": "GDScript",
+"path": "res://assets/entities/test_dummy/skeleton.gd"
+}, {
 "base": "Reference",
 "class": "Icons",
 "language": "GDScript",
@@ -122,7 +137,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "Player",
 "language": "GDScript",
-"path": "res://assets/entities/player/Player.gd"
+"path": "res://assets/entities/player/player.gd"
 }, {
 "base": "Reference",
 "class": "ProjectTools",
@@ -212,13 +227,15 @@ _global_script_classes=[ {
 "base": "Bullet",
 "class": "b556x45NATO",
 "language": "GDScript",
-"path": "res://assets/entities/bullets/556/556.gd"
+"path": "res://assets/entities/projectiles/bullets/556/556.gd"
 } ]
 _global_script_class_icons={
 "Array2D": "",
+"ArrayUtils": "",
 "Behavior": "",
 "BitFlag": "",
 "Bitset": "",
+"BodyPart": "",
 "Bullet": "",
 "CSVFile": "",
 "CallbackDelegator": "",
@@ -231,6 +248,7 @@ _global_script_class_icons={
 "FileSearch": "",
 "FileSystemLink": "",
 "Geometry2D": "res://addons/godot-next/icons/icon_geometry_2d.svg",
+"HumanoidSkeleton": "",
 "Icons": "",
 "Inflector": "",
 "InspectorControls": "",
