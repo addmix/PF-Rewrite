@@ -58,20 +58,6 @@ func process_recoil(delta : float) -> void:
 	var x : Vector3 = character.Accel.position * accuracy["Accel sway rot i"]
 	rot += Vector3(-x.y, x.x, x.z)
 	
-	#recoil
-	recoil_rotation_spring.damper = accuracy["Recoil rot d"]
-	recoil_rotation_spring.speed = accuracy["Recoil rot s"]
-	
-	recoil_rotation_spring.positionvelocity(delta)
-	rot += recoil_rotation_spring.position
-	
-	recoil_translation_spring.damper = accuracy["Recoil pos d"]
-	recoil_translation_spring.speed = accuracy["Recoil pos s"]
-	
-	recoil_translation_spring.positionvelocity(delta)
-	pos += recoil_translation_spring.position
-	
-	
 	#camera movement sway
 	
 	
@@ -114,6 +100,19 @@ func process_recoil(delta : float) -> void:
 	#factors in rotation now
 	rot -= character.Aim.position * aim_rotation_spring.position
 	pos -= character.Aim.position * Basis(character.Aim.position * aim_rotation_spring.position).xform_inv(aim_position_spring.position) + character.Aim.position * base_offset
+	
+	#recoil
+	recoil_rotation_spring.damper = accuracy["Recoil rot d"]
+	recoil_rotation_spring.speed = accuracy["Recoil rot s"]
+	recoil_rotation_spring.positionvelocity(delta)
+	rot = (Basis(rot) * Basis(recoil_rotation_spring.position)).get_euler()
+	
+	recoil_translation_spring.damper = accuracy["Recoil pos d"]
+	recoil_translation_spring.speed = accuracy["Recoil pos s"]
+	recoil_translation_spring.positionvelocity(delta)
+	pos += Basis(rot).xform_inv(recoil_translation_spring.position)
+	
+	#recoil now goes in direction of gun
 	
 	#applies all combinative effects
 	

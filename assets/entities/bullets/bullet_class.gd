@@ -18,6 +18,7 @@ func _init() -> void:
 	ray = RayCast.new()
 	ray.enabled = true
 	ray.collide_with_areas = true
+	ray.set_collision_mask_bit(2, true)
 	add_child(ray)
 	#trail
 	trail = Trail3D.new()
@@ -33,7 +34,9 @@ func _init() -> void:
 	timer.wait_time = 10
 	timer.one_shot = true
 	timer.autostart = true
+	timer.connect("timeout", self, "on_timeout")
 	add_child(timer)
+	
 
 #when added to tree
 func _ready() -> void:
@@ -49,11 +52,21 @@ func _physics_process(delta : float) -> void:
 	#check move
 	ray.cast_to = velocity * delta
 	
+	
+	
 	#get segments
 	
 	#go through segments in order
 	
+	#if object to hit
+	if ray.is_colliding():
+		var collider = ray.get_collider()
+		
+		#check for hit method
+		if collider.has_method("hit"):
+			collider.hit(self)
+	
 	transform.origin += velocity * delta
 
-func _on_Timer_timeout() -> void:
+func on_timeout() -> void:
 	queue_free()

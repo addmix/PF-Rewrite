@@ -34,7 +34,7 @@ func anim_finished(anim : String) -> void:
 		get_parent().get_parent().set_reserve(step)
 		get_parent().get_parent().set_magazine(get_parent().get_parent().data["Misc"]["Magazine"])
 	
-	if get_parent().get_parent().GunMachine.current_state == "Locked":
+	if get_parent().get_parent().GunMachine.current_state == "Locked" or get_parent().get_parent().chamber == 0:
 		call_deferred("emit_signal", "change_state", "Slide")
 	else:
 		call_deferred("emit_signal", "change_state", "Ready")

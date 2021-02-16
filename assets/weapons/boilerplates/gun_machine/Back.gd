@@ -5,7 +5,6 @@ signal change_state
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
-	get_parent().get_parent().set_chamber(get_parent().get_parent().get_chamber() - 1)
 	if get_parent().get_parent().get_magazine() <= 0:
 		call_deferred("emit_signal", "change_state", "Locked")
 	else:

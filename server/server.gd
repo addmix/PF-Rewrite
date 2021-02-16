@@ -21,9 +21,11 @@ export var game_data := {
 	"mode": "TDM",
 }
 
+var PauseMenu : Control
+var Scoreboard : PopupDialog 
+
 var MapInstance : Spatial
 var GamemodeInstance : Node
-var PauseMenu : Control
 
 var network := NetworkedMultiplayerENet.new()
 
@@ -114,6 +116,11 @@ func load_game() -> void:
 	MapInstance = resource.instance()
 	$"/root".add_child(MapInstance, true)
 	
+	#load scoreboard
+	resource = load("res://assets/ui/scoreboard.tscn")
+	Scoreboard = resource.instance()
+	$"/root".add_child(Scoreboard)
+	
 	#load map's gamemode nodes
 	resource = Maps.load_mode(game_data["map"], game_data["mode"])
 	GamemodeInstance = resource.instance()
@@ -122,6 +129,8 @@ func load_game() -> void:
 	#load gamemode script
 	resource = Gamemodes.load_gamemode_script(game_data["mode"])
 	GamemodeInstance.set_script(resource)
+	
+	GamemodeInstance.connect("teams_created", self, "on_teams_created")
 	#initialize gamemode
 	GamemodeInstance.init()
 	
@@ -133,8 +142,7 @@ func load_game() -> void:
 	$"/root".add_child(PauseMenu)
 	
 	#remove menu
-	
-	var menu = $"/root".find_node("Menu")
+	var menu = $"/root/Menu"
 	if menu != null:
 		menu.queue_free()
 #	print("Started host")
@@ -146,20 +154,14 @@ func close_server() -> void:
 	
 	emit_signal("server_closed")
 	
-	
-	
 	#null out variables
 	GamemodeInstance.queue_free()
-	GamemodeInstance = null
-	
 	MapInstance.queue_free()
-	MapInstance = null
+	Scoreboard.queue_free()
+	PauseMenu.queue_free()
 	
 	#close server
 	network.call_deferred("close_connection")
-	
-	PauseMenu.queue_free()
-	PauseMenu = null
 	
 	#load menu
 	var resource := load("res://scenes/menu/menu.tscn")
@@ -167,6 +169,16 @@ func close_server() -> void:
 
 func _exit_tree() -> void:
 	network.close_connection()
+	
+	if PauseMenu:
+		PauseMenu.queue_free()
+	if Scoreboard:
+		Scoreboard.queue_free()
+	if MapInstance:
+		MapInstance.queue_free()
+	if GamemodeInstance:
+		GamemodeInstance.queue_free()
+	
 
 #menu connection server starting funcs
 # warning-ignore:shadowed_variable
@@ -209,3 +221,6 @@ func load_mode() -> void:
 #unloads gamemode
 func unload_mode() -> void:
 	GamemodeInstance.queue_free()
+
+func on_teams_created() -> void:
+	Scoreboard.update_scoreboard()

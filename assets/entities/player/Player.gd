@@ -10,6 +10,15 @@ var player_name : String
 var player_id : int
 var team : int
 
+var kills := 0
+signal update_kills
+var deaths := 0
+signal update_deaths
+var assists := 0
+signal update_assists
+var score := 0.0
+signal update_score
+
 #nodes
 var character = preload("res://assets/entities/player/Character.tscn")
 var character_instance : Character
@@ -27,12 +36,7 @@ func instance_character() -> void:
 	
 	#instance fresh character
 	character_instance = character.instance()
-	#initializes character values
-	initialize_character()
-	#connects character signals
-	connect_character_signals()
-
-func initialize_character() -> void:
+	
 	#give character a reference to player node
 	character_instance.name = str(player_id)
 	
@@ -41,12 +45,16 @@ func initialize_character() -> void:
 	character_instance.Player = self
 	
 	character_instance.add_to_group("characters")
+	#connects character signals
+	connect_character_signals()
 
 func connect_character_signals() -> void:
 # warning-ignore:return_value_discarded
 	character_instance.connect("died", self, "on_player_died")
 
 func on_player_died() -> void:
+	deaths += 1
+	emit_signal("update_deaths")
 	emit_signal("died", self)
 	
 	remove_character()
@@ -58,12 +66,13 @@ func on_player_died() -> void:
 #call to gamemode player spawner
 # warning-ignore:unused_argument
 func spawn_character(node : Position3D) -> void:
-	push_error("ww")
 	instance_character()
-	call_deferred("spawn_deferred")
+#	call_deferred("spawn_deferred")
+	spawn_deferred()
 
 func spawn_deferred() -> void:
-	add_child(character_instance)
+	add_child(character_instance, true)
+	
 	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
 	character_instance.transform.origin = spawn_point.origin
 	character_instance.rotation.y = spawn_point.basis.get_euler().y

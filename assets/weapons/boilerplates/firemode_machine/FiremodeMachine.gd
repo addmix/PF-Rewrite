@@ -38,7 +38,6 @@ func _physics_process(delta : float) -> void:
 
 func change_state(new_state : String) -> void:
 	if is_network_master():
-#		print(new_state)
 		#add state to state stack
 		stateStack.append(current_state)
 		#exit current state
@@ -49,10 +48,9 @@ func change_state(new_state : String) -> void:
 		emit_signal("state_changed", self, current_state, new_state)
 		#assing current_state to new state
 		current_state = new_state
-		if is_network_master():
-			rpc("syncState", new_state)
+		rpc("syncState", new_state)
 
-puppet func syncState(new_state : String) -> void:
+remote func syncState(new_state : String) -> void:
 	#add state to state stack
 	stateStack.append(current_state)
 	#exit current state

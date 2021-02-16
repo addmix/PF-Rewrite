@@ -24,6 +24,5 @@ func unhandled_input(event : InputEvent) -> void:
 		emit_signal("change_state", "Fire")
 		get_tree().set_input_as_handled()
 
-
 func fire() -> void:
 	pass

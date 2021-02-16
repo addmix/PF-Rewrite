@@ -2,7 +2,7 @@ extends Spatial
 
 #signals
 # warning-ignore:unused_signal
-signal ammoChanged
+signal update_ammo
 signal shotFired
 
 signal equipped
@@ -29,8 +29,7 @@ var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
 func _ready():
 	#play idle animation
 	_AnimationPlayer.call_deferred("play", "Ready")
-	#initializes ammo data for any interested nodes
-	call_deferred("emit_signal", "ammoChanged", chamber, magazine, reserve)
+	
 	_connect_signals()
 
 func _connect_signals() -> void:
@@ -42,7 +41,7 @@ onready var chamber : int = data["Misc"]["Chamber"] setget set_chamber, get_cham
 func set_chamber(value : int) -> void:
 	chamber = value
 	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
+		emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 func get_chamber() -> int:
 	return chamber
 
@@ -50,7 +49,7 @@ onready var magazine : int = data["Misc"]["Magazine"] setget set_magazine, get_m
 func set_magazine(value : int) -> void:
 	magazine = value
 	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
+		emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 func get_magazine() -> int:
 	return magazine
 
@@ -58,7 +57,7 @@ onready var reserve : int = data["Misc"]["Reserve"] setget set_reserve, get_rese
 func set_reserve(value : int) -> void:
 	reserve = value
 	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
+		emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 func get_reserve() -> int:
 	return reserve
 
@@ -94,7 +93,8 @@ func on_equipped() -> void:
 func on_dequipped() -> void:
 	emit_signal("dequipped", self)
 
-func _on_M4A1_shotFired():
+func _on_shotFired() -> void:
+	update_ammo()
 	#muzzle flash
 	var instance
 	
@@ -106,6 +106,9 @@ func _on_M4A1_shotFired():
 	instance.transform.origin = $Barrel.get_global_transform().origin
 	instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
 	$"/root".add_child(instance)
+
+func update_ammo() -> void:
+	emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 
 
 export var data := {
@@ -229,10 +232,10 @@ export var data := {
 		
 		#recoil spring settings
 		"Recoil pos s": float(12.0),
-		"Recoil pos d": float(.5),
+		"Recoil pos d": float(.4),
 		
 		"Recoil rot s": float(13.0),
-		"Recoil rot d": float(.5),
+		"Recoil rot d": float(.3),
 		
 		
 		#sway
@@ -246,11 +249,11 @@ export var data := {
 		"Camera bob d": float(.85),
 		"Camera bob i": Vector3(.2, .2, .2),
 		
-		"Pos sway": Vector3(.1, .1, 0),
+		"Pos sway": Vector3(.05, .05, 0),
 		"Pos sway s": float(14.0),
 		"Pos sway d": float(.6),
 		
-		"Rot sway": Vector3(.04, .04, 0),
+		"Rot sway": Vector3(.065, .065, 0),
 		"Rot sway s": float(12.0),
 		"Rot sway d": float(.7),
 		
@@ -315,7 +318,7 @@ var add := {
 	"Movement" : {
 		"Gun bob s": float(1.07),
 		"Gun bob pos i": Vector3(.0025, .001, .003),
-		"Gun bob rot i": Vector3(.002, .002, .01),
+		"Gun bob rot i": Vector3(.001, .001, .01),
 	},
 	"Accel" : {
 		
@@ -352,12 +355,19 @@ var multi := {
 		"Gun bob rot i": Vector3(1, 0.05, 0.5),
 	},
 	"Aim" : {
+		"Magnification": float(1.15),
+		"Walkspeed": float(0.7),
+		
 		"Recoil pos s": float(1.3),
 		"Recoil rot s": float(1.3),
 		
-		"Pos sway": Vector3(.1, .1, 1),
-		"Rot sway": Vector3(.5, .5, 1),
-		"Rot sway d": float(.65),
+		"Pos sway": Vector3(.2, .2, 1),
+		"Pos sway s": float(1.2),
+		"Pos sway d": float(.8),
+		
+		"Rot sway": Vector3(.4, .4, 0),
+		"Rot sway s": float(0.85),
+		"Rot sway d": float(.7),
 		
 		"Pos": Vector3(0, 0, 0),
 		"Rot": Vector3(0, 0, 0),
@@ -374,15 +384,17 @@ var multi := {
 		"Accel sway pos i": Vector3(.2, .2, .4),
 		"Accel sway rot i": Vector3(.6, .6, .8),
 		
-		"Gun bob pos i": Vector3(.12, .12, .1),
-		"Gun bob rot i": Vector3(.12, .15, .1),
+		"Gun bob pos i": Vector3(.4, .4, .1),
+		"Gun bob rot i": Vector3(.8, .8, .1),
 	},
 	"Breath": {
+		"Magnification": float(1.1),
 		"Breath s": float(2),
 		"Breath sway pos i": Vector3(0, 0, 0),
 		"Breath sway rot i": Vector3(0, 0, 0),
 	},
 	"Sprint" : {
+		"Magnification": float(0.95),
 		"Walkspeed": float(1.8),
 	},
 	"Movement" : {

@@ -40,12 +40,14 @@ func on_Player_spawned(player : Player) -> void:
 	pass
 
 func on_spawn_pressed() -> void:
+	#host
 	if get_tree().is_network_server():
 		#accept/deny
 		if spawn_check(get_tree().get_nodes_in_group("Spawns")[0]):
 			rpc("accept_spawn", 1, get_tree().get_nodes_in_group("Spawns")[0])
 		else:
 			rpc("decline_spawn", 1, get_tree().get_nodes_in_group("Spawns")[0])
+	#client
 	else:
 		rpc_id(1, "request_spawn", get_tree().get_nodes_in_group("Spawns")[0])
 

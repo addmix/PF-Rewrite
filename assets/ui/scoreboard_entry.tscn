@@ -1,0 +1,102 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/ui/scoreboard_entry.gd" type="Script" id=1]
+
+[node name="player" type="HBoxContainer"]
+margin_right = 530.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name" type="Label" parent="."]
+margin_top = 12.0
+margin_right = 325.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 80, 16 )
+size_flags_horizontal = 3
+text = "Player"
+align = 1
+valign = 1
+clip_text = true
+
+[node name="VSeparator" type="VSeparator" parent="."]
+margin_left = 329.0
+margin_right = 333.0
+margin_bottom = 40.0
+
+[node name="kills" type="Label" parent="."]
+margin_left = 337.0
+margin_top = 12.0
+margin_right = 362.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 25, 16 )
+text = "0"
+align = 1
+valign = 1
+clip_text = true
+
+[node name="VSeparator2" type="VSeparator" parent="."]
+margin_left = 366.0
+margin_right = 370.0
+margin_bottom = 40.0
+
+[node name="deaths" type="Label" parent="."]
+margin_left = 374.0
+margin_top = 12.0
+margin_right = 399.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 25, 16 )
+text = "0"
+align = 1
+valign = 1
+clip_text = true
+
+[node name="VSeparator3" type="VSeparator" parent="."]
+margin_left = 403.0
+margin_right = 407.0
+margin_bottom = 40.0
+
+[node name="assists" type="Label" parent="."]
+margin_left = 411.0
+margin_top = 12.0
+margin_right = 436.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 25, 16 )
+text = "0"
+align = 1
+valign = 1
+clip_text = true
+
+[node name="VSeparator4" type="VSeparator" parent="."]
+margin_left = 440.0
+margin_right = 444.0
+margin_bottom = 40.0
+
+[node name="kdr" type="Label" parent="."]
+margin_left = 448.0
+margin_top = 12.0
+margin_right = 473.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 25, 16 )
+text = "0"
+align = 1
+valign = 1
+clip_text = true
+
+[node name="VSeparator5" type="VSeparator" parent="."]
+margin_left = 477.0
+margin_right = 481.0
+margin_bottom = 40.0
+
+[node name="score" type="Label" parent="."]
+margin_left = 485.0
+margin_top = 12.0
+margin_right = 530.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 45, 16 )
+text = "0"
+align = 1
+valign = 1
+clip_text = true

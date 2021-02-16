@@ -27,3 +27,5 @@ func load_particles() -> void:
 		self.add_child(particle)
 		
 		value = dir.get_next()
+	
+	queue_free()

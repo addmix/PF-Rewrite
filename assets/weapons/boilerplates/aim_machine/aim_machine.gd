@@ -23,7 +23,7 @@ func change_state(new_state : String) -> void:
 	if is_network_master():
 		rpc("sync_state", new_state)
 
-puppet func sync_state(new_state : String) -> void:
+remote func sync_state(new_state : String) -> void:
 	#exit old state
 	states[current_state].exit()
 	#enter new state

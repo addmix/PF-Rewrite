@@ -1,6 +1,7 @@
 extends Node
 
 signal player_added
+signal player_removed
 
 var player = preload("res://assets/entities/player/Player.tscn")
 
@@ -78,12 +79,13 @@ remote func recieve_player_data(data : Dictionary) -> void:
 			add_player(id, data[id])
 
 remote func recieve_spawned_players(ids : Array) -> void:
+	#this is bad solution
 	for id in ids:
 		players[id].spawn_character(get_tree().get_nodes_in_group("Spawns")[0])
 
 #on clients
 remotesync func distribute_player_data(id : int, data : Dictionary) -> void:
-	if get_tree().get_rpc_sender_id() == 1:
+	if get_tree().get_rpc_sender_id() == 1 and id != get_tree().get_network_unique_id():
 		add_player(id, data)
 
 #everywhere

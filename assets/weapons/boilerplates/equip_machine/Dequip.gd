@@ -27,7 +27,7 @@ func process(delta : float) -> void:
 	get_parent().EquipPosSpring.positionvelocity(delta)
 	get_parent().EquipRotSpring.positionvelocity(delta)
 	
-	if (get_parent().EquipPosSpring.position - get_parent().get_parent().data["Weapon handling"]["Dequip pos"]).length() < 0.001 and (get_parent().EquipRotSpring.position - get_parent().get_parent().data["Weapon handling"]["Dequip rot"]).length() < 0.001:
+	if (get_parent().EquipPosSpring.position - get_parent().get_parent().data["Weapon handling"]["Dequip pos"]).length() < 0.1 and (get_parent().EquipRotSpring.position - get_parent().get_parent().data["Weapon handling"]["Dequip rot"]).length() < 0.01:
 		emit_signal("change_state", "Inactive")
 		get_parent().emit_signal("dequipped")
 		

@@ -2,7 +2,7 @@ extends Spatial
 
 #signals
 # warning-ignore:unused_signal
-signal ammoChanged
+signal update_ammo
 signal shotFired
 
 signal equipped
@@ -41,7 +41,7 @@ onready var chamber : int = data["Misc"]["Chamber"] setget set_chamber, get_cham
 func set_chamber(value : int) -> void:
 	chamber = value
 	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
+		emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 func get_chamber() -> int:
 	return chamber
 
@@ -49,7 +49,7 @@ onready var magazine : int = data["Misc"]["Magazine"] setget set_magazine, get_m
 func set_magazine(value : int) -> void:
 	magazine = value
 	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
+		emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 func get_magazine() -> int:
 	return magazine
 
@@ -57,7 +57,7 @@ onready var reserve : int = data["Misc"]["Reserve"] setget set_reserve, get_rese
 func set_reserve(value : int) -> void:
 	reserve = value
 	if is_network_master():
-		emit_signal("ammoChanged", get_chamber(), get_magazine(), get_reserve())
+		emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 func get_reserve() -> int:
 	return reserve
 
@@ -93,7 +93,8 @@ func on_equipped() -> void:
 func on_dequipped() -> void:
 	emit_signal("dequipped", self)
 
-func _on_M4A1_shotFired():
+func _on_shotFired():
+	update_ammo()
 	#muzzle flash
 	var instance
 	
@@ -106,6 +107,8 @@ func _on_M4A1_shotFired():
 	instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
 	$"/root".add_child(instance)
 
+func update_ammo() -> void:
+	emit_signal("update_ammo", get_chamber(), get_magazine(), get_reserve())
 
 export var data := {
 	"Misc": {
@@ -129,8 +132,8 @@ export var data := {
 		"Damage range": Vector2(40, 90),
 		"Damage": Vector2(32, 24),
 		
-		"Velocity": float(2200.0),
-		"Velocity variance": float(100.0),
+		"Velocity": float(1050.0),
+		"Velocity variance": float(50.0),
 		
 		"Penetration depth": float(0),
 		
@@ -155,8 +158,8 @@ export var data := {
 		"Dequip s": float(12.0),
 		"Dequip d": float(.8),
 		
-		"Dequip pos": Vector3(0, -1.5, 0),
-		"Dequip rot": Vector3(0, 0, 0),
+		"Dequip pos": Vector3(0, -2.0, .7),
+		"Dequip rot": Vector3(-.7, 0, 0),
 		
 		"Aim s": float(15.0),
 		"Aim d": float(.8),
@@ -231,7 +234,7 @@ export var data := {
 		"Recoil pos d": float(.6),
 		
 		"Recoil rot s": float(19.0),
-		"Recoil rot d": float(.5),
+		"Recoil rot d": float(.3),
 		
 		
 		#sway
@@ -308,8 +311,8 @@ var add := {
 		
 	},
 	"Sprint" : {
-		"Pos": Vector3(-.3, -.3, 0),
-		"Rot": Vector3(-.4, .4, 0),
+		"Pos": Vector3(0, .3, .4),
+		"Rot": Vector3(.9, 0, 0),
 	},
 	"Movement" : {
 		"Gun bob s": float(1.07),
@@ -324,11 +327,10 @@ var add := {
 		"Rot": Vector3(.3, .1, -.3),
 	},
 	"Crouch" : {
-		"Rot": Vector3(0, 0, .4),
+		
 	},
 	"Prone" : {
-		"Pos": Vector3(0, 0, .2),
-		"Rot": Vector3(0, 0, 1.3),
+		
 	},
 	"Mounted": {
 		
@@ -351,6 +353,9 @@ var multi := {
 		"Gun bob rot i": Vector3(1, 0.05, 0.5),
 	},
 	"Aim" : {
+		"Magnification": float(1.1),
+		"Walkspeed": float(0.7),
+		
 		"Recoil pos s": float(1.3),
 		"Recoil rot s": float(1.3),
 		
@@ -383,6 +388,7 @@ var multi := {
 		"Breath sway rot i": Vector3(0, 0, 0),
 	},
 	"Sprint" : {
+		"Magnification": float(0.95),
 		"Walkspeed": float(1.8),
 	},
 	"Movement" : {
@@ -411,3 +417,4 @@ var multi := {
 		
 	},
 }
+

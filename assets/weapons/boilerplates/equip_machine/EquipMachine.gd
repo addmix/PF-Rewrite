@@ -37,7 +37,7 @@ func change_state(new_state : String) -> void:
 	
 	
 
-puppet func syncState(new_state : String) -> void:
+remote func syncState(new_state : String) -> void:
 	#exit current state
 	states[current_state].exit()
 	#enter new state from current state

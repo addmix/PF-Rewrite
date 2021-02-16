@@ -1,0 +1,51 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://assets/materials/eotech/holo.png" type="Texture" id=1]
+
+[sub_resource type="Shader" id=1]
+resource_local_to_scene = true
+code = "    shader_type spatial;
+    render_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx;
+    
+    uniform sampler2D texture_albedo : hint_albedo;
+    uniform float tex_scale = 0.1;
+    uniform float intensity_factor = 1.0;
+    
+    varying vec3 v_vertex;
+    varying vec3 v_pos;
+    varying vec3 v_normal;
+    varying vec3 v_tangent;
+    
+    void vertex() {
+        v_vertex = ((PROJECTION_MATRIX * MODELVIEW_MATRIX) * vec4(VERTEX, 1.0)).xyz;
+        v_pos = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+        v_normal = (transpose(inverse(MODELVIEW_MATRIX)) * vec4(NORMAL, 0.0)).xyz;
+        v_tangent = (transpose(inverse(MODELVIEW_MATRIX)) * vec4(TANGENT, 0.0)).xyz;
+    }
+    
+    void fragment() {
+        vec3 normal = normalize(v_normal);
+        vec3 tangent = normalize(v_tangent);
+        vec3 cameraDir = normalize(v_pos);
+        vec3 offset = cameraDir + normal;
+        
+        mat3 mat = mat3(
+            -tangent,
+            cross(-normal, -tangent),
+            vec3(normal.x, -normal.y, normal.z)
+        );
+        
+        offset = mat * offset;
+        
+        vec2 uv = (offset.xy / tex_scale) * vec2(1.0, -1.0);	// flip vertically
+        
+        ALBEDO = texture(texture_albedo, uv + vec2(0.5, 0.5)).xyz * intensity_factor * float(uv.x < .5 && uv.x > -.5 && uv.y < .5 && uv.y > -.5);
+        ALPHA = texture(texture_albedo, uv + vec2(0.5, 0.5)).a * float(uv.x < .5 && uv.x > -.5 && uv.y < .5 && uv.y > -.5);
+    }
+"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/tex_scale = 0.1
+shader_param/intensity_factor = 1.0
+shader_param/texture_albedo = ExtResource( 1 )

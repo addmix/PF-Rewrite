@@ -8,6 +8,7 @@ var Player
 #signals
 signal loaded
 signal died
+signal update_ammo
 
 #in game data
 export var health := 100.0
@@ -54,6 +55,8 @@ func deferred() -> void:
 	ready_weapons()
 	ready_ik()
 	
+	emit_signal("loaded", self)
+	
 	set_physics_process(true)
 	set_process(true)
 
@@ -85,6 +88,11 @@ func update_ik() -> void:
 	start_ik()
 
 
+func hit(bullet, part : Area) -> void:
+#	print("hit")
+	pass
+
+
 #weapon stuff
 signal shot_fired
 
@@ -109,6 +117,7 @@ func ready_weapons() -> void:
 		weapons[weapon].add_to_group("weapons")
 		weapons[weapon].add_to_group(Player.loadout[weapon])
 		weapons[weapon].connect("shotFired", self, "on_shot_fired")
+		weapons[weapon].connect("update_ammo", self, "update_ammo")
 		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
 		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")
 		weapons[weapon].set_network_master(Player.player_id)
@@ -117,6 +126,8 @@ func ready_weapons() -> void:
 	current_weapon = weapons[weapon_index]
 	#add starter weapon to tree
 	Smoothing.add_child(current_weapon)
+	#update ammo counter
+	current_weapon.update_ammo()
 	#start equip machine by equipping new gun
 	current_weapon.EquipMachine.change_state("Equip")
 	
@@ -276,11 +287,16 @@ func on_weapon_dequipped(weapon : Spatial) -> void:
 	weapons[weapon_index].call_deferred("equip")
 	#set current weapon
 	current_weapon = weapons[weapon_index]
+	
+	current_weapon.update_ammo()
 	#emit new weapon
 	emit_signal("weapon_changed", weapons[weapon_index])
 
 func on_shot_fired() -> void:
 	emit_signal("shot_fired", MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1)))
+
+func update_ammo(c : int, m : int, r : int) -> void:
+	emit_signal("update_ammo", c, m, r)
 
 func update_accuracy() -> void:
 	accuracy = get_accuracy()

@@ -73,6 +73,34 @@ background_mode = 2
 background_sky = SubResource( 21 )
 ambient_light_color = Color( 0.105882, 0.105882, 0.105882, 1 )
 ambient_light_sky_contribution = 0.4
+fog_enabled = true
+fog_color = Color( 0.494, 0.506567, 0.52, 1 )
+fog_depth_begin = 300.0
+fog_depth_end = 1000.0
+fog_depth_curve = 0.499997
+fog_transmit_enabled = true
+fog_transmit_curve = 0.840897
+tonemap_mode = 2
+tonemap_exposure = 0.61
+ss_reflections_enabled = true
+ss_reflections_fade_in = 0.47075
+ssao_enabled = true
+ssao_radius = 2.0
+ssao_intensity = 1.89
+ssao_radius2 = 7.0
+ssao_intensity2 = 3.74
+ssao_light_affect = 0.12
+ssao_ao_channel_affect = 1.0
+ssao_quality = 2
+ssao_edge_sharpness = 2.5
+dof_blur_near_enabled = true
+dof_blur_near_distance = 0.8
+dof_blur_near_transition = 0.5
+dof_blur_near_amount = 0.05
+dof_blur_near_quality = 2
+glow_enabled = true
+glow_strength = 1.1
+glow_bloom = 0.15
 
 [sub_resource type="SpatialMaterial" id=23]
 flags_disable_ambient_light = true
@@ -286,3 +314,4 @@ material = SubResource( 23 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="1"]
 shape = SubResource( 24 )
+[connection signal="body_entered" from="Area" to="Area" method="_on_Area_body_entered"]

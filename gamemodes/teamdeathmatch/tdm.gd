@@ -26,10 +26,14 @@ signal game_started
 signal game_ended
 signal game_won
 
+signal teams_created
+
 func init() -> void:
 	#initializes teams
 	Teams = teams.instance()
 	add_child(Teams, true)
+	
+	emit_signal("teams_created")
 	
 	#initializes player spawner
 	Spawner = spawner.instance()
@@ -162,7 +166,7 @@ func on_Player_died(player : Player) -> void:
 #	print(player.player_id, " died")
 	
 	#get killer
-	var killer = player.Character.damage_stack[0][0]
+	var killer = player.character_instance.damage_stack[0][0]
 	
 	#if death related to player somehow
 	if killer.has_method("get_player"):
@@ -174,7 +178,7 @@ func on_Player_died(player : Player) -> void:
 	
 	#no player involved
 	else:
-		if killer == player.Character:
+		if killer == player.character_instance:
 			on_reset(player)
 		else:
 			on_natural(player)
@@ -207,7 +211,7 @@ func on_suicide(player : Player) -> void:
 
 func on_killed(player : Player) -> void:
 	#get killer
-	var killer = player.Character.damage_stack[0][0]
+	var killer = player.character_instance.damage_stack[0][0]
 	
 	print(player.player_id, " was killed by ", killer.player.player_id)
 	

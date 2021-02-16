@@ -28,4 +28,7 @@ func unhandled_input(event : InputEvent) -> void:
 func anim_finished(anim : String) -> void:
 	call_deferred("emit_signal", "change_state", "Ready")
 	#release
-	get_parent().get_parent().GunMachine.states["Locked"].call_deferred("release")
+	if get_parent().get_parent().GunMachine.current_state == "Locked":
+		get_parent().get_parent().GunMachine.states["Locked"].call_deferred("release")
+	else:
+		get_parent().get_parent().GunMachine.call_deferred("emit_signal", "change_state", "Forward")

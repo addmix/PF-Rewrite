@@ -1,12 +1,19 @@
 extends Node
 
+signal player_added_to_team
+signal player_removed_from_team
+
 func _ready() -> void:
 # warning-ignore:return_value_discarded
 	Players.connect("player_added", self, "on_Player_added")
+	Players.connect("player_removed", self, "on_Player_removed")
 
 func on_Player_added(player : Player) -> void:
 #	print("Player ", player.player_id, " added")
 	assign_to_team(player, get_team_with_least_players())
+
+func on_Player_removed(player : Player) -> void:
+	remove_from_team(player)
 
 #number of teams
 var team_count := 2
@@ -39,6 +46,8 @@ func assign_to_team(player : Player, team : int) -> void:
 	player.add_to_group("Team" + str(player.team))
 	#adds player to array
 	teams[team].append(player)
+	
+	emit_signal("player_added_to_team", player, team)
 
 #removes player from team
 func remove_from_team(player : Player) -> void:
@@ -48,6 +57,8 @@ func remove_from_team(player : Player) -> void:
 	player.remove_from_group("Team" + str(player.team))
 	#sets player's team to null
 	player.team = -1
+	
+	emit_signal("player_removed_from_team", player)
 
 #team balance algorithms
 
