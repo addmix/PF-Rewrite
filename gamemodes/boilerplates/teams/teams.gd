@@ -6,6 +6,7 @@ signal player_removed_from_team
 func _ready() -> void:
 # warning-ignore:return_value_discarded
 	Players.connect("player_added", self, "on_Player_added")
+# warning-ignore:return_value_discarded
 	Players.connect("player_removed", self, "on_Player_removed")
 
 func on_Player_added(player : Player) -> void:

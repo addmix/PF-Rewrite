@@ -1,5 +1,4 @@
 extends KinematicBody
-
 class_name Character
 
 #general data
@@ -26,6 +25,7 @@ onready var Head : Spatial = $Smoothing/RotationHelper/Head
 onready var WeaponController : Spatial = $Smoothing/RotationHelper/Head/WeaponController
 onready var Smoothing = $Smoothing/RotationHelper/Head/Smoothing
 onready var _Camera : Camera = $Smoothing/RotationHelper/Head/Camera
+onready var FootController = $Smoothing/RotationHelper/FootController
 
 #control finess
 signal camera_movement
@@ -36,10 +36,12 @@ export var camera_min_angle := -85
 export var camera_sensitiviy := Vector2(.2, .2)
 
 #skeleton and IK stuff
-onready var LeftHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftHandIK"
-onready var RightHandIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightHandIK"
-onready var LeftLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/LeftLegIK"
-onready var RightLegIK : SkeletonIK = $"Smoothing/RotationHelper/Player/metarig/Skeleton/RightLegIK"
+onready var _Skeleton : HumanoidSkeleton = $Smoothing/RotationHelper/Skeleton
+var IKs := []
+var LeftHandIK : SkeletonIK
+var RightHandIK : SkeletonIK
+var LeftLegIK : SkeletonIK
+var RightLegIK : SkeletonIK
 
 func _ready() -> void:
 	set_physics_process(false)
@@ -61,11 +63,33 @@ func deferred() -> void:
 	set_process(true)
 
 func ready_ik() -> void:
+	IKs = _Skeleton.setup_ik()
+	
+	LeftHandIK = IKs[0]
+	RightHandIK = IKs[1]
+	LeftLegIK = IKs[2]
+	RightLegIK = IKs[3]
+	
+	LeftHandIK.use_magnet = true
+	LeftHandIK.magnet = Vector3(2, 2, 0.4)
+	
+	RightHandIK.use_magnet = true
+	RightHandIK.magnet = Vector3(-2, 1, 0.2)
+	
+	LeftLegIK.use_magnet = true
+	LeftLegIK.magnet = Vector3(.5, .5, 3)
+	
+	RightLegIK.use_magnet = true
+	RightLegIK.magnet = Vector3(-.5, .5, 3)
+	
+	LeftLegIK.target_node = FootController.left.get_path()
+	RightLegIK.target_node = FootController.right.get_path()
+	
 	#branchless set IK precision
 	LeftHandIK.max_iterations = 20 * int(is_network_master()) + 4 * int(!is_network_master())
 	RightHandIK.max_iterations = 20 * int(is_network_master()) + 4 * int(!is_network_master())
-	LeftLegIK.max_iterations = 5 * int(is_network_master()) + 3 * int(!is_network_master())
-	RightLegIK.max_iterations = 5 * int(is_network_master()) + 3 * int(!is_network_master())
+	LeftLegIK.max_iterations = 3 * int(is_network_master()) + 3 * int(!is_network_master())
+	RightLegIK.max_iterations = 3 * int(is_network_master()) + 3 * int(!is_network_master())
 	
 	update_ik()
 	
@@ -75,10 +99,14 @@ func ready_ik() -> void:
 func start_ik() -> void:
 	LeftHandIK.start()
 	RightHandIK.start()
+	LeftLegIK.start()
+	RightLegIK.start()
 
 func stop_ik() -> void:
 	LeftHandIK.stop()
 	RightHandIK.stop()
+	LeftLegIK.stop()
+	RightLegIK.stop()
 
 func update_ik() -> void:
 	#set IK target
@@ -88,6 +116,8 @@ func update_ik() -> void:
 	start_ik()
 
 
+# warning-ignore:unused_argument
+# warning-ignore:unused_argument
 func hit(bullet, part : Area) -> void:
 #	print("hit")
 	pass
@@ -239,9 +269,9 @@ func process_springs(delta : float) -> void:
 	$CollisionShape.shape.height = capsule_height
 	$CollisionShape.transform.origin.y = capsule_y
 	
-	$Smoothing/RotationHelper/Player.transform.origin.y = body_y
-	$Smoothing/RotationHelper/Player.transform.origin.z = body_z
-	$Smoothing/RotationHelper/Player.rotation_degrees.x = body_angle
+	_Skeleton.transform.origin.y = body_y
+	_Skeleton.transform.origin.z = body_z
+	_Skeleton.rotation_degrees.x = body_angle
 	
 	Head.transform.origin.y = head_y
 	Head.transform.origin.z = head_z
@@ -496,6 +526,7 @@ var delta_pos := Vector3.ZERO
 var last_pos := Vector3.ZERO
 var current_pos := Vector3.ZERO
 
+# warning-ignore:unused_argument
 func set_delta_pos(delta : float) -> void:
 	current_pos = get_global_transform().origin
 	#not normalized to time
@@ -562,6 +593,7 @@ func process_movement(delta : float) -> void:
 	velocity -= velocity.normalized() * 0.5 * air_density * (velocity * velocity) * drag_coefficient * 1.5
 	
 	#keeps on ground so that it works
+# warning-ignore:return_value_discarded
 	move_and_slide(Vector3(0, -.1, 0), Vector3(0, 1, 0), true, 1)
 	
 	if is_network_master():
@@ -685,5 +717,13 @@ func _on_WeaponController_weapon_changed(weapon : Spatial) -> void:
 	RightHandIK.start()
 
 
-func _on_AirMachine_jump():
+func _on_AirMachine_jump() -> void:
 	velocity.y += 10
+
+func _on_Skeleton_hit(projectile : Projectile, part : BodyPart) -> void:
+	var damage := calculate_damage(projectile, part)
+	health -= damage
+
+func calculate_damage(projectile : Projectile, part : BodyPart) -> float:
+	var damage : float = projectile.weapon.data["Ballistics"]["Damage"] * projectile.weapon.data["Ballistics"][part.name]
+	return damage

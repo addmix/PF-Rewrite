@@ -130,6 +130,7 @@ func load_game() -> void:
 	resource = Gamemodes.load_gamemode_script(game_data["mode"])
 	GamemodeInstance.set_script(resource)
 	
+# warning-ignore:return_value_discarded
 	GamemodeInstance.connect("teams_created", self, "on_teams_created")
 	#initialize gamemode
 	GamemodeInstance.init()

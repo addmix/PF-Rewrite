@@ -1,5 +1,6 @@
 extends Node
 
+# warning-ignore:unused_signal
 signal jump
 onready var character : KinematicBody = get_parent()
 

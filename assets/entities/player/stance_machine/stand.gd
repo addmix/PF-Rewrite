@@ -1,5 +1,6 @@
 extends Node
 
+# warning-ignore:unused_signal
 signal change_state
 var character : KinematicBody
 
@@ -21,5 +22,6 @@ func unhandled_input(event : InputEvent) -> void:
 		call_deferred("emit_signal", "change_state", "Prone")
 		get_tree().set_input_as_handled()
 
+# warning-ignore:unused_argument
 func process(delta : float) -> void:
 	pass

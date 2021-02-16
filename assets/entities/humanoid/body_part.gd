@@ -1,9 +1,11 @@
 extends BoneAttachment
 class_name BodyPart
 
+enum BodyEnum {HEAD, CHEST, WAIST, HIPS, BICEP, FOREARM, HAND, THIGH, SHIN, FOOT}
+
 signal hit
 
-export(HumanoidSkeleton.BodyEnum) var body_enum = 0
+export(BodyEnum) var body_enum = 0
 
 onready var area : Area = $Area
 

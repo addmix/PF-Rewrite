@@ -17,6 +17,7 @@ func unhandled_input(event : InputEvent) -> void:
 		call_deferred("emit_signal", "change_state", "Sprint")
 		get_tree().set_input_as_handled()
 
+# warning-ignore:unused_argument
 func process(delta : float) -> void:
 	if character.movement_spring.target.length() < 0.05:
 		emit_signal("change_state", "Idle")

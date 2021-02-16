@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Assets/Weapons/Carbines/M4A1/M4A1.gltf" type="PackedScene" id=1]
 [ext_resource path="res://assets/weapons/boilerplates/equip_machine/EquipMachine.gd" type="Script" id=2]
@@ -26,6 +26,12 @@
 [ext_resource path="res://assets/weapons/boilerplates/aim_machine/sprint.gd" type="Script" id=24]
 [ext_resource path="res://assets/weapons/boilerplates/aim_machine/aim.gd" type="Script" id=25]
 [ext_resource path="res://assets/attachments/sights/debug.tscn" type="PackedScene" id=26]
+[ext_resource path="res://assets/weapons/carbines/m4a1/m4a11.tres" type="Material" id=27]
+[ext_resource path="res://assets/weapons/carbines/m4a1/black_metal.material" type="Material" id=28]
+[ext_resource path="res://assets/weapons/carbines/m4a1/magmetal.material" type="Material" id=29]
+[ext_resource path="res://assets/weapons/carbines/m4a1/boltrelease.tres" type="Animation" id=30]
+[ext_resource path="res://assets/weapons/carbines/m4a1/magazinein.tres" type="Animation" id=31]
+[ext_resource path="res://assets/weapons/carbines/m4a1/magazineout.tres" type="Animation" id=32]
 
 [node name="M4A1" instance=ExtResource( 1 )]
 script = ExtResource( 7 )
@@ -33,15 +39,48 @@ script = ExtResource( 7 )
 [node name="Armature" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, -0.0770987, -0.117315 )
 
-[node name="Skeleton" parent="Armature" index="0"]
-bones/17/bound_children = [ NodePath("HandIKL") ]
-bones/18/bound_children = [ NodePath("HandIKR") ]
+[node name="M4A1Barrel" parent="Armature/Skeleton" index="1"]
+material/0 = ExtResource( 27 )
 
 [node name="M4A1Barrel Thread cap" parent="Armature/Skeleton" index="2"]
 visible = false
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Barrel Flash Hider" parent="Armature/Skeleton" index="3"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Lower Reciever Trigger Outlet" parent="Armature/Skeleton" index="6"]
+material/0 = ExtResource( 28 )
 
 [node name="M4A1Front Sight" parent="Armature/Skeleton" index="8"]
 visible = false
+
+[node name="M4A1Stock Adjust Pin" parent="Armature/Skeleton" index="9"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Forward Assist" parent="Armature/Skeleton" index="14"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Upper Reciever Bolt" parent="Armature/Skeleton" index="15"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Lower Reciever Magazine Release" parent="Armature/Skeleton" index="16"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Lower Reciever Trigger" parent="Armature/Skeleton" index="18"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Lower Reciever Pins" parent="Armature/Skeleton" index="19"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Lower Reciever Magazine Release Spring" parent="Armature/Skeleton" index="20"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Lower Reciever Lever" parent="Armature/Skeleton" index="21"]
+material/0 = ExtResource( 27 )
+
+[node name="M4A1Lower Reciever Fire Selector" parent="Armature/Skeleton" index="22"]
+material/0 = ExtResource( 27 )
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="23"]
 transform = Transform( 1, 1.42109e-14, -2.38419e-07, 2.38419e-07, -8.9407e-08, 1, 0, -1, -5.96046e-08, -0.115257, -0.221117, 0.0495666 )
@@ -50,6 +89,9 @@ bone_name = "hand_ik_l"
 [node name="HandIKR" type="BoneAttachment" parent="Armature/Skeleton" index="24"]
 transform = Transform( 1, 0, 0, 0, -0.368812, 0.929504, 0, -0.929504, -0.368812, -1.21196e-16, -0.062671, 0.626752 )
 bone_name = "hand_ik_r"
+
+[node name="M4A1Magazine" parent="Armature/Skeleton" index="26"]
+material/0 = ExtResource( 29 )
 
 [node name="M4A1Rear Sight Elevation" parent="Armature/Skeleton" index="28"]
 visible = false
@@ -65,6 +107,9 @@ visible = false
 
 [node name="M4A1Rear Sight" parent="Armature/Skeleton" index="32"]
 visible = false
+
+[node name="M4A1Upper Reciever Dust Cover Hinge" parent="Armature/Skeleton" index="35"]
+material/0 = ExtResource( 27 )
 
 [node name="Barrel" type="Position3D" parent="." index="1"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11753, -1.11467 )
@@ -150,6 +195,11 @@ script = ExtResource( 24 )
 
 [node name="Sprint" type="Position3D" parent="AimMachine/Sprint" index="0"]
 transform = Transform( 0.962242, 0.272196, 0, -0.272196, 0.962242, 0, 0, 0, 1, -0.317993, 0.644791, 0.615256 )
+
+[node name="AnimationPlayer" parent="." index="7"]
+anims/bolt_release = ExtResource( 30 )
+anims/magazine_in = ExtResource( 31 )
+anims/magazine_out = ExtResource( 32 )
 
 [node name="Sight" type="Position3D" parent="." index="8"]
 transform = Transform( 1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -2.98023e-08, 0.21983, 0.130232 )

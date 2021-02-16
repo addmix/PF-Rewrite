@@ -22,6 +22,7 @@ func unhandled_input(event : InputEvent) -> void:
 		index = index % nodes.size()
 		get_tree().set_input_as_handled()
 
+# warning-ignore:unused_argument
 func process(delta : float) -> void:
 	if gun.WeaponController.character.MovementMachine.current_state == "Sprint":
 		emit_signal("change_state", "Sprint")

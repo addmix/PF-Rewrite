@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://assets/entities/test_dummy/skeleton.gd" type="Script" id=1]
+[ext_resource path="res://assets/entities/humanoid/skeleton.gd" type="Script" id=1]
 [ext_resource path="res://assets/entities/test_dummy/dummy_body.gd" type="Script" id=2]
 [ext_resource path="res://assets/entities/humanoid/body_part.gd" type="Script" id=3]
 [ext_resource path="res://assets/entities/humanoid/body_part_area.gd" type="Script" id=4]
@@ -501,3 +501,6 @@ script = ExtResource( 2 )
 [node name="CollisionShape" type="CollisionShape" parent="FootR/Area"]
 transform = Transform( 1, 0, -3.87913e-17, 0, 1, 0, -3.87913e-17, 0, 1, 0, 0.000720441, 0 )
 shape = SubResource( 12 )
+
+[node name="SkeletonIK" type="SkeletonIK" parent="."]
+process_priority = 1

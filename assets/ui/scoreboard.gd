@@ -54,6 +54,7 @@ func remove_from_team(player) -> void:
 	#remove from scoreboard
 	entries[player.player_id].queue_free()
 	#remove from dictionary
+# warning-ignore:return_value_discarded
 	entries.erase(player.player_id)
 
 func update_kills() -> void:

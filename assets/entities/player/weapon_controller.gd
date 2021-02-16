@@ -4,7 +4,9 @@ extends Spatial
 var character : KinematicBody
 
 #signals
+# warning-ignore:unused_signal
 signal shot_fired
+# warning-ignore:unused_signal
 signal set_process
 
 onready var base_offset := transform.origin
@@ -45,6 +47,7 @@ var delta_rot := Vector3.ZERO
 
 func process_recoil(delta : float) -> void:
 	
+# warning-ignore:unused_variable
 	var camera_transform = character._Camera.global_transform.basis
 	
 	#stackable vars

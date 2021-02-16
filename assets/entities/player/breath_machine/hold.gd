@@ -14,6 +14,7 @@ func unhandled_input(event : InputEvent) -> void:
 		emit_signal("change_state", "Release")
 		get_tree().set_input_as_handled()
 
+# warning-ignore:unused_argument
 func process(delta : float) -> void:
 	if character.MovementMachine.current_state != "Idle":
 		emit_signal("change_state", "Release")

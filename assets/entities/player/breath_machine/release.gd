@@ -15,5 +15,6 @@ func unhandled_input(event : InputEvent) -> void:
 		emit_signal("change_state", "Hold")
 		get_tree().set_input_as_handled()
 
+# warning-ignore:unused_argument
 func process(delta : float) -> void:
 	pass

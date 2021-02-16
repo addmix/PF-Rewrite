@@ -39,7 +39,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://assets/entities/humanoid/body_part.gd"
 }, {
-"base": "Spatial",
+"base": "Projectile",
 "class": "Bullet",
 "language": "GDScript",
 "path": "res://assets/entities/projectiles/bullets/bullet_class.gd"
@@ -102,7 +102,7 @@ _global_script_classes=[ {
 "base": "Skeleton",
 "class": "HumanoidSkeleton",
 "language": "GDScript",
-"path": "res://assets/entities/test_dummy/skeleton.gd"
+"path": "res://assets/entities/humanoid/skeleton.gd"
 }, {
 "base": "Reference",
 "class": "Icons",
@@ -118,6 +118,11 @@ _global_script_classes=[ {
 "class": "InspectorControls",
 "language": "GDScript",
 "path": "res://addons/godot-next/global/inspector_controls.gd"
+}, {
+"base": "Spatial",
+"class": "Label3D",
+"language": "GDScript",
+"path": "res://addons/SIsilicon.3d.text/label_3d.gd"
 }, {
 "base": "Reference",
 "class": "MessageDispatcher",
@@ -143,6 +148,11 @@ _global_script_classes=[ {
 "class": "ProjectTools",
 "language": "GDScript",
 "path": "res://addons/godot-next/global/project_tools.gd"
+}, {
+"base": "Spatial",
+"class": "Projectile",
+"language": "GDScript",
+"path": "res://assets/entities/projectiles/projectile.gd"
 }, {
 "base": "Reference",
 "class": "PropertyInfo",
@@ -224,10 +234,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/3d/vector_display_3d.gd"
 }, {
-"base": "Bullet",
-"class": "b556x45NATO",
+"base": "Spatial",
+"class": "Weapon",
 "language": "GDScript",
-"path": "res://assets/entities/projectiles/bullets/556/556.gd"
+"path": "res://assets/weapons/weapon.gd"
+}, {
+"base": "Bullet",
+"class": "b556x45",
+"language": "GDScript",
+"path": "res://assets/entities/projectiles/bullets/556x45/556x45.gd"
+}, {
+"base": "Bullet",
+"class": "b9x19",
+"language": "GDScript",
+"path": "res://assets/entities/projectiles/bullets/9x19/9x19.gd"
 } ]
 _global_script_class_icons={
 "Array2D": "",
@@ -252,11 +272,13 @@ _global_script_class_icons={
 "Icons": "",
 "Inflector": "",
 "InspectorControls": "",
+"Label3D": "",
 "MessageDispatcher": "",
 "MessageDispatcherWrapper": "",
 "PhysicsLayers": "",
 "Player": "",
 "ProjectTools": "",
+"Projectile": "",
 "PropertyInfo": "",
 "PropertyInfoFactory": "",
 "ResourceArray": "",
@@ -273,7 +295,9 @@ _global_script_class_icons={
 "Variant": "",
 "VectorDisplay2D": "",
 "VectorDisplay3D": "",
-"b556x45NATO": ""
+"Weapon": "",
+"b556x45": "",
+"b9x19": ""
 }
 
 [application]
@@ -317,7 +341,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "godot-next", "gut", "smoothing" )
+enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "smoothing" )
 
 [input]
 

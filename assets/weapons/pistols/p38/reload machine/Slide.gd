@@ -3,6 +3,7 @@ extends Node
 # warning-ignore:unused_signal
 signal change_state
 var stopped := false
+# warning-ignore:unused_argument
 func enter(prev : String) -> void:
 	get_parent().get_parent()._AnimationPlayer.play("Slide", 0.3)
 

@@ -1,9 +1,10 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://maps/desert storm/Materials/desert storm.gltf" type="PackedScene" id=1]
 [ext_resource path="res://assets/materials/sand.tres" type="Material" id=2]
 [ext_resource path="res://maps/desert storm/desert storm.gd" type="Script" id=3]
 [ext_resource path="res://maps/desert storm/area.gd" type="Script" id=4]
+[ext_resource path="res://assets/entities/test_dummy/dummy.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Materials/Building.tres" type="Material" id=6]
 
 [sub_resource type="ConcavePolygonShape" id=1]
@@ -314,4 +315,7 @@ material = SubResource( 23 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="1"]
 shape = SubResource( 24 )
+
+[node name="Dummy" parent="." index="35" instance=ExtResource( 5 )]
+transform = Transform( -0.895921, 0, -0.444213, 0, 1, 0, 0.444213, 0, -0.895921, 141.198, 97.7941, 156.707 )
 [connection signal="body_entered" from="Area" to="Area" method="_on_Area_body_entered"]

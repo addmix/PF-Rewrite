@@ -23,8 +23,8 @@ onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
 var WeaponController : Spatial
 
 #effects
-var bullet = preload("res://assets/entities/bullets/556/556.tscn")
-var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
+var bullet_script : Script = load("res://assets/entities/projectiles/bullets/556x45/556x45.gd")
+var muzzle_flash : PackedScene = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
 
 func _ready():
 	#play idle animation
@@ -102,7 +102,9 @@ func _on_shotFired() -> void:
 #	$Barrel.add_child(instance)
 	
 	#bullet
-	instance = bullet.instance()
+	instance = Spatial.new()
+	instance.set_script(bullet_script)
+	instance.weapon = self
 	instance.transform.origin = $Barrel.get_global_transform().origin
 	instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
 	$"/root".add_child(instance)
@@ -126,12 +128,24 @@ export var data := {
 		"Path": "res://Assets/Weapons/Carbines/M4A1/",
 	},
 	"Ballistics": {
-		"Head multiplier": float(1.5),
-		"Torso multipler": float(1.0),
-		"Limb multiplier": float(.8),
+		"Head": float(2.0),
+		"Chest": float(1.4),
+		"Waist": float(1.1),
+		"Hips": float(.9),
+		"BicepL": float(.9),
+		"BicepR": float(.9),
+		"ForearmL": float(.7),
+		"ForearmR": float(.7),
+		"HandL": float(.5),
+		"HandR": float(.5),
+		"ThighL": float(1.2),
+		"ThighR": float(1.2),
+		"ShinL": float(.6),
+		"ShinR": float(.6),
+		"FootL": float(.3),
+		"FootR": float(.3),
 		
-		"Damage range": Vector2(40, 90),
-		"Damage": Vector2(32, 24),
+		"Damage": float(32.0),
 		
 		"Velocity": float(2200.0),
 		"Velocity variance": float(100.0),
@@ -192,12 +206,12 @@ export var data := {
 		
 		#rotation
 		"Camera rot d": float(.8),
-		"Camera rot s": float(10.0),
+		"Camera rot s": float(16.0),
 		
 		"Min camera rot": Vector3(-.1, -.1, 0),
 		"Max camera rot": Vector3(.2, .1, 0),
-		"Min camera rot force": Vector3(.1, 0, 0),
-		"Max camera rot force": Vector3(.3, 0, 0),
+		"Min camera rot force": Vector3(.35, -.3, 0),
+		"Max camera rot force": Vector3(.55, .3, 0),
 		
 		#translation
 		"Camera pos d": float(.8),
@@ -205,8 +219,8 @@ export var data := {
 		
 		"Min camera pos": Vector3.ZERO,
 		"Max camera pos": Vector3(2, 2, 2),
-		"Min camera pos force": Vector3.ZERO,
-		"Max camera pos force": Vector3.ZERO,
+		"Min camera pos force": Vector3(0, .01, -.05),
+		"Max camera pos force": Vector3(0, .025, -.05),
 		
 		
 		
@@ -225,17 +239,17 @@ export var data := {
 		
 		
 		#force
-		"Min pos force": Vector3(-1.2, .6, 2.5),
-		"Max pos force": Vector3(1.6, 1.2, 4.0),
-		"Min rot force": Vector3(.6, -0.8, 0),
-		"Max rot force": Vector3(2.5, 1, 0),
+		"Min pos force": Vector3(-1, 1.2, .2),
+		"Max pos force": Vector3(1.3, 1.6, .5),
+		"Min rot force": Vector3(-.8, -.8, -.4),
+		"Max rot force": Vector3(1.2, 1.1, .4),
 		
 		#recoil spring settings
 		"Recoil pos s": float(12.0),
-		"Recoil pos d": float(.4),
+		"Recoil pos d": float(.5),
 		
-		"Recoil rot s": float(13.0),
-		"Recoil rot d": float(.3),
+		"Recoil rot s": float(12.0),
+		"Recoil rot d": float(.4),
 		
 		
 		#sway
@@ -253,7 +267,7 @@ export var data := {
 		"Pos sway s": float(14.0),
 		"Pos sway d": float(.6),
 		
-		"Rot sway": Vector3(.065, .065, 0),
+		"Rot sway": Vector3(.035, .035, 0),
 		"Rot sway s": float(12.0),
 		"Rot sway d": float(.7),
 		
@@ -362,12 +376,12 @@ var multi := {
 		"Recoil rot s": float(1.3),
 		
 		"Pos sway": Vector3(.2, .2, 1),
-		"Pos sway s": float(1.2),
-		"Pos sway d": float(.8),
+		"Pos sway s": float(1.1),
+		"Pos sway d": float(.9),
 		
 		"Rot sway": Vector3(.4, .4, 0),
-		"Rot sway s": float(0.85),
-		"Rot sway d": float(.7),
+		"Rot sway s": float(0.95),
+		"Rot sway d": float(.9),
 		
 		"Pos": Vector3(0, 0, 0),
 		"Rot": Vector3(0, 0, 0),

@@ -2,12 +2,15 @@ extends Node
 
 func _ready() -> void:
 	var ints := get_random_ints(1000)
+# warning-ignore:return_value_discarded
 	branchless_exclude_by_value(ints, 9)
+# warning-ignore:return_value_discarded
 	exclude_by_value(ints, 9)
 
 static func get_random_ints(amount : int) -> Array:
 	var array := []
 	
+# warning-ignore:unused_variable
 	for i in range(amount):
 		array.append(randi() % 10)
 	

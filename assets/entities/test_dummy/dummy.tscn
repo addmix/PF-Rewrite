@@ -17,3 +17,4 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.35
 shape = SubResource( 1 )
 
 [node name="Skeleton" parent="." instance=ExtResource( 1 )]
+[connection signal="hit" from="Skeleton" to="." method="_on_Skeleton_hit"]

@@ -2,6 +2,7 @@ extends Node
 
 onready var player = get_parent()
 
+# warning-ignore:unused_signal
 signal change_state
 
 onready var gunMachine = get_parent().get_node("GunMachine")

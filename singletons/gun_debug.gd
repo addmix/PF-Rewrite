@@ -7,6 +7,7 @@ export var update := false setget set_update
 func _ready() -> void:
 	set_weapon("M4A1")
 
+# warning-ignore:unused_argument
 func set_update(value : bool) -> void:
 	update_data()
 #	update = false

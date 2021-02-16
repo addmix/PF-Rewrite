@@ -65,39 +65,24 @@ target = NodePath("../WeaponController")
 
 [node name="Position3D" type="Position3D" parent="Smoothing/RotationHelper/Head"]
 
-[node name="Foot controller" type="Spatial" parent="Smoothing/RotationHelper"]
+[node name="FootController" type="Spatial" parent="Smoothing/RotationHelper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.4, 0 )
 script = ExtResource( 1 )
 
-[node name="LSphere" type="Spatial" parent="Smoothing/RotationHelper/Foot controller"]
+[node name="LSphere" type="Spatial" parent="Smoothing/RotationHelper/FootController"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.5, 0 )
 
-[node name="LeftLeg" type="Position3D" parent="Smoothing/RotationHelper/Foot controller/LSphere"]
+[node name="LeftLeg" type="Position3D" parent="Smoothing/RotationHelper/FootController/LSphere"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.5, 0 )
 
-[node name="RSphere" type="Spatial" parent="Smoothing/RotationHelper/Foot controller"]
+[node name="RSphere" type="Spatial" parent="Smoothing/RotationHelper/FootController"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.5, 0 )
 
-[node name="RightLeg" type="Position3D" parent="Smoothing/RotationHelper/Foot controller/RSphere"]
+[node name="RightLeg" type="Position3D" parent="Smoothing/RotationHelper/FootController/RSphere"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.5, 0 )
 
 [node name="Skeleton" parent="Smoothing/RotationHelper" instance=ExtResource( 19 )]
-bones/0/bound_children = [ NodePath("Hips") ]
-bones/1/bound_children = [ NodePath("Waist") ]
-bones/2/bound_children = [ NodePath("Chest") ]
-bones/4/bound_children = [ NodePath("UpperArmL") ]
-bones/5/bound_children = [ NodePath("ForearmL") ]
-bones/6/bound_children = [ NodePath("HandL") ]
-bones/8/bound_children = [ NodePath("UpperArmR") ]
-bones/9/bound_children = [ NodePath("ForearmR") ]
-bones/10/bound_children = [ NodePath("HandR") ]
-bones/11/bound_children = [ NodePath("Head") ]
-bones/12/bound_children = [ NodePath("ThighL") ]
-bones/13/bound_children = [ NodePath("ShinL") ]
-bones/14/bound_children = [ NodePath("FootL") ]
-bones/15/bound_children = [ NodePath("ThighR") ]
-bones/16/bound_children = [ NodePath("ShinR") ]
-bones/17/bound_children = [ NodePath("FootR") ]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, -4.45, 0 )
 
 [node name="StanceMachine" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -206,6 +191,7 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "N/A"
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_camera_movement"]
+[connection signal="loaded" from="." to="Smoothing/RotationHelper/FootController" method="_on_Character_loaded"]
 [connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_shot_fired"]
 [connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_shot_fired"]
 [connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_update_accuracy"]
@@ -214,4 +200,5 @@ text = "N/A"
 [connection signal="weapon_changed" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_weapon_changed"]
 [connection signal="set_process" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_set_process"]
 [connection signal="shot_fired" from="Smoothing/RotationHelper/Head/WeaponController" to="Smoothing/RotationHelper/Head/Camera" method="_on_WeaponController_shot_fired"]
+[connection signal="hit" from="Smoothing/RotationHelper/Skeleton" to="." method="_on_Skeleton_hit"]
 [connection signal="jump" from="AirMachine" to="." method="_on_AirMachine_jump"]

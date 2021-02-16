@@ -1,6 +1,7 @@
 extends Node
 
 signal player_added
+# warning-ignore:unused_signal
 signal player_removed
 
 var player = preload("res://assets/entities/player/Player.tscn")
@@ -52,6 +53,7 @@ func on_peer_connected(id : int) -> void:
 
 func on_peer_disconnected(id : int) -> void:
 	players[id].queue_free()
+# warning-ignore:return_value_discarded
 	players.erase(id)
 
 #on server

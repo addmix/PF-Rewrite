@@ -22,8 +22,8 @@ onready var _AnimationPlayer : AnimationPlayer = $AnimationPlayer
 var WeaponController : Spatial
 
 #effects
-var bullet = preload("res://assets/entities/bullets/556/556.tscn")
-var muzzle_flash = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
+var bullet_script : Script = load("res://assets/entities/projectiles/bullets/9x19/9x19.gd")
+var muzzle_flash : PackedScene = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
 
 func _ready():
 	#play idle animation
@@ -102,7 +102,8 @@ func _on_shotFired():
 #	$Barrel.add_child(instance)
 	
 	#bullet
-	instance = bullet.instance()
+	instance = Spatial.new()
+	instance.set_script(bullet_script)
 	instance.transform.origin = $Barrel.get_global_transform().origin
 	instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
 	$"/root".add_child(instance)

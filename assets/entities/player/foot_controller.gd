@@ -3,7 +3,7 @@ extends Spatial
 var radius : float = 0.75
 var stride_size := Vector3(0, .5, 1)
 
-var character : KinematicBody
+var character : Character
 onready var WeaponController : Spatial = get_parent().get_node("Head/WeaponController")
 
 onready var l : Spatial = $LSphere
@@ -13,12 +13,6 @@ onready var right : Position3D = $RSphere/RightLeg
 
 func _ready() -> void:
 	set_physics_process(false)
-	call_deferred("deferred")
-
-func deferred() -> void:
-	character = get_parent().get_parent().get_parent()
-#	print(character.delta_pos)
-	call_deferred("set_physics_process", true)
 
 var distance := 0.0
 func _physics_process(_delta : float) -> void:
@@ -44,3 +38,8 @@ func _physics_process(_delta : float) -> void:
 	r.translation.y = radius
 	left.translation.z = -radius
 	right.translation.z = radius
+
+
+func _on_Character_loaded(c : Character) -> void:
+	character = c
+	call_deferred("set_physics_process", true)

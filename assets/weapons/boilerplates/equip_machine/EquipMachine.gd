@@ -1,6 +1,8 @@
 extends Node
 
+# warning-ignore:unused_signal
 signal equipped
+# warning-ignore:unused_signal
 signal dequipped
 
 var states := {}

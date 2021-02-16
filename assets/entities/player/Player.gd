@@ -11,12 +11,15 @@ var player_id : int
 var team : int
 
 var kills := 0
+# warning-ignore:unused_signal
 signal update_kills
 var deaths := 0
 signal update_deaths
 var assists := 0
+# warning-ignore:unused_signal
 signal update_assists
 var score := 0.0
+# warning-ignore:unused_signal
 signal update_score
 
 #nodes
