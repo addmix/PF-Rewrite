@@ -11,3 +11,5 @@ func resize() -> void:
 	var text_min_dimension := min(safe_area_size.x, safe_area_size.y)
 	$TextureRect.rect_size = Vector2(text_min_dimension, text_min_dimension)
 	$TextureRect.rect_position = Vector2(safe_area_size.x / 2 - text_min_dimension / 2, 0)
+	
+	$TextureRect2.rect_position = safe_area_size / 2 - $TextureRect2.rect_size / 2

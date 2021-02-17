@@ -2,20 +2,17 @@
 
 [ext_resource path="res://assets/particles/m4a1_muzzle_flash.tres" type="Material" id=1]
 [ext_resource path="res://assets/particles/m4a1_muzzle_flash.gd" type="Script" id=2]
+[ext_resource path="res://assets/materials/m4a1_muzzle_flash_material.tres" type="Material" id=3]
 
-[sub_resource type="SpatialMaterial" id=1]
-vertex_color_use_as_albedo = true
-albedo_color = Color( 1, 0.760784, 0.305882, 1 )
-
-[sub_resource type="SphereMesh" id=2]
-radius = 0.02
-height = 0.2
+[sub_resource type="SphereMesh" id=1]
+radius = 0.1
+height = 0.5
 radial_segments = 10
 rings = 6
 
 [node name="Particles" type="Particles"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.130763 )
-material_override = SubResource( 1 )
+material_override = ExtResource( 3 )
 emitting = false
 amount = 4
 lifetime = 0.05
@@ -26,5 +23,5 @@ randomness = 0.48
 visibility_aabb = AABB( -1.48834, -0.992714, -1.63861, 2.97669, 1.98543, 3.27721 )
 draw_order = 2
 process_material = ExtResource( 1 )
-draw_pass_1 = SubResource( 2 )
+draw_pass_1 = SubResource( 1 )
 script = ExtResource( 2 )

@@ -2,30 +2,22 @@ extends Node
 
 const path : String = "res://assets/particles/"
 
+var particles := [
+	"m4a1_muzzle_flash.tres",
+]
+
+var frame_count := 0
+func _physics_process(delta : float) -> void:
+	frame_count += 1
+	if frame_count > 4:
+		queue_free()
+
 func load_particles() -> void:
-	#init directory to path with all particles
-	var dir := Directory.new()
-# warning-ignore:return_value_discarded
-	dir.open(path)
-	
-# warning-ignore:return_value_discarded
-	dir.list_dir_begin(true, true)
-	var value = dir.get_next()
-	
-	#loop through all files
-	while value != "":
-		#only load scenes
-		if !value.ends_with(".tscn"):
-			value = dir.get_next()
-			continue
+	for particle in particles:
+		var res = load(path + particle)
+		var particles = Particles.new()
+		particles.process_material = res
+		particles.set_one_shot(true)
 		
-		var res = load(path + "/" + value)
-		var particle = Particles.new()
-		particle.process_material = res
-		particle.set_one_shot(true)
-		particle.emitting = true
-		self.add_child(particle)
-		
-		value = dir.get_next()
-	
-	queue_free()
+		self.add_child(particles)
+		particles.emitting = true

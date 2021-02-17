@@ -322,7 +322,8 @@ _global_script_class_icons={
 
 config/name="Pf Rewrite"
 run/main_scene="res://gameloader/gameloader.tscn"
-boot_splash/image="res://assets/warning_low_tides_logos/wlt2.png"
+boot_splash/image="res://assets/warning_low_tides_logos/logo.png"
+boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
 
@@ -337,23 +338,21 @@ volume/voice_volume=0.0
 
 [autoload]
 
+Server="*res://server/server.gd"
 ModLoader="*res://gameloader/resource_loader.gd"
+ParticleLoader="*res://gameloader/particleloader.gd"
 Maps="*res://singletons/maps.gd"
 Gamemodes="*res://singletons/gamemodes.gd"
-FileUtils="*res://utils/fileutils.gd"
-MathUtils="*res://utils/mathutils.gd"
-Server="*res://server/server.gd"
-Players="*res://singletons/players.gd"
-NodeUtils="*res://utils/nodeutils.gd"
 Weapons="*res://singletons/weapons.gd"
-ParticleLoader="*res://gameloader/particleloader.gd"
+Players="*res://singletons/players.gd"
 GunDebug="*res://singletons/gun_debug.gd"
 AlgorithmUtils="*res://utils/algorithmutils.gd"
+MathUtils="*res://utils/mathutils.gd"
+FileUtils="*res://utils/fileutils.gd"
+NodeUtils="*res://utils/nodeutils.gd"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
 window/vsync/use_vsync=false
 window/stretch/aspect="expand"
 

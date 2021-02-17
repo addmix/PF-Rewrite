@@ -27,8 +27,8 @@ func on_shot_fired() -> void:
 	instance.pitch_scale += rand_range(-1, 1) * .02
 	instance.play(0)
 	
-#	instance = muzzle_flash.instance()
-#	$Barrel.add_child(instance)
+	instance = muzzle_flash.instance()
+	$Barrel.add_child(instance)
 	
 	#bullet
 	instance = Spatial.new()

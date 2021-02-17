@@ -112,7 +112,7 @@ remote func return_game_data(data : Dictionary) -> void:
 func load_game() -> void:
 	#game related stuff
 	#load map
-	var resource := Maps.load_map(game_data["map"])
+	var resource : Resource = Maps.load_map(game_data["map"])
 	MapInstance = resource.instance()
 	$"/root".add_child(MapInstance, true)
 	
@@ -206,7 +206,7 @@ func change_mode(mode : String) -> void:
 
 #loads map
 func load_map() -> void:
-	var resource := Maps.load_map(game_data["map"])
+	var resource : Resource = Maps.load_map(game_data["map"])
 	var scene : Spatial = resource.instance()
 	MapInstance = scene
 	$"/root".add_child(scene, true)
