@@ -18,6 +18,8 @@ func _init() -> void:
 
 func on_shot_fired() -> void:
 	update_ammo()
+	
+	print(get_chamber(), get_magazine(), get_reserve())
 	#muzzle flash
 	var instance
 	instance = gunshot.instance()
