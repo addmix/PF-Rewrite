@@ -62,7 +62,7 @@ _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "Character",
 "language": "GDScript",
-"path": "res://assets/entities/player/character.gd"
+"path": "res://assets/entities/player/character/character.gd"
 }, {
 "base": "Reference",
 "class": "ClassType",

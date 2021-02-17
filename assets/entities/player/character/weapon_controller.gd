@@ -12,18 +12,15 @@ signal set_process
 onready var base_offset := transform.origin
 onready var aim_node : Position3D = find_node("Aim")
 
-func _ready() -> void:
+func _init() -> void:
 	set_process(false)
 	set_physics_process(false)
-	
-	call_deferred("deferred")
 
-func deferred() -> void:
-	character = get_parent().get_parent().get_parent().get_parent()
+func on_character_loaded(c : Character) -> void:
+	character = c
 	
 	set_process(true)
 	set_physics_process(true)
-
 
 var rotation_delta := Vector3.ZERO
 
@@ -238,7 +235,6 @@ func _on_Character_update_accuracy(new : Dictionary) -> void:
 func _on_Character_shot_fired(direction : Vector3) -> void:
 	recoil_rotation_spring.accelerate(MathUtils.v3lerp(accuracy["Min rot force"], accuracy["Max rot force"], direction))
 	recoil_translation_spring.accelerate(MathUtils.v3lerp(accuracy["Min pos force"], accuracy["Max pos force"], direction))
-
 
 func _on_Character_camera_movement(movement : Vector3) -> void:
 	rotation_delta += movement

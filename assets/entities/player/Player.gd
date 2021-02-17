@@ -23,7 +23,7 @@ var score := 0.0
 signal update_score
 
 #nodes
-onready var character = load("res://assets/entities/player/Character.tscn")
+onready var character = load("res://assets/entities/player/character/character.tscn")
 var character_instance
 
 #signals

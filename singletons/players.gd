@@ -4,7 +4,7 @@ signal player_added
 # warning-ignore:unused_signal
 signal player_removed
 
-var player = preload("res://assets/entities/player/Player.tscn")
+var player = preload("res://assets/entities/player/player.tscn")
 
 #id: data
 var players := {}
