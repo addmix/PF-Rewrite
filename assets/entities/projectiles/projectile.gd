@@ -10,7 +10,7 @@ var trail : Trail3D
 var timer : Timer
 
 var material : Material
-var default_material : Material = preload("res://assets/entities/projectiles/bullets/default_material.tres")
+var default_material = preload("res://assets/entities/projectiles/bullets/default_material.tres")
 
 #when instanced
 func _init() -> void:

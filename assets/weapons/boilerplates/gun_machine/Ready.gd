@@ -2,6 +2,7 @@ extends Node
 
 # warning-ignore:unused_signal
 signal change_state
+# warning-ignore:unused_signal
 signal reset
 
 # warning-ignore:unused_argument

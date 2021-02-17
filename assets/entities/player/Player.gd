@@ -78,7 +78,6 @@ func spawn_deferred() -> void:
 	
 	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
 	character_instance.transform.origin = spawn_point.origin
-	character_instance.rotation.y = spawn_point.basis.get_euler().y
 
 func remove_character() -> void:
 	character_instance.remove_from_group("characters")

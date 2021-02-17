@@ -9,7 +9,7 @@ func enter(prev : String) -> void:
 		#subtract spent bullet
 		get_parent().get_parent().set_chamber(get_parent().get_parent().get_chamber() - 1)
 		#announce shot fired
-		get_parent().get_parent().emit_signal("shotFired")
+		get_parent().get_parent().emit_signal("shot_fired")
 		#firerate delay
 		yield(get_tree().create_timer(.08), "timeout")
 		#change state

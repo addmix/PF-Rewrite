@@ -32,10 +32,28 @@ var current_weapon : Spatial
 
 #springs
 var aim_position_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+
+remote var puppet_aim_pos_p := Vector3.ZERO
+remote var puppet_aim_pos_v := Vector3.ZERO
+remote var puppet_aim_pos_t := Vector3.ZERO
+
 var aim_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 
-var recoil_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+remote var puppet_aim_rot_p := Vector3.ZERO
+remote var puppet_aim_rot_v := Vector3.ZERO
+remote var puppet_aim_rot_t := Vector3.ZERO
+
 var recoil_translation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+
+remote var puppet_recoil_pos_p := Vector3.ZERO
+remote var puppet_recoil_pos_v := Vector3.ZERO
+remote var puppet_recoil_pos_t := Vector3.ZERO
+
+var recoil_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
+
+remote var puppet_recoil_rot_p := Vector3.ZERO
+remote var puppet_recoil_rot_v := Vector3.ZERO
+remote var puppet_recoil_rot_t := Vector3.ZERO
 
 var rotation_sway_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
 var translation_sway_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
@@ -46,6 +64,7 @@ var delta_pos := Vector3.ZERO
 var delta_rot := Vector3.ZERO
 
 func process_recoil(delta : float) -> void:
+	network_springs()
 	
 # warning-ignore:unused_variable
 	var camera_transform = character._Camera.global_transform.basis
@@ -132,6 +151,74 @@ func process_recoil(delta : float) -> void:
 	rotation_delta = Vector3.ZERO
 	
 	movement_speed = s
+
+func network_springs() -> void:
+	if get_tree().is_network_server():
+		if is_network_master():
+			rset_unreliable("puppet_aim_pos_p", aim_position_spring.position)
+			rset_unreliable("puppet_aim_pos_v", aim_position_spring.velocity)
+			rset_unreliable("puppet_aim_pos_t", aim_position_spring.target)
+			
+			rset_unreliable("puppet_aim_rot_p", aim_rotation_spring.position)
+			rset_unreliable("puppet_aim_rot_v", aim_rotation_spring.velocity)
+			rset_unreliable("puppet_aim_rot_t", aim_rotation_spring.target)
+			
+			rset_unreliable("puppet_recoil_pos_p", recoil_translation_spring.position)
+			rset_unreliable("puppet_recoil_pos_v", recoil_translation_spring.velocity)
+			rset_unreliable("puppet_recoil_pos_t", recoil_translation_spring.target)
+			
+			rset_unreliable("puppet_recoil_rot_p", recoil_rotation_spring.position)
+			rset_unreliable("puppet_recoil_rot_v", recoil_rotation_spring.velocity)
+			rset_unreliable("puppet_recoil_rot_t", recoil_rotation_spring.target)
+		else:
+			rset_unreliable("puppet_aim_pos_p", puppet_aim_pos_p)
+			rset_unreliable("puppet_aim_pos_v", puppet_aim_pos_v)
+			rset_unreliable("puppet_aim_pos_t", puppet_aim_pos_t)
+			
+			rset_unreliable("puppet_aim_rot_p", puppet_aim_pos_p)
+			rset_unreliable("puppet_aim_rot_v", puppet_aim_pos_v)
+			rset_unreliable("puppet_aim_rot_t", puppet_aim_pos_t)
+			
+			rset_unreliable("puppet_recoil_pos_p", puppet_recoil_pos_p)
+			rset_unreliable("puppet_recoil_pos_v", puppet_recoil_pos_v)
+			rset_unreliable("puppet_recoil_pos_t", puppet_recoil_pos_t)
+			
+			rset_unreliable("puppet_recoil_rot_p", puppet_recoil_rot_p)
+			rset_unreliable("puppet_recoil_rot_v", puppet_recoil_rot_v)
+			rset_unreliable("puppet_recoil_rot_t", puppet_recoil_rot_t)
+	else:
+		if is_network_master():
+			rset_unreliable_id(1, "puppet_aim_pos_p", aim_position_spring.position)
+			rset_unreliable_id(1, "puppet_aim_pos_v", aim_position_spring.velocity)
+			rset_unreliable_id(1, "puppet_aim_pos_t", aim_position_spring.target)
+			
+			rset_unreliable_id(1, "puppet_aim_rot_p", aim_rotation_spring.position)
+			rset_unreliable_id(1, "puppet_aim_rot_v", aim_rotation_spring.velocity)
+			rset_unreliable_id(1, "puppet_aim_rot_t", aim_rotation_spring.target)
+			
+			rset_unreliable_id(1, "puppet_recoil_pos_p", recoil_translation_spring.position)
+			rset_unreliable_id(1, "puppet_recoil_pos_v", recoil_translation_spring.velocity)
+			rset_unreliable_id(1, "puppet_recoil_pos_t", recoil_translation_spring.target)
+			
+			rset_unreliable_id(1, "puppet_recoil_rot_p", recoil_rotation_spring.position)
+			rset_unreliable_id(1, "puppet_recoil_rot_v", recoil_rotation_spring.velocity)
+			rset_unreliable_id(1, "puppet_recoil_rot_t", recoil_rotation_spring.target)
+		else:
+			aim_position_spring.position = puppet_aim_pos_p
+			aim_position_spring.velocity = puppet_aim_pos_v
+			aim_position_spring.target = puppet_aim_pos_t
+			
+			aim_rotation_spring.position = puppet_aim_rot_p
+			aim_rotation_spring.velocity = puppet_aim_rot_v
+			aim_rotation_spring.target = puppet_aim_rot_t
+			
+			recoil_translation_spring.position = puppet_recoil_pos_p
+			recoil_translation_spring.velocity = puppet_recoil_pos_v
+			recoil_translation_spring.target = puppet_recoil_pos_t
+			
+			recoil_rotation_spring.position = puppet_recoil_rot_p
+			recoil_rotation_spring.velocity = puppet_recoil_rot_v
+			recoil_rotation_spring.target = puppet_recoil_rot_t
 
 func get_linear_velocity() -> Vector3:
 	return delta_pos + character.delta_pos

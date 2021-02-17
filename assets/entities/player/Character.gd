@@ -44,6 +44,8 @@ var LeftLegIK : SkeletonIK
 var RightLegIK : SkeletonIK
 
 func _ready() -> void:
+	_Camera.current = is_network_master()
+	
 	set_physics_process(false)
 	set_process(false)
 	
@@ -146,7 +148,7 @@ func ready_weapons() -> void:
 		weapons[weapon].WeaponController = WeaponController
 		weapons[weapon].add_to_group("weapons")
 		weapons[weapon].add_to_group(Player.loadout[weapon])
-		weapons[weapon].connect("shotFired", self, "on_shot_fired")
+		weapons[weapon].connect("shot_fired", self, "on_shot_fired")
 		weapons[weapon].connect("update_ammo", self, "update_ammo")
 		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
 		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")
@@ -336,7 +338,19 @@ func on_weapon_dequipped(weapon : Spatial) -> void:
 	emit_signal("weapon_changed", weapons[weapon_index])
 
 func on_shot_fired() -> void:
-	emit_signal("shot_fired", MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1)))
+	var direction := MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1))
+	if get_tree().is_network_server() and is_network_master():
+		rpc("puppet_shot_fired", direction)
+		emit_signal("shot_fired", direction)
+	elif is_network_master():
+		rpc_id(1, "puppet_shot_fired", direction)
+		emit_signal("shot_fired", direction)
+
+remote func puppet_shot_fired(direction : Vector3) -> void:
+	if is_network_master():
+		return
+	else:
+		emit_signal("shot_fired", direction)
 
 func update_ammo(c : int, m : int, r : int) -> void:
 	emit_signal("update_ammo", c, m, r)
@@ -446,6 +460,9 @@ func damage(source, hp : float) -> void:
 	damage_stack.append([source, hp, OS.get_ticks_msec()])
 	#do screen effect
 	
+	if get_tree().is_network_server():
+		rset("health", health)
+	
 	if health <= 0:
 		kill()
 
@@ -458,9 +475,24 @@ func calculate_damage(projectile : Projectile, part : BodyPart) -> float:
 	return damage
 
 func kill() -> void:
+	if get_tree().is_network_server():
+		rpc("puppet_kill")
+	emit_signal("died")
+
+remote func puppet_kill() -> void:
 	emit_signal("died")
 
 func reset() -> void:
+	if get_tree().is_network_server():
+		rpc("puppet_reset")
+	damage_stack.append([self, 100.0, OS.get_ticks_msec()])
+	emit_signal("died")
+
+remote func puppet_reset() -> void:
+	if get_tree().is_network_server():
+		rpc("puppet_reset")
+	else:
+		rpc_id(1, "puppet_reset")
 	damage_stack.append([self, 100.0, OS.get_ticks_msec()])
 	emit_signal("died")
 
@@ -562,7 +594,10 @@ remote var puppet_position := Vector3.ZERO
 
 var vel := Vector3.ZERO
 func _physics_process(delta : float) -> void:
-	client_process(delta)
+	if get_tree().is_network_server():
+		server_process(delta)
+	else:
+		client_process(delta)
 	
 	#update walk bob
 	process_walk(delta)
@@ -576,10 +611,10 @@ func _physics_process(delta : float) -> void:
 	process_movement(delta)
 
 #executes on client
+# warning-ignore:unused_argument
 func client_process(delta : float) -> void:
-	if get_tree().is_network_server():
-		server_process(delta)
-	elif is_network_master():
+	if is_network_master():
+		#client to server
 		#position
 		rset_unreliable_id(1, "puppet_position", transform.origin)
 		#extrapolate position
@@ -588,8 +623,9 @@ func client_process(delta : float) -> void:
 		rset_unreliable_id(1, "puppet_head_rotation", Vector2(Head.rotation.x, RotationHelper.rotation.y))
 		#extrapolate rotation
 		rset_unreliable_id(1, "puppet_mouse_movement", mouse_movement)
-		mouse_movement
+#		mouse_movement
 	else:
+		#apply other client's data
 		#position
 		transform.origin = puppet_position
 		#extrapolate position
@@ -599,13 +635,13 @@ func client_process(delta : float) -> void:
 		RotationHelper.rotation.y = puppet_head_rotation.y
 		#extrapolate rotation
 		mouse_movement = puppet_mouse_movement
-		rotate_head(mouse_movement)
 		
 
 #executes on the server and sends to all clients
 # warning-ignore:unused_argument
 func server_process(delta : float) -> void:
 	if is_network_master():
+		#us to clients
 		#extrapolate position
 		rset_unreliable("puppet_position", transform.origin)
 		#extrapolate position
@@ -615,6 +651,7 @@ func server_process(delta : float) -> void:
 		#extrapolate rotation
 		rset_unreliable("puppet_mouse_movement", mouse_movement)
 	else:
+		#client to client
 		#extrapolate position
 		rset_unreliable("puppet_position", puppet_position)
 		#extrapolate position
@@ -624,6 +661,16 @@ func server_process(delta : float) -> void:
 		#extrapolate rotation
 		rset_unreliable("puppet_mouse_movement", puppet_mouse_movement)
 		
+		#apply other client's data
+		#position
+		transform.origin = puppet_position
+		#extrapolate position
+		axis = puppet_axis
+		#rotation
+		Head.rotation.x = puppet_head_rotation.x
+		RotationHelper.rotation.y = puppet_head_rotation.y
+		#extrapolate rotation
+		mouse_movement = puppet_mouse_movement
 
 #persistent character velocity
 var velocity := Vector3.ZERO

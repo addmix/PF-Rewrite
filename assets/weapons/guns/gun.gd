@@ -5,7 +5,7 @@ class_name Gun
 #signals
 # warning-ignore:unused_signal
 signal update_ammo
-signal shotFired
+signal shot_fired
 
 #properties
 onready var chamber : int = _data["Misc"]["Chamber"] setget set_chamber, get_chamber

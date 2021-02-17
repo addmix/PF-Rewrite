@@ -2,10 +2,10 @@
 
 [ext_resource path="res://assets/weapons/boilerplates/reload_machine/ReloadMachine.gd" type="Script" id=1]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/Fire.gd" type="Script" id=2]
-[ext_resource path="res://assets/weapons/pistols/p38/reload machine/slide.gd" type="Script" id=3]
-[ext_resource path="res://assets/weapons/pistols/p38/reload machine/MagazineIn.gd" type="Script" id=4]
+[ext_resource path="res://assets/weapons/guns/pistols/p38/reload machine/slide.gd" type="Script" id=3]
+[ext_resource path="res://assets/weapons/guns/pistols/p38/reload machine/MagazineIn.gd" type="Script" id=4]
 [ext_resource path="res://assets/weapons/boilerplates/reload_machine/Ready.gd" type="Script" id=5]
-[ext_resource path="res://assets/weapons/pistols/p38/gun_machine/ready.gd" type="Script" id=6]
+[ext_resource path="res://assets/weapons/guns/pistols/p38/gun_machine/ready.gd" type="Script" id=6]
 [ext_resource path="res://assets/weapons/boilerplates/equip_machine/Dequip.gd" type="Script" id=7]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/Back.gd" type="Script" id=8]
 [ext_resource path="res://assets/weapons/boilerplates/gun_machine/Locked.gd" type="Script" id=9]
@@ -18,9 +18,10 @@
 [ext_resource path="res://assets/weapons/boilerplates/equip_machine/Inactive.gd" type="Script" id=16]
 [ext_resource path="res://assets/weapons/boilerplates/aim_machine/sprint.gd" type="Script" id=17]
 [ext_resource path="res://assets/weapons/boilerplates/equip_machine/Equip.gd" type="Script" id=18]
-[ext_resource path="res://assets/weapons/pistols/p38/P38bakcup.gltf" type="PackedScene" id=19]
-[ext_resource path="res://assets/weapons/pistols/p38/p38.gd" type="Script" id=20]
+[ext_resource path="res://assets/weapons/guns/pistols/p38/P38bakcup.gltf" type="PackedScene" id=19]
+[ext_resource path="res://assets/weapons/guns/pistols/p38/p38.gd" type="Script" id=20]
 [ext_resource path="res://assets/weapons/boilerplates/reload_machine/MagazineOut.gd" type="Script" id=21]
+
 
 [node name="p38" instance=ExtResource( 19 )]
 script = ExtResource( 20 )

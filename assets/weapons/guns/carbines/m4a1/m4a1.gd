@@ -1,5 +1,5 @@
 extends Gun
-#class_name M4A1
+class_name M4A1
 
 #effects
 var bullet_script : Script = load("res://assets/entities/projectiles/bullets/556x45/556x45.gd")
@@ -9,8 +9,10 @@ func _init() -> void:
 	.set_data(data)
 	.set_add(add)
 	.set_multi(multi)
+# warning-ignore:return_value_discarded
+	connect("shot_fired", self, "on_shot_fired")
 
-func _on_shotFired() -> void:
+func on_shot_fired() -> void:
 	update_ammo()
 	#muzzle flash
 	var instance
@@ -152,10 +154,10 @@ var data = {
 		
 		
 		#force
-		"Min pos force": Vector3(-1, 1.2, .2),
-		"Max pos force": Vector3(1.3, 1.6, .5),
-		"Min rot force": Vector3(-.8, -.8, -.4),
-		"Max rot force": Vector3(1.2, 1.1, .4),
+		"Min pos force": Vector3(-1, .2, .2),
+		"Max pos force": Vector3(1.3, .6, .5),
+		"Min rot force": Vector3(-.2, -.8, -.4),
+		"Max rot force": Vector3(1.8, 1.1, .4),
 		
 		#recoil spring settings
 		"Recoil pos s": float(12.0),
