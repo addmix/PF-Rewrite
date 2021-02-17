@@ -1,11 +1,11 @@
 extends Gun
-class_name M4A1
+#class_name M4A1
 
 #effects
 var bullet_script : Script = load("res://assets/entities/projectiles/bullets/556x45/556x45.gd")
 var muzzle_flash : PackedScene = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
 
-func _ready() -> void:
+func _init() -> void:
 	.set_data(data)
 	.set_add(add)
 	.set_multi(multi)

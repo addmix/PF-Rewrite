@@ -30,4 +30,4 @@ func fire() -> void:
 
 func _on_FiremodeMachine_fire() -> void:
 	if get_parent().current_state == name:
-		emit_signal("change_state", "Fire")
+		call_deferred("emit_signal", "change_state", "Fire")

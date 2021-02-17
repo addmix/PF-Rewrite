@@ -129,11 +129,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/SIsilicon.3d.text/label_3d.gd"
 }, {
-"base": "Gun",
-"class": "M4A1",
-"language": "GDScript",
-"path": "res://assets/weapons/carbines/m4a1/m4a1.gd"
-}, {
 "base": "Reference",
 "class": "MessageDispatcher",
 "language": "GDScript",
@@ -284,7 +279,6 @@ _global_script_class_icons={
 "Inflector": "",
 "InspectorControls": "",
 "Label3D": "",
-"M4A1": "",
 "MessageDispatcher": "",
 "MessageDispatcherWrapper": "",
 "PhysicsLayers": "",
