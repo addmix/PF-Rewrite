@@ -65,6 +65,9 @@ target = NodePath("../WeaponController")
 
 [node name="Position3D" type="Position3D" parent="Smoothing/RotationHelper/Head"]
 
+[node name="Listener" type="Listener" parent="Smoothing/RotationHelper/Head"]
+current = true
+
 [node name="FootController" type="Spatial" parent="Smoothing/RotationHelper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.4, 0 )
 script = ExtResource( 1 )
@@ -83,22 +86,6 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.5
 
 [node name="Skeleton" parent="Smoothing/RotationHelper" instance=ExtResource( 19 )]
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, -4.45, 0 )
-bones/0/bound_children = [  ]
-bones/1/bound_children = [  ]
-bones/2/bound_children = [  ]
-bones/4/bound_children = [  ]
-bones/5/bound_children = [  ]
-bones/6/bound_children = [  ]
-bones/8/bound_children = [  ]
-bones/9/bound_children = [  ]
-bones/10/bound_children = [  ]
-bones/11/bound_children = [  ]
-bones/12/bound_children = [  ]
-bones/13/bound_children = [  ]
-bones/14/bound_children = [  ]
-bones/15/bound_children = [  ]
-bones/16/bound_children = [  ]
-bones/17/bound_children = [  ]
 
 [node name="StanceMachine" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -203,9 +190,9 @@ __meta__ = {
 }
 
 [node name="Magazine" type="Label" parent="UI/Ammo/HBoxContainer"]
-margin_top = 63.0
+margin_top = 32.0
 margin_right = 24.0
-margin_bottom = 77.0
+margin_bottom = 46.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "N/A"
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]

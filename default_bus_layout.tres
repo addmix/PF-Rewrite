@@ -1,4 +1,13 @@
-[gd_resource type="AudioBusLayout" load_steps=3 format=2]
+[gd_resource type="AudioBusLayout" load_steps=4 format=2]
+
+[sub_resource type="AudioEffectReverb" id=3]
+resource_name = "Reverb"
+predelay_msec = 132.0
+room_size = 0.08
+spread = 0.83
+hipass = 0.04
+dry = 0.84
+wet = 0.0
 
 [sub_resource type="AudioEffectHighPassFilter" id=1]
 resource_name = "HighPassFilter"
@@ -15,6 +24,8 @@ bus/1/mute = false
 bus/1/bypass_fx = false
 bus/1/volume_db = 0.0
 bus/1/send = "Master"
+bus/1/effect/0/effect = SubResource( 3 )
+bus/1/effect/0/enabled = true
 bus/2/name = "Hitmarkers"
 bus/2/solo = false
 bus/2/mute = false

@@ -11,7 +11,7 @@ func enter(prev : String) -> void:
 		#announce shot fired
 		get_parent().get_parent().emit_signal("shot_fired")
 		#firerate delay
-		yield(get_tree().create_timer(.08), "timeout")
+		yield(get_tree().create_timer(.083), "timeout")
 		#change state
 		call_deferred("emit_signal", "change_state", "Back")
 
