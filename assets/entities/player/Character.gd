@@ -283,6 +283,19 @@ func set_weapon(index : int, weapon : String) -> void:
 #used for non-immediate weapon swapping
 var new_weapon := 0
 func switch_weapon(index : int) -> void:
+	if  get_tree().is_network_server():
+		rpc("puppet_switch_weapon", index)
+	else:
+		rpc_id(1, "puppet_switch_weapon", index)
+	if weapons[index % weapons.size()] == null:
+		return
+	#do dequip animation
+	weapons[weapon_index].dequip()
+	new_weapon = index % weapons.size()
+
+puppet func puppet_switch_weapon(index : int) -> void:
+	if  get_tree().is_network_server():
+		rpc("puppet_switch_weapon", index)
 	if weapons[index % weapons.size()] == null:
 		return
 	#do dequip animation
@@ -457,20 +470,14 @@ func _unhandled_input(event : InputEvent) -> void:
 		#mouse movement
 		if event is InputEventMouseMotion:
 			var relative = event.relative * camera_sensitiviy
-			
 			var current = Head.rotation_degrees
 			
-			RotationHelper.rotate_y(deg2rad(-relative.x))
-			
-			#branchless way of limiting up/down movement
-			Head.rotation_degrees.x = ((Head.rotation_degrees.x - relative.y) * int(!Head.rotation_degrees.x - relative.y <= camera_min_angle and !Head.rotation_degrees.x - relative.y >= camera_max_angle)
-			+ camera_min_angle * int(Head.rotation_degrees.x - relative.y <= camera_min_angle)
-			+ camera_max_angle * int(Head.rotation_degrees.x - relative.y >= camera_max_angle))
+			mouse_movement += relative
+			rotate_head(relative)
 			
 			var delta : Vector3 = current - Head.rotation_degrees
 			emit_signal("camera_movement", Vector3(delta.x, -relative.x, delta.z))
 			
-			rset_unreliable("head_rotation", Vector3(Head.rotation.x, RotationHelper.rotation.y, 0))
 			get_tree().set_input_as_handled()
 		elif event.is_action_pressed("weapon_next"):
 			switch_weapon(weapon_index + 1)
@@ -490,22 +497,26 @@ func _unhandled_input(event : InputEvent) -> void:
 		elif event.is_action_pressed("weapon_4"):
 			switch_weapon(3)
 			get_tree().set_input_as_handled()
-		
 		elif event.is_action_pressed("reset_character"):
 			reset()
 			get_tree().set_input_as_handled()
 
-remote var puppet_axis := Vector3.ZERO
+func rotate_head(relative : Vector2) -> void:
+	RotationHelper.rotate_y(deg2rad(-relative.x))
+	#branchless way of limiting up/down movement
+	Head.rotation_degrees.x = ((Head.rotation_degrees.x - relative.y) * int(!Head.rotation_degrees.x - relative.y <= camera_min_angle and !Head.rotation_degrees.x - relative.y >= camera_max_angle)
+	+ camera_min_angle * int(Head.rotation_degrees.x - relative.y <= camera_min_angle)
+	+ camera_max_angle * int(Head.rotation_degrees.x - relative.y >= camera_max_angle))
+
+var axis := Vector3.ZERO
+puppet var puppet_axis := Vector3.ZERO
 func get_axis() -> Vector3:
-	var axis := Vector3.ZERO
 	if is_network_master():
-		axis += Vector3(0, 0, -1) * int(Input.is_action_pressed("walk_forward"))
-		axis += Vector3(0, 0, 1) * int(Input.is_action_pressed("walk_backward"))
-		axis += Vector3(-1, 0, 0) * int(Input.is_action_pressed("walk_left"))
-		axis += Vector3(1, 0, 0) * int(Input.is_action_pressed("walk_right"))
-		rset_unreliable("puppet_axis", axis)
-	else:
-		axis = puppet_axis
+		axis = Vector3.ZERO
+	axis += Vector3(0, 0, -1) * int(Input.is_action_pressed("walk_forward"))
+	axis += Vector3(0, 0, 1) * int(Input.is_action_pressed("walk_backward"))
+	axis += Vector3(-1, 0, 0) * int(Input.is_action_pressed("walk_left"))
+	axis += Vector3(1, 0, 0) * int(Input.is_action_pressed("walk_right"))
 	return axis
 
 #delta velocity
@@ -540,13 +551,16 @@ func set_last_pos() -> void:
 onready var gravity : Vector3 = ProjectSettings.get("physics/3d/default_gravity") * ProjectSettings.get("physics/3d/default_gravity_vector")
 var movement_spring = V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .99, 14)
 
+var mouse_movement := Vector2.ZERO
 
-remote var puppet_pos := Vector3.ZERO
-remote var head_rotation := Vector3.ZERO
-
+puppet var puppet_mouse_movement := Vector2.ZERO
+puppet var puppet_head_rotation := Vector2.ZERO
+puppet var puppet_position := Vector3.ZERO
 
 var vel := Vector3.ZERO
 func _physics_process(delta : float) -> void:
+	client_process(delta)
+	
 	#update walk bob
 	process_walk(delta)
 	#update breath sway
@@ -557,19 +571,65 @@ func _physics_process(delta : float) -> void:
 	WeaponController.process_recoil(delta)
 	#do movement step
 	process_movement(delta)
-	
-	#branchlessly apply puppet transform
-	Head.rotation.x = head_rotation.x * int(!is_network_master()) + Head.rotation.x * int(is_network_master())
-	transform.origin = puppet_pos  * int(!is_network_master()) + transform.origin * int(is_network_master())
-	RotationHelper.rotation.y = head_rotation.y * int(!is_network_master()) + RotationHelper.rotation.y * int(is_network_master())
+
+#executes on client
+func client_process(delta : float) -> void:
+	if get_tree().is_network_server():
+		server_process(delta)
+	elif is_network_master():
+		#position
+		rset_unreliable_id(1, "puppet_position", transform.origin)
+		#extrapolate position
+		rset_unreliable_id(1, "puppet_axis", axis)
+		#rotation
+		rset_unreliable_id(1, "puppet_head_rotation", Vector2(Head.rotation.x, RotationHelper.rotation.y))
+		#extrapolate rotation
+		rset_unreliable_id(1, "puppet_mouse_movement", mouse_movement)
+		mouse_movement = Vector2.ZERO
+	else:
+		#position
+		transform.origin = puppet_position
+		#extrapolate position
+		axis = puppet_axis
+		#rotation
+		Head.rotation.x = puppet_head_rotation.x
+		RotationHelper.rotation.y = puppet_head_rotation.y
+		#extrapolate rotation
+		mouse_movement = puppet_mouse_movement
+		rotate_head(mouse_movement)
+		
+
+#executes on the server and sends to all clients
+# warning-ignore:unused_argument
+func server_process(delta : float) -> void:
+	if is_network_master():
+		#extrapolate position
+		rset_unreliable("puppet_position", transform.origin)
+		#extrapolate position
+		rset_unreliable("puppet_axis", axis)
+		#rotation
+		rset_unreliable("puppet_head_rotation", Vector2(Head.rotation.x, RotationHelper.rotation.y))
+		#extrapolate rotation
+		rset_unreliable("puppet_mouse_movement", mouse_movement)
+	else:
+		#extrapolate position
+		rset_unreliable("puppet_position", puppet_position)
+		#extrapolate position
+		rset_unreliable("puppet_axis", puppet_axis)
+		#rotation
+		rset_unreliable("puppet_head_rotation", puppet_head_rotation)
+		#extrapolate rotation
+		rset_unreliable("puppet_mouse_movement", puppet_mouse_movement)
+		
 
 #persistent character velocity
 var velocity := Vector3.ZERO
 func process_movement(delta : float) -> void:
 	#local space axis
-	var axis := get_axis()
 	
-	if !is_network_master():
+	if is_network_master():
+		axis = get_axis()
+	else:
 		axis = puppet_axis
 	
 	#gets pos basis for ground normal pos

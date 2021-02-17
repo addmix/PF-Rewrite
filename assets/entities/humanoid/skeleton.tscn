@@ -501,6 +501,3 @@ script = ExtResource( 2 )
 [node name="CollisionShape" type="CollisionShape" parent="FootR/Area"]
 transform = Transform( 1, 0, -3.87913e-17, 0, 1, 0, -3.87913e-17, 0, 1, 0, 0.000720441, 0 )
 shape = SubResource( 12 )
-
-[node name="SkeletonIK" type="SkeletonIK" parent="."]
-process_priority = 1
