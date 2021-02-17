@@ -24,7 +24,7 @@ signal update_score
 
 #nodes
 onready var character = load("res://assets/entities/player/character/character.tscn")
-var character_instance
+var character_instance : Character
 
 #signals
 signal died
@@ -54,6 +54,7 @@ func instance_character() -> void:
 func connect_character_signals() -> void:
 # warning-ignore:return_value_discarded
 	character_instance.connect("died", self, "on_player_died")
+	character_instance.connect("spawned", self, "on_player_spawned")
 
 func on_player_died() -> void:
 	deaths += 1
@@ -65,6 +66,10 @@ func on_player_died() -> void:
 	#show menu
 	if is_network_master():
 		Server.GamemodeInstance.Spawner.show_menu()
+
+func on_player_spawned() -> void:
+	if is_network_master():
+		Server.GamemodeInstance.Spawner.hide_menu()
 
 #call to gamemode player spawner
 # warning-ignore:unused_argument

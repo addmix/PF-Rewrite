@@ -6,8 +6,10 @@ var Player
 
 #signals
 signal loaded
+signal spawned
 signal died
 signal update_ammo
+signal health_changed
 
 #in game data
 export var health := 100.0
@@ -44,6 +46,7 @@ var LeftLegIK : SkeletonIK
 var RightLegIK : SkeletonIK
 
 func _ready() -> void:
+	emit_signal("spawned")
 	_Camera.current = is_network_master()
 	
 	set_physics_process(false)
@@ -342,7 +345,7 @@ func on_weapon_dequipped(weapon : Spatial) -> void:
 	emit_signal("weapon_changed", weapons[weapon_index])
 
 func on_shot_fired() -> void:
-	var direction := MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1))
+	var direction : Vector3 = MathUtils.v3RandfRange(Vector3.ZERO, Vector3(1, 1, 1))
 	if get_tree().is_network_server() and is_network_master():
 		rpc("puppet_shot_fired", direction)
 		emit_signal("shot_fired", direction)
@@ -459,6 +462,8 @@ func _exit_tree() -> void:
 			weapon.free()
 
 func damage(source, hp : float) -> void:
+	emit_signal("health_changed", hp)
+	
 	#damage player
 	health -= hp
 	#add damage history

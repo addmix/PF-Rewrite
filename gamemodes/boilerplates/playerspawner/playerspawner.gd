@@ -13,6 +13,8 @@ func set_spawning(value : bool = true) -> void:
 func get_spawning() -> bool:
 	return allow_spawning
 
+var selected_spawn : Position3D
+
 func _ready() -> void:
 	#creates instance
 	Plugin = plugin.instance()
@@ -31,50 +33,32 @@ func show_menu() -> void:
 func hide_menu() -> void:
 	remove_child(Plugin)
 
+func on_spawn_pressed() -> void:
+	if get_tree().is_network_server():
+		puppet_spawn(1, get_tree().get_nodes_in_group("Spawns")[0])
+	else:
+		rpc_id(1, "puppet_spawn", 0, get_tree().get_nodes_in_group("Spawns")[0])
+
+remote func puppet_spawn(id : int, node : Position3D) -> void:
+	if get_tree().is_network_server() and spawn_check(node):
+		rpc("puppet_spawn", get_tree().get_rpc_sender_id(), node)
+	spawn_player(id, node)
+
+func spawn_player(player : int, node : Position3D) -> void:
+	#spawn character
+	Players.players[player].spawn_character(node)
+	emit_signal("player_spawned", Players.players[player])
+
 # warning-ignore:unused_argument
 func spawn_check(node : Position3D) -> bool:
 	return allow_spawning
 
 # warning-ignore:unused_argument
 func on_Player_spawned(player : Player) -> void:
-	pass
-
-func on_spawn_pressed() -> void:
-	#host
-	if get_tree().is_network_server():
-		#accept/deny
-		if spawn_check(get_tree().get_nodes_in_group("Spawns")[0]):
-			rpc("accept_spawn", 1, get_tree().get_nodes_in_group("Spawns")[0])
-		else:
-			rpc("decline_spawn", 1, get_tree().get_nodes_in_group("Spawns")[0])
-	#client
-	else:
-		rpc_id(1, "request_spawn", get_tree().get_nodes_in_group("Spawns")[0])
-
-remote func request_spawn(node : Position3D) -> void:
-	
-	#make a decision here
-	if spawn_check(node):
-		rpc("accept_spawn", get_tree().get_rpc_sender_id(), node)
-	else:
-		rpc("decline_spawn", get_tree().get_rpc_sender_id(), node)
-
-remotesync func accept_spawn(id : int, node : Position3D) -> void:
-	#spawn character
-	Players.players[id].spawn_character(node)
-	
-	#emit signal
-	emit_signal("player_spawned", Players.players[id])
-	
 	#remove menu
-	if id == get_tree().get_network_unique_id():
+	if player.is_network_master():
 		#removes menu when spawned
 		hide_menu()
-
-# warning-ignore:unused_argument
-# warning-ignore:unused_argument
-remotesync func decline_spawn(id : int, node : Position3D) -> void:
-	pass
 
 func _exit_tree() -> void:
 	Plugin.free()
