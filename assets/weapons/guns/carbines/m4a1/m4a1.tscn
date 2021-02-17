@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://assets/weapons/guns/carbines/m4a1/m4a1.gltf" type="PackedScene" id=1]
 [ext_resource path="res://assets/weapons/boilerplates/equip_machine/EquipMachine.gd" type="Script" id=2]
@@ -30,8 +30,6 @@
 [ext_resource path="res://assets/weapons/guns/carbines/m4a1/black_metal.material" type="Material" id=28]
 [ext_resource path="res://assets/weapons/guns/carbines/m4a1/MagMetal.material" type="Material" id=29]
 [ext_resource path="res://assets/weapons/guns/carbines/m4a1/BoltRelease.tres" type="Animation" id=30]
-[ext_resource path="res://assets/weapons/guns/carbines/m4a1/MagazineIn.tres" type="Animation" id=31]
-[ext_resource path="res://assets/weapons/guns/carbines/m4a1/MagazineOut.tres" type="Animation" id=32]
 
 [node name="M4A1" instance=ExtResource( 1 )]
 script = ExtResource( 7 )
@@ -87,7 +85,7 @@ material/0 = ExtResource( 27 )
 material/0 = ExtResource( 27 )
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="23"]
-transform = Transform( 1, 1.42109e-14, -2.38419e-07, 2.38419e-07, -8.9407e-08, 1, 7.10543e-15, -1, -5.96046e-08, -0.117629, 0.135424, 0.148564 )
+transform = Transform( 1, 1.42109e-14, -2.38419e-07, 2.38419e-07, -8.9407e-08, 1, 7.10543e-15, -1, -5.96046e-08, -0.152045, 0.131386, 0.0968052 )
 bone_name = "hand_ik_l"
 
 [node name="HandIKR" type="BoneAttachment" parent="Armature/Skeleton" index="24"]
@@ -201,9 +199,7 @@ script = ExtResource( 24 )
 transform = Transform( 0.962242, 0.272196, 0, -0.272196, 0.962242, 0, 0, 0, 1, -0.317993, 0.644791, 0.615256 )
 
 [node name="AnimationPlayer" parent="." index="7"]
-anims/bolt_release = ExtResource( 30 )
-anims/magazine_in = ExtResource( 31 )
-anims/magazine_out = ExtResource( 32 )
+anims/BoltRelease = ExtResource( 30 )
 
 [node name="Sight" type="Position3D" parent="." index="8"]
 transform = Transform( 1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -2.98023e-08, 0.21983, 0.130232 )

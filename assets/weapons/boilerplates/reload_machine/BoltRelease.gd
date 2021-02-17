@@ -23,7 +23,7 @@ func stop() -> void:
 
 func resume() -> void:
 	stopped = false
-	get_parent().get_parent()._AnimationPlayer.play("BoltRelease", 0.3)
+	get_parent().get_parent()._AnimationPlayer.play("BoltRelease", 0.2)
 
 # warning-ignore:unused_argument
 func process(delta : float) -> void:
