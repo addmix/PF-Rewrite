@@ -449,10 +449,13 @@ func damage(source, hp : float) -> void:
 	if health <= 0:
 		kill()
 
-# warning-ignore:unused_argument
-func shot(projectile : Spatial) -> void:
-	#calculate damage here
-	pass
+func _on_Skeleton_hit(projectile : Projectile, part : BodyPart) -> void:
+	var damage := calculate_damage(projectile, part)
+	damage(projectile, damage)
+
+func calculate_damage(projectile : Projectile, part : BodyPart) -> float:
+	var damage : float = projectile.weapon.data["Ballistics"]["Damage"] * projectile.weapon.data["Ballistics"][part.name]
+	return damage
 
 func kill() -> void:
 	emit_signal("died")
@@ -509,7 +512,7 @@ func rotate_head(relative : Vector2) -> void:
 	+ camera_max_angle * int(Head.rotation_degrees.x - relative.y >= camera_max_angle))
 
 var axis := Vector3.ZERO
-puppet var puppet_axis := Vector3.ZERO
+remote var puppet_axis := Vector3.ZERO
 func get_axis() -> Vector3:
 	if is_network_master():
 		axis = Vector3.ZERO
@@ -553,9 +556,9 @@ var movement_spring = V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .99
 
 var mouse_movement := Vector2.ZERO
 
-puppet var puppet_mouse_movement := Vector2.ZERO
-puppet var puppet_head_rotation := Vector2.ZERO
-puppet var puppet_position := Vector3.ZERO
+remote var puppet_mouse_movement := Vector2.ZERO
+remote var puppet_head_rotation := Vector2.ZERO
+remote var puppet_position := Vector3.ZERO
 
 var vel := Vector3.ZERO
 func _physics_process(delta : float) -> void:
@@ -585,7 +588,7 @@ func client_process(delta : float) -> void:
 		rset_unreliable_id(1, "puppet_head_rotation", Vector2(Head.rotation.x, RotationHelper.rotation.y))
 		#extrapolate rotation
 		rset_unreliable_id(1, "puppet_mouse_movement", mouse_movement)
-		mouse_movement = Vector2.ZERO
+		mouse_movement
 	else:
 		#position
 		transform.origin = puppet_position
@@ -656,11 +659,11 @@ func process_movement(delta : float) -> void:
 # warning-ignore:return_value_discarded
 	move_and_slide(Vector3(0, -.1, 0), Vector3(0, 1, 0), true, 1)
 	
-	if is_network_master():
-		rset_unreliable("puppet_pos", transform.origin)
-	
 	set_delta_pos(delta)
 	set_delta_vel(delta)
+
+func _on_AirMachine_jump() -> void:
+	velocity.y += 10
 
 var drag_coefficient := 0.7
 var air_density := 0.00002
@@ -776,14 +779,7 @@ func _on_WeaponController_weapon_changed(weapon : Spatial) -> void:
 	LeftHandIK.start()
 	RightHandIK.start()
 
-
-func _on_AirMachine_jump() -> void:
-	velocity.y += 10
-
-func _on_Skeleton_hit(projectile : Projectile, part : BodyPart) -> void:
-	var damage := calculate_damage(projectile, part)
-	health -= damage
-
-func calculate_damage(projectile : Projectile, part : BodyPart) -> float:
-	var damage : float = projectile.weapon.data["Ballistics"]["Damage"] * projectile.weapon.data["Ballistics"][part.name]
-	return damage
+func _notification(what : int) -> void:
+	match what:
+		MainLoop.NOTIFICATION_WM_FOCUS_IN:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

@@ -4,7 +4,7 @@ class_name Player
 
 #values
 var data : Dictionary
-var loadout := ["M4A1", "P38", null, null]
+var loadout := ["M4A1", null, null, null]
 
 var player_name : String
 var player_id : int
