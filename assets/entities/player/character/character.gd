@@ -53,7 +53,9 @@ func _ready() -> void:
 
 func deferred() -> void:
 	#branchless set camera stuff
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED * int(is_network_master()) + Input.MOUSE_MODE_VISIBLE * int(!is_network_master()))
+	if is_network_master():
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	_Camera.current = is_network_master()
 	
 	ready_weapons()
