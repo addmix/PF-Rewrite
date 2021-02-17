@@ -1,0 +1,40 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="gunshot_data" version="1.3.0" audacityversion="2.4.2" sel0="0.3422648571" sel1="0.3422648571" vpos="0" h="0.0000000000" zoom="315.5451041674" rate="48000.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags>
+		<tag name="YEAR" value="2019-08-25T00:23"/>
+		<tag name="ALBUM" value="www.FesliyanStudios.com"/>
+		<tag name="Band" value="www.FesliyanStudios.com"/>
+		<tag name="ARTIST" value="www.FesliyanStudios.com"/>
+		<tag name="TITLE" value="www.FesliyanStudios.com"/>
+		<tag name="COMMENTS" value="www.FesliyanStudios.com"/>
+		<tag name="Composer" value="www.FesliyanStudios.com"/>
+		<tag name="GENRE" value="Sound Clip"/>
+	</tags>
+	<wavetrack name="1911-.45-ACP-Far-Single-Gunshot-A-www.fesliyanstudios.com" isSelected="1" height="150" minimized="0" channel="0" linked="1" mute="0" solo="0" rate="48000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="38086">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808d49.au" len="14147" min="-1.287169" max="1.650629" rms="0.265103"/>
+				</waveblock>
+				<waveblock start="14147">
+					<simpleblockfile filename="e0808f02.au" len="23939" min="-0.329166" max="0.356622" rms="0.032356"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="1911-.45-ACP-Far-Single-Gunshot-A-www.fesliyanstudios.com" isSelected="1" height="150" minimized="0" channel="1" linked="0" mute="0" solo="0" rate="48000" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="38086">
+				<waveblock start="0">
+					<simpleblockfile filename="e08085dd.au" len="14147" min="-1.577503" max="2.06305" rms="0.268261"/>
+				</waveblock>
+				<waveblock start="14147">
+					<simpleblockfile filename="e08089f2.au" len="23939" min="-0.170109" max="0.14166" rms="0.018727"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

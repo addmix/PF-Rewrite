@@ -1,7 +1,8 @@
 extends Spatial
 class_name Projectile
 
-var weapon : Spatial
+var weapon : Weapon
+var player
 var velocity := Vector3.ZERO
 var gravity : Vector3 = ProjectSettings.get("physics/3d/default_gravity") * ProjectSettings.get("physics/3d/default_gravity_vector")
 
@@ -59,6 +60,8 @@ func _physics_process(delta : float) -> void:
 		#check for hit method
 		if result["collider"].has_method("hit"):
 			result["collider"].hit(self)
+		if result["collider"].get_class() == "BodyPart":
+			player.connect_hit()
 	
 	transform.origin += velocity * delta
 

@@ -1,9 +1,13 @@
 extends Gun
 class_name M4A1
 
+#nodes
+onready var barrel : Position3D = $Barrel
+
 #effects
 var bullet_script : Script = load("res://assets/entities/projectiles/bullets/556x45/556x45.gd")
 var muzzle_flash : PackedScene = preload("res://assets/particles/m4a1_muzzle_flash.tscn")
+var gunshot : PackedScene = preload("res://assets/weapons/guns/carbines/m4a1/effects/gunshot.tscn")
 
 func _init() -> void:
 	.set_data(data)
@@ -16,6 +20,12 @@ func on_shot_fired() -> void:
 	update_ammo()
 	#muzzle flash
 	var instance
+	instance = gunshot.instance()
+	instance.add_to_group("Gunshots")
+	$"/root".add_child(instance)
+	instance.transform.origin = barrel.get_global_transform().origin
+	instance.pitch_scale += rand_range(-1, 1) * .02
+	instance.play(0)
 	
 #	instance = muzzle_flash.instance()
 #	$Barrel.add_child(instance)
@@ -24,7 +34,8 @@ func on_shot_fired() -> void:
 	instance = Spatial.new()
 	instance.set_script(bullet_script)
 	instance.weapon = self
-	instance.transform.origin = $Barrel.get_global_transform().origin
+	instance.player = character.Player
+	instance.transform.origin = barrel.get_global_transform().origin
 	instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
 	$"/root".add_child(instance)
 

@@ -83,6 +83,22 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.5
 
 [node name="Skeleton" parent="Smoothing/RotationHelper" instance=ExtResource( 19 )]
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, -4.45, 0 )
+bones/0/bound_children = [  ]
+bones/1/bound_children = [  ]
+bones/2/bound_children = [  ]
+bones/4/bound_children = [  ]
+bones/5/bound_children = [  ]
+bones/6/bound_children = [  ]
+bones/8/bound_children = [  ]
+bones/9/bound_children = [  ]
+bones/10/bound_children = [  ]
+bones/11/bound_children = [  ]
+bones/12/bound_children = [  ]
+bones/13/bound_children = [  ]
+bones/14/bound_children = [  ]
+bones/15/bound_children = [  ]
+bones/16/bound_children = [  ]
+bones/17/bound_children = [  ]
 
 [node name="StanceMachine" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -182,6 +198,9 @@ margin_right = 1.52588e-05
 margin_bottom = 7.62939e-06
 mouse_filter = 2
 custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Magazine" type="Label" parent="UI/Ammo/HBoxContainer"]
 margin_top = 63.0
@@ -192,6 +211,7 @@ text = "N/A"
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_camera_movement"]
 [connection signal="loaded" from="." to="Smoothing/RotationHelper/FootController" method="_on_Character_loaded"]
+[connection signal="loaded" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_loaded"]
 [connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_shot_fired"]
 [connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_shot_fired"]
 [connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_update_accuracy"]

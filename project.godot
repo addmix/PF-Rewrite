@@ -39,6 +39,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://assets/entities/humanoid/body_part.gd"
 }, {
+"base": "Area",
+"class": "BodyPartArea",
+"language": "GDScript",
+"path": "res://assets/entities/humanoid/body_part_area.gd"
+}, {
 "base": "Projectile",
 "class": "Bullet",
 "language": "GDScript",
@@ -266,6 +271,7 @@ _global_script_class_icons={
 "BitFlag": "",
 "Bitset": "",
 "BodyPart": "",
+"BodyPartArea": "",
 "Bullet": "",
 "CSVFile": "",
 "CallbackDelegator": "",
@@ -354,6 +360,13 @@ window/stretch/aspect="expand"
 [editor_plugins]
 
 enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "smoothing" )
+
+[importer_defaults]
+
+ogg_vorbis={
+"loop": false,
+"loop_offset": 0
+}
 
 [input]
 

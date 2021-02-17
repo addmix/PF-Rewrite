@@ -5,6 +5,8 @@ signal equipped
 signal dequipped
 
 #nodes
+var character
+
 onready var LeftIK : BoneAttachment = $Armature/Skeleton/HandIKL
 onready var RightIK : BoneAttachment = $Armature/Skeleton/HandIKR
 
@@ -52,3 +54,6 @@ func on_equipped() -> void:
 
 func on_dequipped() -> void:
 	emit_signal("dequipped", self)
+
+func on_character_loaded(c) -> void:
+	character = c

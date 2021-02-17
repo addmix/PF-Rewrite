@@ -36,7 +36,7 @@ export var camera_min_angle := -85
 export var camera_sensitiviy := Vector2(.2, .2)
 
 #skeleton and IK stuff
-onready var _Skeleton : HumanoidSkeleton = $Smoothing/RotationHelper/Skeleton
+onready var _Skeleton = $Smoothing/RotationHelper/Skeleton
 var IKs := []
 var LeftHandIK : SkeletonIK
 var RightHandIK : SkeletonIK
@@ -152,6 +152,7 @@ func ready_weapons() -> void:
 		weapons[weapon].connect("update_ammo", self, "update_ammo")
 		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
 		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")
+		connect("loaded", weapons[weapon], "on_character_loaded")
 		weapons[weapon].set_network_master(Player.player_id)
 	
 	#set current weapon

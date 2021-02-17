@@ -23,8 +23,8 @@ var score := 0.0
 signal update_score
 
 #nodes
-var character = preload("res://assets/entities/player/Character.tscn")
-var character_instance : Character
+onready var character = load("res://assets/entities/player/Character.tscn")
+var character_instance
 
 #signals
 signal died
@@ -86,3 +86,10 @@ func remove_character() -> void:
 func _exit_tree() -> void:
 	if character_instance:
 		remove_character()
+
+var hitmarker : PackedScene = preload("res://assets/weapons/hitmarker.tscn")
+func connect_hit() -> void:
+	var instance : AudioStreamPlayer = hitmarker.instance()
+	instance.add_to_group("Hitmarkers")
+	add_child(instance)
+	instance.play(0)
