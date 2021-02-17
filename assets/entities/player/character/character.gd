@@ -448,7 +448,8 @@ func process_breath(delta : float) -> void:
 #when character is removed from the tree
 func _exit_tree() -> void:
 	#branchless change mouse mode
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE * int(is_network_master()) + Input.get_mouse_mode() * int(!is_network_master()))
+	if is_network_master():
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
 	#cleanup weapons
 	for weapon in weapons:
