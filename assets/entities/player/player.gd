@@ -54,6 +54,7 @@ func instance_character() -> void:
 func connect_character_signals() -> void:
 # warning-ignore:return_value_discarded
 	character_instance.connect("died", self, "on_player_died")
+# warning-ignore:return_value_discarded
 	character_instance.connect("spawned", self, "on_player_spawned")
 
 func on_player_died() -> void:
