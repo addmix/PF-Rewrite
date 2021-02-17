@@ -292,6 +292,8 @@ func set_weapon(index : int, weapon : String) -> void:
 #used for non-immediate weapon swapping
 var new_weapon := 0
 func switch_weapon(index : int) -> void:
+	if index == weapon_index:
+		return
 	if  get_tree().is_network_server():
 		rpc("puppet_switch_weapon", index)
 	else:
