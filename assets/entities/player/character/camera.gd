@@ -76,6 +76,3 @@ func _on_Character_camera_movement(relative : Vector3) -> void:
 func _on_Character_shot_fired(direction : Vector3) -> void:
 	rotation_spring.accelerate(MathUtils.v3lerp(accuracy["Min camera rot force"], accuracy["Max camera rot force"], direction))
 	translation_spring.accelerate(MathUtils.v3lerp(accuracy["Min camera pos force"], accuracy["Max camera pos force"], direction))
-
-
-
