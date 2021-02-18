@@ -364,6 +364,7 @@ func ready_weapons() -> void:
 		weapons[weapon].connect("update_ammo", self, "update_ammo")
 		weapons[weapon].connect("equipped", self, "on_weapon_equipped")
 		weapons[weapon].connect("dequipped", self, "on_weapon_dequipped")
+		
 # warning-ignore:return_value_discarded
 		connect("loaded", weapons[weapon], "on_character_loaded")
 		weapons[weapon].set_network_master(Player.player_id)

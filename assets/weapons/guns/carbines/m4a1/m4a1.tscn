@@ -36,10 +36,6 @@ script = ExtResource( 7 )
 [node name="Armature" parent="." index="0"]
 transform = Transform( 1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, -0.0770987, -0.117315 )
 
-[node name="Skeleton" parent="Armature" index="0"]
-bones/17/bound_children = [ NodePath("HandIKL") ]
-bones/18/bound_children = [ NodePath("HandIKR") ]
-
 [node name="M4A1Barrel" parent="Armature/Skeleton" index="1"]
 material/0 = ExtResource( 27 )
 
@@ -208,6 +204,7 @@ transform = Transform( 1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0.117518, -0.
 
 [node name="debug_sight" parent="." index="11" instance=ExtResource( 26 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.329195, 0.12484 )
+[connection signal="loaded" from="." to="EquipMachine" method="_on_M4A1_loaded"]
 [connection signal="reset" from="GunMachine/Ready" to="FiremodeMachine" method="_on_Ready_reset"]
 [connection signal="fire" from="FiremodeMachine" to="GunMachine/Ready" method="_on_FiremodeMachine_fire"]
 [connection signal="animation_finished" from="AnimationPlayer" to="ReloadMachine" method="_on_AnimationPlayer_animation_finished"]

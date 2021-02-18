@@ -1,6 +1,8 @@
 extends Gun
 class_name M4A1
 
+signal loaded
+
 #nodes
 onready var barrel : Position3D = $Barrel
 
@@ -10,11 +12,22 @@ var muzzle_flash : PackedScene = preload("res://assets/particles/m4a1_muzzle_fla
 var gunshot : PackedScene = preload("res://assets/weapons/guns/carbines/m4a1/effects/gunshot.tscn")
 
 func _init() -> void:
+	set_process(false)
+	set_physics_process(false)
 	.set_data(data)
 	.set_add(add)
 	.set_multi(multi)
 # warning-ignore:return_value_discarded
 	connect("shot_fired", self, "on_shot_fired")
+
+func _ready() -> void:
+# warning-ignore:return_value_discarded
+	WeaponController.connect("loaded", self, "loaded")
+
+func loaded() -> void:
+	emit_signal("loaded")
+	set_process(true)
+	set_physics_process(true)
 
 func on_shot_fired() -> void:
 	update_ammo()

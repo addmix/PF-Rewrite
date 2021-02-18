@@ -1,6 +1,12 @@
 extends Spatial
 
 
+#signals
+
+
+signal loaded
+
+
 #variables
 
 
@@ -76,6 +82,8 @@ func _physics_process(_delta : float) -> void:
 
 func on_character_loaded(c : Character) -> void:
 	character = c
+	
+	emit_signal("loaded")
 	
 	set_process(true)
 	set_physics_process(true)

@@ -71,9 +71,19 @@ var hitmarker : PackedScene = preload("res://assets/weapons/hitmarker.tscn")
 
 
 #base functions
+func _ready() -> void:
+# warning-ignore:return_value_discarded
+	Server.connect("connection_successful", self, "on_connection_successful")
+
 func _exit_tree() -> void:
 	if character_instance:
 		remove_character()
+
+
+func on_connection_successful() -> void:
+	player_id = get_network_master()
+	name = str(player_id)
+	set_network_master(player_id)
 
 func connect_character_signals() -> void:
 	var err := []

@@ -12,6 +12,8 @@ var EquipPosSpring : V3Spring
 var EquipRotSpring : V3Spring
 
 func _ready() -> void:
+	set_process(false)
+	set_physics_process(false)
 	
 	#add states to machine
 	var children := get_children()
@@ -69,3 +71,8 @@ func _unhandled_input(event : InputEvent) -> void:
 		
 		#pass inputs to current state
 		states[current_state].unhandled_input(event)
+
+
+func _on_M4A1_loaded() -> void:
+	set_process(true)
+	set_physics_process(true)

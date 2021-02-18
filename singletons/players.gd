@@ -4,7 +4,7 @@ signal player_added
 # warning-ignore:unused_signal
 signal player_removed
 
-var player = preload("res://assets/entities/player/player.tscn")
+var player : PackedScene = preload("res://assets/entities/player/player.tscn")
 
 #id: data
 var players := {}
@@ -58,19 +58,20 @@ func on_peer_disconnected(id : int) -> void:
 
 #on server
 remote func send_player_data(data : Dictionary) -> void:
-	#send new player's data to everyone
-	rpc("distribute_player_data", get_tree().get_rpc_sender_id(), data)
-	
-	#sends all players' data to new client
-	rpc_id(get_tree().get_rpc_sender_id(), "recieve_player_data", players_data)
-	
-	#get spawned players
-	var characters = get_tree().get_nodes_in_group("characters")
-	var ids := []
-	for character in characters:
-		ids.append(character.Player.player_id)
-	
-	rpc_id(get_tree().get_rpc_sender_id(), "recieve_spawned_players", ids)
+	if get_tree().is_network_server():
+		#send new player's data to everyone
+		rpc("distribute_player_data", get_tree().get_rpc_sender_id(), data)
+		
+		#sends all players' data to new client
+		rpc_id(get_tree().get_rpc_sender_id(), "recieve_player_data", players_data)
+		
+		#get spawned players
+		var characters = get_tree().get_nodes_in_group("characters")
+		var ids := []
+		for character in characters:
+			ids.append(character.Player.player_id)
+		
+		rpc_id(get_tree().get_rpc_sender_id(), "recieve_spawned_players", ids)
 
 #on new client
 remote func recieve_player_data(data : Dictionary) -> void:
@@ -106,7 +107,7 @@ func add_player(id : int, data : Dictionary) -> void:
 	#set player master
 	instance.set_network_master(id)
 	#add to players group
-	instance.add_to_group("players")
+	instance.add_to_group("Players")
 	#set node name to player ID
 	instance.name = str(id)
 	#set player id

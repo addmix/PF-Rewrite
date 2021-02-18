@@ -156,6 +156,7 @@ func load_game() -> void:
 func close_server() -> void:
 	#server
 	if !get_tree().is_network_server():
+		print("server closed")
 		#server closed scene here
 		pass
 	
