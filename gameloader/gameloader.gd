@@ -1,7 +1,7 @@
 extends Node
 
+onready var skip_intro : bool = ProjectSettings.get_setting("application/boot_splash/skip_intro")
 var SplashScreen = preload("res://scenes/splash_screen/splash_screen.tscn")
-var load_menu := true
 
 func _ready() -> void:
 	#load resources
@@ -21,7 +21,7 @@ func _ready() -> void:
 	if args.has("--map"):
 		var index := args.find("--map")
 		
-		load_menu = false
+		skip_intro = true
 		#if no map
 		if index == args.size() - 1:
 			return
@@ -29,8 +29,12 @@ func _ready() -> void:
 		Server.game_data["map"] = args[index + 1]
 		call_deferred("start_server")
 	
+	#load menu
+	var menu = load("res://scenes/menu/menu.tscn").instance()
+	$"/root".call_deferred("add_child", menu, true)
+	
 	#load splash screen
-	if load_menu:
+	if !skip_intro:
 		$"/root".call_deferred("add_child", SplashScreen.instance())
 	call_deferred("queue_free")
 

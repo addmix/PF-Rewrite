@@ -30,7 +30,6 @@ signal update_accuracy
 
 #general data
 var process_delta := 0.0
-var Player
 remote var puppet_position := Vector3.ZERO
 
 #anims
@@ -44,7 +43,7 @@ remote var puppet_axis := Vector3.ZERO
 remote var puppet_mouse_movement := Vector2.ZERO
 export var camera_max_angle := 85
 export var camera_min_angle := -85
-export var camera_sensitiviy := Vector2(.2, .2)
+onready var camera_sensitiviy : Vector2 = ProjectSettings.get_setting("controls/mouse/sensitivity")
 
 #camera
 var camera_transform := Basis()
@@ -53,6 +52,7 @@ remote var puppet_head_rotation := Vector2.ZERO
 #movement
 onready var gravity : Vector3 = ProjectSettings.get("physics/3d/default_gravity") * ProjectSettings.get("physics/3d/default_gravity_vector")
 const discrepancy_allowance_position := .05
+const discrepancy_allowance_rotation := .05
 var drag_coefficient := 0.7
 var air_density := 0.00002
 var velocity := Vector3.ZERO
@@ -92,11 +92,12 @@ var Mounted := Spring.new(0, 0, 0, 0, 1)
 
 
 #general nodes
+var Player
+onready var Smoothing = $Smoothing/RotationHelper/Head/Smoothing
 onready var RotationHelper : Spatial = $Smoothing/RotationHelper
 onready var Head : Spatial = $Smoothing/RotationHelper/Head
-onready var WeaponController : Spatial = $Smoothing/RotationHelper/Head/WeaponController
-onready var Smoothing = $Smoothing/RotationHelper/Head/Smoothing
 onready var _Camera : Camera = $Smoothing/RotationHelper/Head/Camera
+onready var WeaponController : Spatial = $Smoothing/RotationHelper/Head/WeaponController
 onready var FootController = $Smoothing/RotationHelper/FootController
 
 #state machine nodes
@@ -172,6 +173,8 @@ func _physics_process(delta : float) -> void:
 
 func _process(delta : float) -> void:
 	process_delta = delta
+	if !is_network_master():
+		rotate_head(mouse_movement * delta)
 
 func _exit_tree() -> void:
 	#branchless change mouse mode
@@ -458,9 +461,6 @@ func update_ammo(c : int, m : int, r : int) -> void:
 func get_max_movement_speed() -> float:
 	return accuracy["Walkspeed"]
 
-remote func set_player_position(position : Vector3) -> void:
-	transform.origin = position
-
 func process_movement(delta : float) -> void:
 	#local space axis
 	
@@ -647,7 +647,7 @@ func _unhandled_input(event : InputEvent) -> void:
 			var relative = event.relative * camera_sensitiviy
 			var current = Head.rotation_degrees
 			
-			mouse_movement += relative * process_delta
+			mouse_movement += relative / process_delta
 			rotate_head(relative)
 			
 			var delta : Vector3 = current - Head.rotation_degrees
@@ -718,51 +718,40 @@ func set_last_pos() -> void:
 func client_process(_delta : float) -> void:
 	if is_network_master():
 		#client to server
-		#position
 		rset_unreliable_id(1, "puppet_position", transform.origin)
-		#extrapolate position
 		rset_unreliable_id(1, "puppet_axis", axis)
-		#rotation
 		rset_unreliable_id(1, "puppet_head_rotation", Vector2(Head.rotation.x, RotationHelper.rotation.y))
-		#extrapolate rotation
 		rset_unreliable_id(1, "puppet_mouse_movement", mouse_movement)
-#		mouse_movement
 	else:
-		#apply other client's data
-		#position
+		#apply data from server
 		transform.origin = puppet_position
-		#extrapolate position
 		axis = puppet_axis
-		#rotation
 		Head.rotation.x = puppet_head_rotation.x
 		RotationHelper.rotation.y = puppet_head_rotation.y
-		#extrapolate rotation
 		mouse_movement = puppet_mouse_movement
 
 func server_process(_delta : float) -> void:
 	#client to us
-	#if delta is within allowed discrepancy
+	#allow client's position report if it is within given discrepancy
+	#position
 	if (transform.origin - puppet_position).length() < get_max_movement_speed() * (1 + discrepancy_allowance_position):
-		#position
 		transform.origin = puppet_position
+	#reset client's position because it is too far off
 	else:
 		rpc("set_player_position", transform.origin)
 	
+	
 	if !is_network_master():
-		#extrapolate position
-		axis = puppet_axis
-		#rotation
 		Head.rotation.x = puppet_head_rotation.x
 		RotationHelper.rotation.y = puppet_head_rotation.y
-		#extrapolate rotation
+		axis = puppet_axis
 		mouse_movement = puppet_mouse_movement
 	
 	#us to clients
-	#extrapolate position
 	rset_unreliable("puppet_position", transform.origin)
-	#extrapolate position
 	rset_unreliable("puppet_axis", axis)
-	#rotation
 	rset_unreliable("puppet_head_rotation", Vector2(Head.rotation.x, RotationHelper.rotation.y))
-	#extrapolate rotation
 	rset_unreliable("puppet_mouse_movement", mouse_movement)
+
+remote func set_player_position(pos : Vector3) -> void:
+	transform.origin = pos

@@ -37,20 +37,6 @@ func _physics_process(delta : float) -> void:
 	states[current_state].process(delta)
 
 func change_state(new_state : String) -> void:
-	if is_network_master():
-		#add state to state stack
-		stateStack.append(current_state)
-		#exit current state
-		states[current_state].exit()
-		#enter new state from current state
-		states[new_state].enter(current_state)
-		#emit state_changed signal
-		emit_signal("state_changed", self, current_state, new_state)
-		#assing current_state to new state
-		current_state = new_state
-		rpc("syncState", new_state)
-
-remote func syncState(new_state : String) -> void:
 	#add state to state stack
 	stateStack.append(current_state)
 	#exit current state
@@ -61,9 +47,31 @@ remote func syncState(new_state : String) -> void:
 	emit_signal("state_changed", self, current_state, new_state)
 	#assing current_state to new state
 	current_state = new_state
+	if get_tree().is_network_server():
+		rpc("sync_state", new_state)
+	elif is_network_master():
+		rpc_id(1, "syncState", new_state)
 	
 
-func _unhandled_input(event):
+remote func sync_state(new_state : String) -> void:
+	if get_tree().is_network_server():
+		#anticheat
+		rpc("sync_state", new_state)
+	
+	if current_state != new_state:
+		#add state to state stack
+		stateStack.append(current_state)
+		#exit current state
+		states[current_state].exit()
+		#enter new state from current state
+		states[new_state].enter(current_state)
+		#emit state_changed signal
+		emit_signal("state_changed", self, current_state, new_state)
+		#assing current_state to new state
+		current_state = new_state
+	
+
+func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
 		#change firemode
 		if Input.is_action_just_pressed("change_firemode"):

@@ -1,20 +1,23 @@
 extends Node
 
+#signals
 signal player_spawned
 
-var Gamemode : Node
-
-var plugin = preload("res://gamemodes/boilerplates/playerspawner/playerspawneruiplugin.tscn")
-var Plugin : Control
-
+#variables
 var allow_spawning := false setget set_spawning, get_spawning
 func set_spawning(value : bool = true) -> void:
 	allow_spawning = value
 func get_spawning() -> bool:
 	return allow_spawning
 
+#nodes
+var Gamemode : Node
 var selected_spawn : Position3D
+var plugin = preload("res://gamemodes/boilerplates/playerspawner/playerspawneruiplugin.tscn")
+var Plugin : Control
 
+
+#base funcs
 func _ready() -> void:
 	#creates instance
 	Plugin = plugin.instance()
@@ -23,16 +26,26 @@ func _ready() -> void:
 	#adds plugin to tree
 	add_child(Plugin)
 
-func _connect_signals() -> void:
-# warning-ignore:return_value_discarded
-	connect("player_spawned", self, "on_Player_spawned")
+func _exit_tree() -> void:
+	Plugin.free()
 
+
+#setup funcs
+func _connect_signals() -> void:
+	var err = connect("player_spawned", self, "on_Player_spawned")
+	if err != OK:
+		push_error("Error while connecting signal \"player_spawned\" to node " + str(self) + ", function \"on_Player_spawned\"")
+
+
+#menu funcs
 func show_menu() -> void:
 	add_child(Plugin)
 
 func hide_menu() -> void:
 	remove_child(Plugin)
 
+
+#spawn funcs
 func on_spawn_pressed() -> void:
 	if get_tree().is_network_server():
 		puppet_spawn(1, get_tree().get_nodes_in_group("Spawns")[0])
@@ -49,16 +62,11 @@ func spawn_player(player : int, node : Position3D) -> void:
 	Players.players[player].spawn_character(node)
 	emit_signal("player_spawned", Players.players[player])
 
-# warning-ignore:unused_argument
-func spawn_check(node : Position3D) -> bool:
+func spawn_check(_node : Position3D) -> bool:
 	return allow_spawning
 
-# warning-ignore:unused_argument
 func on_Player_spawned(player : Player) -> void:
 	#remove menu
 	if player.is_network_master():
 		#removes menu when spawned
 		hide_menu()
-
-func _exit_tree() -> void:
-	Plugin.free()

@@ -1,11 +1,14 @@
 #global node
 extends Node
 
+
 signal server_closed
 signal connection_successful
 signal connection_failed
 signal peer_connected
 signal peer_disconnected
+
+signal recieved_game_data
 
 #server variables
 export var ip := "127.0.0.1"
@@ -29,7 +32,7 @@ var GamemodeInstance : Node
 
 var network := NetworkedMultiplayerENet.new()
 
-signal recieved_game_data
+
 
 func _ready() -> void:
 	_connect_signals()
@@ -72,6 +75,8 @@ func peer_connected(id : int) -> void:
 
 func peer_disconnected(id : int) -> void:
 	emit_signal("peer_disconnected", id)
+	if id == 1:
+		push_error("Host closed server")
 
 #start host player
 func start_host() -> void:
@@ -100,6 +105,8 @@ func start_client() -> void:
 
 # warning-ignore:unused_argument
 remote func kick(reason : String) -> void:
+	#display kick info here
+	print("Kicked for: ", reason)
 	close_server()
 
 remote func return_game_data(data : Dictionary) -> void:
@@ -146,12 +153,10 @@ func load_game() -> void:
 	var menu = $"/root/Menu"
 	if menu != null:
 		menu.queue_free()
-#	print("Started host")
 
 func close_server() -> void:
 	#server
-	if get_tree().is_network_server():
-		rpc("kick", "Server closed")
+	rpc("kick", "Server closed")
 	
 	emit_signal("server_closed")
 	
@@ -169,7 +174,8 @@ func close_server() -> void:
 	$"/root".add_child(resource.instance())
 
 func _exit_tree() -> void:
-	network.close_connection()
+	if get_tree().network_peer == network:
+		network.close_connection()
 	
 	if PauseMenu:
 		PauseMenu.queue_free()
@@ -186,9 +192,6 @@ func _exit_tree() -> void:
 func set_server(address : String, port : int) -> void:
 	ip = address
 	self.port = port
-
-
-
 
 #gamemode funcs
 #changes all game data

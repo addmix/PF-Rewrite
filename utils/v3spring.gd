@@ -9,6 +9,7 @@ var damper : float = 0
 var speed : float = 1
 var mass : float = 1
 
+#base funcs
 func _init(p : Vector3, v : Vector3, t : Vector3, d: float, s: float) -> void:
 	position = p
 	velocity = v
@@ -19,7 +20,8 @@ func _init(p : Vector3, v : Vector3, t : Vector3, d: float, s: float) -> void:
 func get_class() -> String:
 	return "V3Spring"
 
-#returns position, velocity
+
+#physics funcs
 func positionvelocity(delta : float) -> void:
 	if damper > 1:
 		return
@@ -45,9 +47,15 @@ func positionvelocity(delta : float) -> void:
 	position = target + (direction * cosine + curve1 * sine) / e
 	velocity = speed * ((curve * curve1 - damper * direction) * cosine - (curve * direction + damper * curve1) * sine) / e
 
-func apply_force(force : Vector3) -> void:
-	velocity += force / mass
+func apply_force(f : Vector3) -> void:
+	velocity += f / mass
 
-# warning-ignore:shadowed_variable
-func accelerate(speed : Vector3) -> void:
-	velocity += speed
+func accelerate(s : Vector3) -> void:
+	velocity += s
+
+
+#networking
+
+
+func check_discrepancy(s : V3Spring, d : float) -> bool:
+	return (position - s.position).length() < d

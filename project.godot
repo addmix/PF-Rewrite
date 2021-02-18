@@ -326,6 +326,7 @@ boot_splash/image="res://assets/warning_low_tides_logos/logo.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
+boot_splash/skip_intro=true
 
 [audio]
 
@@ -351,6 +352,10 @@ MathUtils="*res://utils/mathutils.gd"
 FileUtils="*res://utils/fileutils.gd"
 NodeUtils="*res://utils/nodeutils.gd"
 
+[controls]
+
+mouse/sensitivity=Vector2( 0.2, 0.2 )
+
 [display]
 
 window/vsync/use_vsync=false
@@ -359,6 +364,12 @@ window/stretch/aspect="expand"
 [editor_plugins]
 
 enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "smoothing" )
+
+[gameplay]
+
+hitmarker/color=Color( 1, 1, 1, 1 )
+hitmarker/size=Vector2( 20, 4 )
+hitmarker/spacing=10.0
 
 [importer_defaults]
 

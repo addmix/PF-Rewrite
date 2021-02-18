@@ -1,27 +1,37 @@
 extends Camera
 
-var character : KinematicBody
-var accuracy := {}
 
-func _ready() -> void:
-	set_process(false)
-	set_physics_process(false)
+#variables
 
-func _on_Character_loaded(c) -> void:
-	character = c
-	set_process(true)
-	set_physics_process(true)
 
-#vars
+#movement
 var rotation_delta := Vector3.ZERO
 var base_transform := transform
 
-#springs
+#accuracy
+var accuracy := {}
 var zoom_spring := Spring.new(1, 0, 1, .85, 12)
 var rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var translation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var rotation_sway_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
 var bob_intensity_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+
+
+#nodes
+
+
+var character : KinematicBody
+
+
+#functions
+
+
+
+
+#base funcs
+func _ready() -> void:
+	set_process(false)
+	set_physics_process(false)
 
 func _process(delta : float) -> void:
 	var pos := Vector3.ZERO
@@ -65,13 +75,32 @@ func _process(delta : float) -> void:
 	transform.origin = pos + base_transform.origin
 	rotation = rot
 
-#update accuracy
+
+#nodes
+
+
+func _on_Character_loaded(c) -> void:
+	character = c
+	set_process(true)
+	set_physics_process(true)
+
+
+#movement
+
+
+func _on_Character_camera_movement(relative : Vector3) -> void:
+	rotation_delta = relative
+
+
+#accuracy
+
+
 func _on_Character_update_accuracy(new : Dictionary) -> void:
 	accuracy = new
 
-#update camera movement
-func _on_Character_camera_movement(relative : Vector3) -> void:
-	rotation_delta = relative
+
+#weapons
+
 
 func _on_Character_shot_fired(direction : Vector3) -> void:
 	rotation_spring.accelerate(MathUtils.v3lerp(accuracy["Min camera rot force"], accuracy["Max camera rot force"], direction))

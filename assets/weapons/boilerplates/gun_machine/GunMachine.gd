@@ -42,16 +42,25 @@ func change_state(new_state : String) -> void:
 	emit_signal("state_changed", self, current_state, new_state)
 	#assing current_state to new state
 	current_state = new_state
-	if is_network_master():
-		rpc("syncState", new_state)
+	if get_tree().is_network_server():
+		rpc("sync_state", new_state)
+	elif is_network_master():
+		rpc_id(1, "sync_state", new_state)
 
-remote func syncState(new_state : String) -> void:
-	#exit current state
-	states[current_state].exit()
-	#enter new state from current state
-	states[new_state].enter(current_state)
-	#emit state_changed signal
-	emit_signal("state_changed", self, current_state, new_state)
-	#assing current_state to new state
-	current_state = new_state
+remote func sync_state(new_state : String) -> void:
+	if get_tree().is_network_server():
+		#anticheat
+		rpc("sync_state", new_state)
+	if is_network_master():
+		return
+	
+	if current_state != new_state:
+		#exit current state
+		states[current_state].exit()
+		#enter new state from current state
+		states[new_state].enter(current_state)
+		#emit state_changed signal
+		emit_signal("state_changed", self, current_state, new_state)
+		#assing current_state to new state
+		current_state = new_state
 	

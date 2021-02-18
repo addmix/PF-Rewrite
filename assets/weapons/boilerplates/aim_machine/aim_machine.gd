@@ -14,22 +14,30 @@ func _ready() -> void:
 		i.connect("change_state", self, "change_state")
 
 func change_state(new_state : String) -> void:
-	#exit old state
+	#exit current state
 	states[current_state].exit()
-	#enter new state
+	#enter new state from current state
 	states[new_state].enter()
-	#apply new state
+	#assing current_state to new state
 	current_state = new_state
-	if is_network_master():
+	if get_tree().is_network_server():
 		rpc("sync_state", new_state)
+	elif is_network_master():
+		rpc_id(1, "syncState", new_state)
+	
 
 remote func sync_state(new_state : String) -> void:
-	#exit old state
-	states[current_state].exit()
-	#enter new state
-	states[new_state].enter()
-	#apply new state
-	current_state = new_state
+	if get_tree().is_network_server():
+		#anticheat
+		rpc("sync_state", new_state)
+	
+	if current_state != new_state:
+		#exit current state
+		states[current_state].exit()
+		#enter new state from current state
+		states[new_state].enter()
+		#assing current_state to new state
+		current_state = new_state
 
 func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():

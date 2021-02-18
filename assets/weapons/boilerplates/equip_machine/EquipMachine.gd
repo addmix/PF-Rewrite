@@ -27,26 +27,30 @@ func init_springs() -> void:
 	EquipRotSpring = V3Spring.new(get_parent().data["Weapon handling"]["Equip pos"], Vector3.ZERO, Vector3.ZERO, get_parent().data["Weapon handling"]["Equip d"], get_parent().data["Weapon handling"]["Equip s"])
 
 func change_state(new_state : String) -> void:
-	if is_network_master():
-		rpc("syncState", new_state)
-	#exit current state
-	states[current_state].exit()
-	
-	#enter new state
-	states[new_state].enter()
-	
-	current_state = new_state
-	
-	
-
-remote func syncState(new_state : String) -> void:
 	#exit current state
 	states[current_state].exit()
 	#enter new state from current state
 	states[new_state].enter()
 	#assing current_state to new state
 	current_state = new_state
+	if get_tree().is_network_server():
+		rpc("sync_state", new_state)
+	elif is_network_master():
+		rpc_id(1, "syncState", new_state)
+	
 
+remote func sync_state(new_state : String) -> void:
+	if get_tree().is_network_server():
+		#anticheat
+		rpc("sync_state", new_state)
+	
+	if current_state != new_state:
+		#exit current state
+		states[current_state].exit()
+		#enter new state from current state
+		states[new_state].enter()
+		#assing current_state to new state
+		current_state = new_state
 
 
 func _physics_process(delta : float) -> void:

@@ -38,30 +38,55 @@ func _physics_process(delta : float) -> void:
 	states[current_state].process(delta)
 
 func change_state(new_state : String) -> void:
-	if is_network_master():
-		#exit current state
-		states[current_state].exit()
-		#enter new state from current state
-		states[new_state].enter(current_state)
-		#assing current_state to new state
-		current_state = new_state
-		rpc("sync_state", new_state)
-
-remote func sync_state(new_state : String) -> void:
-	print("sync")
 	#exit current state
 	states[current_state].exit()
 	#enter new state from current state
 	states[new_state].enter(current_state)
 	#assing current_state to new state
 	current_state = new_state
+	if get_tree().is_network_server():
+		rpc("sync_state", new_state)
+	elif is_network_master():
+		rpc_id(1, "sync_state", new_state)
+
+remote func sync_state(new_state : String) -> void:
+	if get_tree().is_network_server():
+		rpc("sync_state", new_state)
+	
+	if current_state != new_state:
+		
+		#exit current state
+		states[current_state].exit()
+		#enter new state from current state
+		states[new_state].enter(current_state)
+		#assing current_state to new state
+		current_state = new_state
+	
 
 func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
 		if event.is_action_pressed("reload") and get_parent().can_reload():
 			get_tree().set_input_as_handled()
+			if get_tree().is_network_server():
+				rpc("input", event)
+			else:
+				rpc_id(1, "input", event)
+			
 			if states[current_state].stopped:
 				states[current_state].resume()
+
+remote func input(event : InputEvent) -> void:
+	if get_tree().is_network_server():
+		#anticheat
+		rpc("input", event)
+	
+	if event.is_action_pressed("reload") and get_parent().can_reload():
+		if states[current_state].stopped:
+			states[current_state].resume()
+
+remote func resume() -> void:
+	if !is_network_master():
+		states[current_state].resume()
 
 func _on_AnimationPlayer_animation_finished(anim_name : String) -> void:
 	states[current_state].anim_finished(anim_name)

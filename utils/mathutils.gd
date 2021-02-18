@@ -59,8 +59,7 @@ static func intersect_planes(p1 : Vector3, n1 : Vector3, p2 : Vector3, n2 : Vect
 	
 # warning-ignore:unused_variable
 	var x := multiply(inverse(M), b)
-	
-	var p = 1
+	var p = Vector3(x[0][0], x[0][1], x[0][2])
 	var n = n1.cross(n2)
 	return PoolVector3Array([p, n])
 	
