@@ -54,8 +54,14 @@ func on_spawn_pressed() -> void:
 
 remote func puppet_spawn(id : int, node : Position3D) -> void:
 	if get_tree().is_network_server() and spawn_check(node):
-		rpc("puppet_spawn", get_tree().get_rpc_sender_id(), node)
-	spawn_player(get_tree().get_rpc_sender_id(), node)
+		if get_tree().get_rpc_sender_id() == 0:
+			rpc("puppet_spawn", 1, node)
+			spawn_player(1, node)
+		else:
+			rpc("puppet_spawn", get_tree().get_rpc_sender_id(), node)
+			spawn_player(get_tree().get_rpc_sender_id(), node)
+	else:
+		spawn_player(get_tree().get_rpc_sender_id(), node)
 
 func spawn_player(player : int, node : Position3D) -> void:
 	#spawn character
