@@ -228,16 +228,16 @@ func network_springs() -> void:
 		rset("puppet_aim_rot", aim_rotation_spring)
 		rset("puppet_recoil_pos", recoil_translation_spring)
 		rset("puppet_recoil_rot", recoil_rotation_spring)
-		rset("puppet_rot_sway", translation_sway_spring)
-		rset("puppet_rot_sway", rotation_sway_spring)
+		rset("puppet_sway_pos", translation_sway_spring)
+		rset("puppet_sway_rot", rotation_sway_spring)
 	else:
 		if is_network_master():
 			rset_id(1, "puppet_aim_pos", aim_position_spring)
 			rset_id(1, "puppet_aim_rot", aim_rotation_spring)
 			rset_id(1, "puppet_recoil_pos", recoil_translation_spring)
 			rset_id(1, "puppet_recoil_rot", recoil_rotation_spring)
-			rset_id(1, "puppet_rot_sway", translation_sway_spring)
-			rset_id(1, "puppet_rot_sway", rotation_sway_spring)
+			rset_id(1, "puppet_sway_pos", translation_sway_spring)
+			rset_id(1, "puppet_sway_rot", rotation_sway_spring)
 		else:
 			aim_position_spring = puppet_aim_pos
 			aim_rotation_spring = puppet_aim_rot
