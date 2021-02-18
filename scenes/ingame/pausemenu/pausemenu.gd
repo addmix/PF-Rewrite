@@ -11,10 +11,7 @@ func _on_Options_pressed():
 	pass # Replace with function body.
 
 func _on_Quit_pressed():
-	if get_tree().is_network_server():
-		Server.close_server()
-	else:
-		Server.close_server()
+	Server.close_server()
 
 func resume() -> void:
 	PausePopup.hide()

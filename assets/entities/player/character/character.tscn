@@ -83,6 +83,22 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.5
 
 [node name="Skeleton" parent="Smoothing/RotationHelper" instance=ExtResource( 19 )]
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, -4.45, 0 )
+bones/0/bound_children = [ NodePath("Hips") ]
+bones/1/bound_children = [ NodePath("Waist") ]
+bones/2/bound_children = [ NodePath("Chest") ]
+bones/4/bound_children = [ NodePath("BicepL") ]
+bones/5/bound_children = [ NodePath("ForearmL") ]
+bones/6/bound_children = [ NodePath("HandL") ]
+bones/8/bound_children = [ NodePath("BicepR") ]
+bones/9/bound_children = [ NodePath("ForearmR") ]
+bones/10/bound_children = [ NodePath("HandR") ]
+bones/11/bound_children = [ NodePath("Head") ]
+bones/12/bound_children = [ NodePath("ThighL") ]
+bones/13/bound_children = [ NodePath("ShinL") ]
+bones/14/bound_children = [ NodePath("FootL") ]
+bones/15/bound_children = [ NodePath("ThighR") ]
+bones/16/bound_children = [ NodePath("ShinR") ]
+bones/17/bound_children = [ NodePath("FootR") ]
 
 [node name="StanceMachine" type="Node" parent="."]
 script = ExtResource( 7 )

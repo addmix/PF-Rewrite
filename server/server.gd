@@ -38,14 +38,13 @@ func _ready() -> void:
 	_connect_signals()
 
 func _connect_signals() -> void:
-# warning-ignore:return_value_discarded
-	network.connect("connection_succeeded", self, "connection_succeeded")
-# warning-ignore:return_value_discarded
-	network.connect("connection_failed", self, "connection_failed")
-# warning-ignore:return_value_discarded
-	network.connect("peer_connected", self, "peer_connected")
-# warning-ignore:return_value_discarded
-	network.connect("peer_disconnected", self, "peer_disconnected")
+	var err := []
+	err.append(network.connect("connection_succeeded", self, "connection_succeeded"))
+	err.append(network.connect("connection_failed", self, "connection_failed"))
+	err.append(network.connect("peer_connected", self, "peer_connected"))
+	err.append(network.connect("peer_disconnected", self, "peer_disconnected"))
+	err.append(network.connect("server_disconnected", self, "close_server"))
+	#check error
 
 #only on client
 func connection_succeeded() -> void:
@@ -156,7 +155,9 @@ func load_game() -> void:
 
 func close_server() -> void:
 	#server
-	rpc("kick", "Server closed")
+	if !get_tree().is_network_server():
+		#server closed scene here
+		pass
 	
 	emit_signal("server_closed")
 	
