@@ -49,24 +49,14 @@ func _connect_signals() -> void:
 #only on client
 func connection_succeeded() -> void:
 	emit_signal("connection_successful")
-#	print("Successfully connected to server")
-	
-	#get server info and load map n shit
-	yield(self, "recieved_game_data")
-	
-	#loads map and gamemode, and removes menu
-	load_game()
 
 #only on client
 func connection_failed() -> void:
 	emit_signal("connection_failed")
-#	print("Failed to connect to server")
 	get_tree().set_network_peer(null)
 
 func peer_connected(id : int) -> void:
 	emit_signal("peer_connected", id)
-#	print("Peer connected with id: " + str(id))
-	
 	#only on server
 	if get_tree().is_network_server():
 		#send game data to new player
@@ -74,8 +64,6 @@ func peer_connected(id : int) -> void:
 
 func peer_disconnected(id : int) -> void:
 	emit_signal("peer_disconnected", id)
-	if id == 1:
-		push_error("Host closed server")
 
 #start host player
 func start_host() -> void:
@@ -109,13 +97,17 @@ remote func kick(reason : String) -> void:
 	close_server()
 
 remote func return_game_data(data : Dictionary) -> void:
+	game_data = data
+	emit_signal("recieved_game_data")
 	#makes sure we are getting data from the server
-	if get_tree().get_rpc_sender_id() == 1:
-		game_data = data
-		emit_signal("recieved_game_data")	
+	#loads map and gamemode, and removes menu
+	load_game()
 
 #loads map and gamemode
 func load_game() -> void:
+	#player stuff
+	
+	
 	#game related stuff
 	#load map
 	var resource : Resource = Maps.load_map(game_data["map"])

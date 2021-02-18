@@ -68,22 +68,16 @@ var hitmarker : PackedScene = preload("res://assets/weapons/hitmarker.tscn")
 #functions
 
 
-
+func set_player_id(id):
+	player_id = id
+	print(id)
+	print(name)
 
 #base functions
-func _ready() -> void:
-# warning-ignore:return_value_discarded
-	Server.connect("connection_successful", self, "on_connection_successful")
-
 func _exit_tree() -> void:
+	print("re")
 	if character_instance:
 		remove_character()
-
-
-func on_connection_successful() -> void:
-	player_id = get_network_master()
-	name = str(player_id)
-	set_network_master(player_id)
 
 func connect_character_signals() -> void:
 	var err := []
@@ -120,12 +114,15 @@ func on_player_died() -> void:
 		Server.GamemodeInstance.Spawner.show_menu()
 
 func remove_character() -> void:
+	print("dele")
 	character_instance.remove_from_group("characters")
 	character_instance.queue_free()
 
 func spawn_character(_node : Position3D) -> void:
 	instance_character()
-	add_child(character_instance, true)
+	add_child(character_instance)
+	print(NodeUtils.get_child_recursive(character_instance))
+	
 	
 	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
 	character_instance.transform.origin = spawn_point.origin
@@ -138,6 +135,7 @@ func instance_character() -> void:
 	#instance new character
 	character_instance = character.instance()
 	character_instance.name = str(player_id)
+	print(character_instance.name)
 	character_instance.set_network_master(player_id)
 	character_instance.Player = self
 	character_instance.add_to_group("characters")
