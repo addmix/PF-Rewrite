@@ -64,7 +64,7 @@ remote func puppet_spawn(id : int, node : Position3D) -> void:
 			rpc("puppet_spawn", get_tree().get_rpc_sender_id(), node)
 			spawn_player(get_tree().get_rpc_sender_id(), node)
 	else:
-		spawn_player(get_tree().get_rpc_sender_id(), node)
+		spawn_player(id, node)
 
 func spawn_player(player : int, node : Position3D) -> void:
 	#spawn character

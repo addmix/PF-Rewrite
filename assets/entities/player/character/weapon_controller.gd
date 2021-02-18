@@ -199,37 +199,38 @@ func network_springs() -> void:
 	if get_tree().is_network_server():
 		#check values
 		#position
-		if aim_position_spring.check_discrepancy(puppet_aim_pos, aim_pos_variance):
-			aim_position_spring = puppet_aim_pos
-		else:
-			rpc("set_aim_pos")
 		
-		if aim_rotation_spring.check_discrepancy(puppet_aim_rot, aim_rot_variance):
-			aim_rotation_spring = puppet_aim_rot
-		else:
-			rpc("set_aim_rot")
-		
-		#recoil
-		if recoil_translation_spring.check_discrepancy(puppet_recoil_pos, recoil_pos_variance):
-			recoil_translation_spring = puppet_recoil_pos
-		else:
-			rpc("set_recoil_pos")
-		
-		if recoil_rotation_spring.check_discrepancy(puppet_recoil_rot, recoil_rot_variance):
-			recoil_rotation_spring = puppet_recoil_rot
-		else:
-			rpc("set_recoil_rot")
-		
-		#sway
-		if translation_sway_spring.check_discrepancy(puppet_sway_pos, pos_sway_variance):
-			translation_sway_spring = puppet_sway_pos
-		else:
-			rpc("set_sway_pos")
-		
-		if rotation_sway_spring.check_discrepancy(puppet_sway_rot, rot_sway_variance):
-			rotation_sway_spring = puppet_sway_rot
-		else:
-			rpc("set_sway_rot")
+#		if aim_position_spring.check_discrepancy(puppet_aim_pos, aim_pos_variance):
+#			aim_position_spring = puppet_aim_pos
+#		else:
+#			rpc("set_aim_pos")
+#
+#		if aim_rotation_spring.check_discrepancy(puppet_aim_rot, aim_rot_variance):
+#			aim_rotation_spring = puppet_aim_rot
+#		else:
+#			rpc("set_aim_rot")
+#
+#		#recoil
+#		if recoil_translation_spring.check_discrepancy(puppet_recoil_pos, recoil_pos_variance):
+#			recoil_translation_spring = puppet_recoil_pos
+#		else:
+#			rpc("set_recoil_pos")
+#
+#		if recoil_rotation_spring.check_discrepancy(puppet_recoil_rot, recoil_rot_variance):
+#			recoil_rotation_spring = puppet_recoil_rot
+#		else:
+#			rpc("set_recoil_rot")
+#
+#		#sway
+#		if translation_sway_spring.check_discrepancy(puppet_sway_pos, pos_sway_variance):
+#			translation_sway_spring = puppet_sway_pos
+#		else:
+#			rpc("set_sway_pos")
+#
+#		if rotation_sway_spring.check_discrepancy(puppet_sway_rot, rot_sway_variance):
+#			rotation_sway_spring = puppet_sway_rot
+#		else:
+#			rpc("set_sway_rot")
 		
 		#apply values
 		rset("puppet_aim_pos", aim_position_spring)

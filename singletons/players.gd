@@ -78,7 +78,6 @@ remote func recieve_player_data(data : Dictionary) -> void:
 	print("Recieved player data from server")
 	if get_tree().get_rpc_sender_id() == 1:
 		#loop through all entries and create players
-		print(data)
 		for id in data.keys():
 			add_player(id, data[id])
 
