@@ -68,11 +68,6 @@ var hitmarker : PackedScene = preload("res://assets/weapons/hitmarker.tscn")
 #functions
 
 
-func set_player_id(id):
-	player_id = id
-	print(id)
-	print(name)
-
 #base functions
 func _exit_tree() -> void:
 	if character_instance:

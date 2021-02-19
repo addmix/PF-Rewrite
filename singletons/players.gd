@@ -75,7 +75,7 @@ remote func send_player_data(data : Dictionary) -> void:
 
 #on new client
 remote func recieve_player_data(data : Dictionary) -> void:
-	print("Recieved player data from server")
+#	print("Recieved player data from server")
 	if get_tree().get_rpc_sender_id() == 1:
 		#loop through all entries and create players
 		for id in data.keys():
@@ -107,8 +107,6 @@ func add_player(id : int, data : Dictionary) -> void:
 	instance.add_to_group("Players")
 	#set node name to player ID
 	instance.name = str(id)
-	#set player id
-	instance.set_player_id(id)
 	#set player name
 	instance.player_name = data["name"]
 	#add player node to players dictionary

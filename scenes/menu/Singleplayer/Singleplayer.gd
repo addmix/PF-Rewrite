@@ -26,7 +26,7 @@ func load_levels() -> void:
 		
 		#check for error
 		if err != OK:
-			print("Error loading " + dir.get_current_dir() + "/map.dat")
+			push_error("Error loading " + dir.get_current_dir() + "/map.dat")
 			continue
 		
 		#instance button
