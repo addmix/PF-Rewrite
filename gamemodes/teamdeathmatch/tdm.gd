@@ -130,7 +130,7 @@ func init_scores() -> void:
 func init_Players() -> void:
 #	print(Players.players)
 	for player in Players.players:
-		player.connect("died", self, "on_Player_died")
+		Players.players[player].connect("died", self, "on_Player_died")
 
 func on_Player_added(player : Player) -> void:
 # warning-ignore:return_value_discarded
