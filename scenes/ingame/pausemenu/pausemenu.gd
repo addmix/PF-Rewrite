@@ -1,13 +1,13 @@
 extends Control
 
 onready var PausePopup : PopupDialog = $PopupDialog
+onready var Options : Popup = $Options
 
 func _on_Resume_pressed():
 	resume()
 
 func _on_Options_pressed():
-	#popup options menu
-	pass # Replace with function body.
+	Options.popup_centered()
 
 func _on_Quit_pressed():
 	Server.close_server()
@@ -29,6 +29,7 @@ func _unhandled_input(event):
 		if event.is_action_pressed("ui_cancel"):
 			resume()
 			get_tree().set_input_as_handled()
+		get_tree().set_input_as_handled()
 	else:
 		if event.is_action_pressed("ui_pause"):
 			pause()

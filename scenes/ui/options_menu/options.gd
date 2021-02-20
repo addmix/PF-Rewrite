@@ -159,6 +159,10 @@ func _on_Apply_pressed() -> void:
 		ProjectSettings.set_setting(node.setting, node.get_value())
 # warning-ignore:return_value_discarded
 	ProjectSettings.save()
+	
+	Settings.load_settings()
+	
+	hide()
 
 func _on_Revert_pressed() -> void:
 	revert_confirmation.popup_centered()
@@ -168,6 +172,7 @@ func _on_RevertConfirmation_confirmed() -> void:
 		var revert = ProjectSettings.property_get_revert(node.setting)
 		ProjectSettings.set_setting(node.setting, revert)
 		node.set_value(revert)
+# warning-ignore:return_value_discarded
 	ProjectSettings.save()
 
 func _on_Cancel_pressed() -> void:
@@ -177,4 +182,6 @@ func _on_Cancel_pressed() -> void:
 	hide()
 
 
-
+func _unhandled_input(event : InputEvent) -> void:
+	if visible:
+		get_tree().set_input_as_handled()

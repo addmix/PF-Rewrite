@@ -375,6 +375,8 @@ enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "smoothing" )
 hitmarker/color=Color( 1, 1, 1, 1 )
 hitmarker/size=Vector2( 20, 4 )
 hitmarker/spacing=10.0
+hud/scale=0.0
+hud/transparency=0.0
 
 [importer_defaults]
 

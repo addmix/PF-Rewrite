@@ -134,6 +134,8 @@ func _ready() -> void:
 	emit_signal("spawned")
 	_Camera.current = is_network_master()
 	
+	Settings.connect("load_settings", self, "settings_changed")
+	
 	set_physics_process(false)
 	set_process(false)
 	
@@ -756,3 +758,6 @@ func server_process(_delta : float) -> void:
 
 remote func set_player_position(pos : Vector3) -> void:
 	transform.origin = pos
+
+func settings_changed() -> void:
+	camera_sensitiviy = ProjectSettings.get_setting("controls/mouse/sensitivity")

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scenes/ingame/pausemenu/pausemenu.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ui/options_menu/options.tscn" type="PackedScene" id=2]
 
 [node name="PauseMenu" type="Control"]
 anchor_right = 1.0
@@ -72,6 +73,12 @@ margin_right = 367.0
 margin_bottom = 217.0
 size_flags_horizontal = 3
 text = "Quit"
+
+[node name="Options" parent="." instance=ExtResource( 2 )]
+margin_left = 265.562
+margin_top = 153.414
+margin_right = 265.562
+margin_bottom = 153.414
 [connection signal="pressed" from="PopupDialog/MarginContainer/VBoxContainer/Resume" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="PopupDialog/MarginContainer/VBoxContainer/Options" to="." method="_on_Options_pressed"]
 [connection signal="pressed" from="PopupDialog/MarginContainer/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]

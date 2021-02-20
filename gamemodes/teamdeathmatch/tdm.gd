@@ -1,9 +1,37 @@
 extends Spatial
 
+
+#signals
+
+
+signal teams_created
+signal game_started
+signal game_ended
+signal game_won
+signal score_updated
+
+
+
+#variables
+
+
 var scores := []
 var game_timer := Timer.new()
 var countdown_timer := Timer.new()
 var end_timer := Timer.new()
+
+var options := {
+	"game_time" : 300,
+	"countdown_time": .1,
+	"end_time": 10,
+	"score": 200,
+	"teams": 2,
+}
+
+
+
+#nodes
+
 
 #teams
 var teams := preload("res://gamemodes/boilerplates/teams/teams.tscn")
@@ -13,20 +41,12 @@ var Teams : Node
 var spawner := preload("res://gamemodes/boilerplates/playerspawner/playerspawner.tscn")
 var Spawner : Node
 
-export var options := {
-	"game_time" : 300,
-	"countdown_time": .1,
-	"end_time": 10,
-	"score": 200,
-	"teams": 2,
-	
-}
+#UI plugin
+var plugin := preload("res://gamemodes/teamdeathmatch/tdm_ui_plugin.tscn")
+var Plugin : MarginContainer
 
-signal game_started
-signal game_ended
-signal game_won
 
-signal teams_created
+
 
 func init() -> void:
 	#initializes teams
@@ -37,10 +57,13 @@ func init() -> void:
 	
 	#initializes player spawner
 	Spawner = spawner.instance()
-	add_child(Spawner, true)
 	Spawner.Gamemode = self
+	add_child(Spawner, true)
 	
-	connect_signals()
+	
+	
+	
+	
 	
 	#sets team count
 	Teams.team_count = options["teams"]
@@ -70,31 +93,35 @@ func init() -> void:
 	end_timer.one_shot = true
 	add_child(end_timer)
 	
+	
+	#initializes UI plugin
+	Plugin = plugin.instance()
+	$"/root".add_child(Plugin, true)
+	
+	
+	connect_signals()
 	#start countdown timer
 	countdown_timer.start()
 #	print("Starting countdown")
 
 #connects signals
 func connect_signals() -> void:
+	var _err : int
 	#game signals
-# warning-ignore:return_value_discarded
-	connect("game_started", self, "on_game_start")
-# warning-ignore:return_value_discarded
-	connect("game_ended", self, "on_game_ended")
-# warning-ignore:return_value_discarded
-	connect("game_won", self, "on_game_won")
+	_err = connect("game_started", self, "on_game_start")
+	_err = connect("game_ended", self, "on_game_ended")
+	_err = connect("game_won", self, "on_game_won")
 	
 	#timer signals
-# warning-ignore:return_value_discarded
-	countdown_timer.connect("timeout", self, "on_countdown_finished")
-# warning-ignore:return_value_discarded
-	game_timer.connect("timeout", self, "on_game_time_finished")
-# warning-ignore:return_value_discarded
-	end_timer.connect("timeout", self, "on_end_time_finished")
+	_err = countdown_timer.connect("timeout", self, "on_countdown_finished")
+	_err = game_timer.connect("timeout", self, "on_game_time_finished")
+	_err = end_timer.connect("timeout", self, "on_end_time_finished")
 	
 	#player signals
-# warning-ignore:return_value_discarded
-	Players.connect("player_added", self, "on_Player_added")
+	_err = Players.connect("player_added", self, "on_Player_added")
+	
+	#ui signals
+	_err = connect("score_updated", Plugin, "on_score_updated")
 
 func init_scores() -> void:
 	for team in Teams.team_count:
@@ -190,13 +217,12 @@ func player_scored(player : Player) -> void:
 	#update score
 	scores[player.team] += 1
 	
-	print(scores)
-	
 	#check score
 	if scores[player.team] >= options["score"]:
 		#emit game ended signal if one team has won
 		emit_signal("game_ended")
 	
+	emit_signal("score_updated", scores)
 
 func on_reset(player : Player) -> void:
 	print(player.player_id, " reset")

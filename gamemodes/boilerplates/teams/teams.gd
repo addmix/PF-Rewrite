@@ -10,8 +10,9 @@ func _ready() -> void:
 	Players.connect("player_removed", self, "on_Player_removed")
 
 func on_Player_added(player : Player) -> void:
-#	print("Player ", player.player_id, " added")
-	assign_to_team(player, get_team_with_least_players())
+	var team : int = get_team_with_least_players()
+	assign_to_team(player, team)
+	
 
 func on_Player_removed(player : Player) -> void:
 	remove_from_team(player)
