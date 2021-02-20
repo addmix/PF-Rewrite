@@ -23,7 +23,7 @@ func change_state(new_state : String) -> void:
 	if get_tree().is_network_server():
 		rpc("sync_state", new_state)
 	elif is_network_master():
-		rpc_id(1, "syncState", new_state)
+		rpc_id(1, "sync_state", new_state)
 	
 
 remote func sync_state(new_state : String) -> void:
