@@ -57,5 +57,13 @@ func accelerate(s : Vector3) -> void:
 #networking
 
 
+func get_networking() -> Array:
+	return [position, velocity, target]
+
+func set_networking(a : Array) -> void:
+	position = a[0]
+	velocity = a[1]
+	target = a[2]
+
 func check_discrepancy(s : V3Spring, d : float) -> bool:
 	return (position - s.position).length() < d

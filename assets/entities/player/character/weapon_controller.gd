@@ -19,27 +19,27 @@ onready var base_offset := transform.origin
 
 const aim_pos_variance := .05
 var aim_position_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-remote var puppet_aim_pos := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+remote var puppet_aim_pos := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 
 const aim_rot_variance := .05
 var aim_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-remote var puppet_aim_rot := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+remote var puppet_aim_rot := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 
 const recoil_pos_variance := .05
 var recoil_translation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-remote var puppet_recoil_pos := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+remote var puppet_recoil_pos := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 
 const recoil_rot_variance := .05
 var recoil_rotation_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-remote var puppet_recoil_rot := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+remote var puppet_recoil_rot := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 
 const pos_sway_variance := .05
 var translation_sway_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-remote var puppet_sway_pos := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+remote var puppet_sway_pos := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 
 const rot_sway_variance := .05
 var rotation_sway_spring := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, .5, 1)
-remote var puppet_sway_rot := V3Spring.new(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, 0, 1)
+remote var puppet_sway_rot := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 
 #accuracy
 var accuracy := {}
@@ -178,22 +178,22 @@ func process_recoil(delta : float) -> void:
 #networking
 
 remote func set_aim_pos() -> void:
-	aim_position_spring = puppet_aim_pos
+	aim_position_spring.set_networking(puppet_aim_pos)
 
 remote func set_aim_rot() -> void:
-	aim_rotation_spring = puppet_aim_rot
+	aim_rotation_spring.set_networking(puppet_aim_rot)
 
 remote func set_recoil_pos() -> void:
-	recoil_translation_spring = puppet_recoil_pos
+	recoil_translation_spring.set_networking(puppet_recoil_pos)
 
 remote func set_recoil_rot() -> void:
-	recoil_rotation_spring = puppet_recoil_rot
+	recoil_rotation_spring.set_networking(puppet_recoil_rot)
 
 remote func set_sway_pos() -> void:
-	translation_sway_spring = puppet_sway_pos
+	translation_sway_spring.set_networking(puppet_sway_pos)
 
 remote func set_sway_rot() -> void:
-	rotation_sway_spring = puppet_sway_rot
+	rotation_sway_spring.set_networking(puppet_sway_rot)
 
 func network_springs() -> void:
 	if get_tree().is_network_server():
@@ -233,27 +233,27 @@ func network_springs() -> void:
 #			rpc("set_sway_rot")
 		
 		#apply values
-		rset("puppet_aim_pos", aim_position_spring)
-		rset("puppet_aim_rot", aim_rotation_spring)
-		rset("puppet_recoil_pos", recoil_translation_spring)
-		rset("puppet_recoil_rot", recoil_rotation_spring)
-		rset("puppet_sway_pos", translation_sway_spring)
-		rset("puppet_sway_rot", rotation_sway_spring)
+		rset("puppet_aim_pos", aim_position_spring.get_networking())
+		rset("puppet_aim_rot", aim_rotation_spring.get_networking())
+		rset("puppet_recoil_pos", recoil_translation_spring.get_networking())
+		rset("puppet_recoil_rot", recoil_rotation_spring.get_networking())
+		rset("puppet_sway_pos", translation_sway_spring.get_networking())
+		rset("puppet_sway_rot", rotation_sway_spring.get_networking())
 	else:
 		if is_network_master():
-			rset_id(1, "puppet_aim_pos", aim_position_spring)
-			rset_id(1, "puppet_aim_rot", aim_rotation_spring)
-			rset_id(1, "puppet_recoil_pos", recoil_translation_spring)
-			rset_id(1, "puppet_recoil_rot", recoil_rotation_spring)
-			rset_id(1, "puppet_sway_pos", translation_sway_spring)
-			rset_id(1, "puppet_sway_rot", rotation_sway_spring)
+			rset_id(1, "puppet_aim_pos", aim_position_spring.get_networking())
+			rset_id(1, "puppet_aim_rot", aim_rotation_spring.get_networking())
+			rset_id(1, "puppet_recoil_pos", recoil_translation_spring.get_networking())
+			rset_id(1, "puppet_recoil_rot", recoil_rotation_spring.get_networking())
+			rset_id(1, "puppet_sway_pos", translation_sway_spring.get_networking())
+			rset_id(1, "puppet_sway_rot", rotation_sway_spring.get_networking())
 		else:
-			aim_position_spring = puppet_aim_pos
-			aim_rotation_spring = puppet_aim_rot
-			recoil_translation_spring = puppet_recoil_pos
-			recoil_rotation_spring = puppet_recoil_rot
-			translation_sway_spring = puppet_sway_pos
-			rotation_sway_spring = puppet_sway_rot
+			aim_position_spring.set_networking(puppet_aim_pos)
+			aim_rotation_spring.set_networking(puppet_aim_rot)
+			recoil_translation_spring.set_networking(puppet_recoil_pos)
+			recoil_rotation_spring.set_networking(puppet_recoil_rot)
+			translation_sway_spring.set_networking(puppet_sway_pos)
+			rotation_sway_spring.set_networking(puppet_sway_rot)
 
 
 #weapons
