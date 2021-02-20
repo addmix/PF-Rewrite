@@ -336,6 +336,7 @@ volume/ambient_volume=1.0
 volume/sfx_volume=1.0
 volume/music_volume=1.0
 volume/voice_volume=1.0
+volume/hitmarker_volume=1.0
 
 [autoload]
 
