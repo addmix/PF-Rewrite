@@ -732,7 +732,7 @@ func client_process(_delta : float) -> void:
 		axis = puppet_axis
 		Head.rotation.x = puppet_head_rotation.x
 		RotationHelper.rotation.y = puppet_head_rotation.y
-		mouse_movement = puppet_mouse_movement
+#		mouse_movement = puppet_mouse_movement
 
 func server_process(_delta : float) -> void:
 	#client to us
@@ -749,7 +749,7 @@ func server_process(_delta : float) -> void:
 		Head.rotation.x = puppet_head_rotation.x
 		RotationHelper.rotation.y = puppet_head_rotation.y
 		axis = puppet_axis
-		mouse_movement = puppet_mouse_movement
+#		mouse_movement = puppet_mouse_movement
 	
 	#us to clients
 	rset_unreliable("puppet_position", transform.origin)
