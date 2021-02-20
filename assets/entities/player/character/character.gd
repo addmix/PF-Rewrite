@@ -422,8 +422,8 @@ func switch_weapon(index : int) -> void:
 	new_weapon = index % weapons.size()
 
 puppet func puppet_switch_weapon(index : int) -> void:
-	if  get_tree().is_network_server():
-		rpc("puppet_switch_weapon", index)
+#	if  get_tree().is_network_server():
+#		rpc("puppet_switch_weapon", index)
 	if weapons[index % weapons.size()] == null:
 		return
 	#do dequip animation
