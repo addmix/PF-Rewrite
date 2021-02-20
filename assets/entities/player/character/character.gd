@@ -151,6 +151,7 @@ func deferred() -> void:
 	ready_weapons()
 	ready_ik()
 	
+	update_accuracy()
 	emit_signal("loaded", self)
 	
 	set_physics_process(true)
