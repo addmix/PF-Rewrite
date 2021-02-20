@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scenes/ui/Options/Options.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ui/Options/Sound.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/ui/Options/InputMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/ui/Options/Settings.tscn" type="PackedScene" id=4]
+
+[node name="Options" type="Popup"]
+margin_right = 500.0
+margin_bottom = 300.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 11.0
+margin_bottom = 43.0
+tab_align = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Gameplay" type="Control" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Controls" parent="TabContainer" instance=ExtResource( 3 )]
+visible = false
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Graphics" parent="TabContainer" instance=ExtResource( 4 )]
+visible = false
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Sound" parent="TabContainer" instance=ExtResource( 2 )]
+visible = false
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0

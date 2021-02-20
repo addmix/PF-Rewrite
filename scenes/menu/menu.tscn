@@ -1,11 +1,8 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/menu/Quit/Quit.gd" type="Script" id=1]
-[ext_resource path="res://scenes/menu/Options/Options.gd" type="Script" id=2]
+[ext_resource path="res://scenes/ui/Options/options.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/menu/menu.gd" type="Script" id=3]
-[ext_resource path="res://scenes/menu/Options/InputMenu.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/menu/Options/Settings.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/menu/Options/Sound.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/menu/Singleplayer/Singleplayer.gd" type="Script" id=7]
 [ext_resource path="res://scenes/menu/Multiplayer/Edit server.gd" type="Script" id=8]
 [ext_resource path="res://scenes/menu/Multiplayer/Multiplayer.gd" type="Script" id=9]
@@ -121,7 +118,6 @@ margin_bottom = 20.0
 text = "Cancel"
 
 [node name="Multiplayer" type="Popup" parent="."]
-visible = true
 margin_right = 782.0
 margin_bottom = 443.0
 script = ExtResource( 9 )
@@ -476,40 +472,7 @@ margin_right = 251.0
 margin_bottom = 20.0
 text = "Cancel"
 
-[node name="Options" type="Popup" parent="."]
-margin_right = 500.0
-margin_bottom = 300.0
-script = ExtResource( 2 )
-
-[node name="TabContainer" type="TabContainer" parent="Options"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = 11.0
-margin_bottom = 43.0
-tab_align = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Controls" parent="Options/TabContainer" instance=ExtResource( 4 )]
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-
-[node name="Graphics" parent="Options/TabContainer" instance=ExtResource( 5 )]
-visible = false
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-
-[node name="Sound" parent="Options/TabContainer" instance=ExtResource( 6 )]
-visible = false
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+[node name="Options" parent="." instance=ExtResource( 2 )]
 
 [node name="Credits" type="PopupDialog" parent="."]
 margin_right = 40.0
