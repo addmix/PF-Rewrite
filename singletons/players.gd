@@ -107,6 +107,8 @@ func add_player(id : int, data : Dictionary) -> void:
 	instance.add_to_group("Players")
 	#set node name to player ID
 	instance.name = str(id)
+	#tell the node the player's ID
+	instance.player_id = id
 	#set player name
 	instance.player_name = data["name"]
 	#add player node to players dictionary

@@ -21,7 +21,7 @@ signal died
 
 #player vars
 var player_name : String
-var player_id : int
+var player_id : int = 0
 var team : int
 var data : Dictionary
 var loadout := ["M4A1", null, null, null]
@@ -68,6 +68,8 @@ var hitmarker : PackedScene = preload("res://assets/weapons/hitmarker.tscn")
 #functions
 
 
+
+
 #base functions
 func _exit_tree() -> void:
 	if character_instance:
@@ -93,6 +95,7 @@ func connect_hit() -> void:
 func on_player_spawned() -> void:
 	emit_signal("spawned")
 	
+	
 	#hide menu
 	if is_network_master():
 		Server.GamemodeInstance.Spawner.hide_menu()
@@ -115,7 +118,7 @@ func spawn_character(_node : Position3D) -> void:
 	instance_character()
 	add_child(character_instance)
 	
-	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
+	var spawn_point : Transform = _node.get_global_transform()
 	character_instance.transform.origin = spawn_point.origin
 
 func instance_character() -> void:

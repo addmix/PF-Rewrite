@@ -18,6 +18,7 @@ resource_name = "LowPassFilter"
 cutoff_hz = 5000.0
 
 [resource]
+bus/0/volume_db = -0.130497
 bus/1/name = "Gunshots"
 bus/1/solo = false
 bus/1/mute = false

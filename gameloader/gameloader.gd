@@ -6,6 +6,8 @@ var SplashScreen = preload("res://scenes/splash_screen/splash_screen.tscn")
 func _ready() -> void:
 	#load resources
 	ModLoader.load_resources()
+	#apply settings to relevant nodes
+	Settings.load_settings()
 	#scan maps folder
 	Maps.scan_maps()
 	#scan gamemodes

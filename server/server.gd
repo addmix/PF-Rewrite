@@ -80,7 +80,6 @@ func start_host() -> void:
 	
 	#loading stuff is done, allow players to join
 	network.refuse_new_connections = false
-	
 	Players.add_player(1, Players.local_player)
 
 #start client player, connects to host player
