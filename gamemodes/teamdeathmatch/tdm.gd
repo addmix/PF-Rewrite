@@ -191,6 +191,8 @@ func on_game_won(team : int) -> void:
 #when player dies
 func on_Player_died(player : Player) -> void:
 #	print(player.player_id, " died")
+	if !player.character_instance.damage_stack.size() > 0:
+		return
 	
 	#get killer
 	var killer = player.character_instance.damage_stack[0][0]
