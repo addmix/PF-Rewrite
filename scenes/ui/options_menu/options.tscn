@@ -1,9 +1,11 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://scenes/ui/Options/Options.gd" type="Script" id=1]
-[ext_resource path="res://scenes/ui/Options/Sound.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/ui/Options/InputMenu.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/ui/options_menu/Options.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ui/options_menu/Sound.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/ui/options_menu/InputMenu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/ui/Options/Settings.tscn" type="PackedScene" id=4]
+
+
 
 [node name="Options" type="Popup"]
 margin_right = 500.0

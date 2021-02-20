@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/menu/Quit/Quit.gd" type="Script" id=1]
-[ext_resource path="res://scenes/ui/Options/options.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/ui/options_menu/options.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/menu/menu.gd" type="Script" id=3]
 [ext_resource path="res://scenes/menu/Singleplayer/Singleplayer.gd" type="Script" id=7]
 [ext_resource path="res://scenes/menu/Multiplayer/Edit server.gd" type="Script" id=8]
@@ -9,6 +9,8 @@
 [ext_resource path="res://scenes/menu/Multiplayer/Add server.gd" type="Script" id=10]
 [ext_resource path="res://scenes/menu/Multiplayer/Delete server.gd" type="Script" id=11]
 [ext_resource path="res://scenes/menu/Login.gd" type="Script" id=12]
+
+
 
 [node name="Menu" type="Control"]
 anchor_right = 1.0
