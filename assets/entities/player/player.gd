@@ -118,7 +118,7 @@ func spawn_character(_node : Position3D) -> void:
 	instance_character()
 	add_child(character_instance)
 	
-	var spawn_point : Transform = _node.get_global_transform()
+	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
 	character_instance.transform.origin = spawn_point.origin
 
 func instance_character() -> void:
