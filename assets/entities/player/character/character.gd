@@ -63,7 +63,8 @@ var last_pos := Vector3.ZERO
 var current_pos := Vector3.ZERO
 
 #health/damage
-export var health := 100.0
+var health := 100.0
+remote var puppet_health := 100.0
 var damage_stack := []
 
 #weapons
@@ -526,7 +527,7 @@ func damage(source, hp : float) -> void:
 	#do screen effect
 	
 	if get_tree().is_network_server():
-		rset("health", health)
+		rset("puppet_health", health)
 	
 	if health <= 0:
 		kill()

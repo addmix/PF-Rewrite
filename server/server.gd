@@ -32,8 +32,6 @@ var GamemodeInstance : Node
 
 var network := NetworkedMultiplayerENet.new()
 
-
-
 func _ready() -> void:
 	_connect_signals()
 
