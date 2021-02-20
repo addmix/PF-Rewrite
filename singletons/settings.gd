@@ -32,6 +32,7 @@ func load_audio() -> void:
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), (1 - max(0, min(1, ProjectSettings.get_setting("audio/volume/master_volume")))) * -80)
 	#ambient
 	ProjectSettings.set_initial_value("audio/volume/ambient_volume", 1.0)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Ambient"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/ambient_volume")))) * -80)
 	#sfx volume
 	ProjectSettings.set_initial_value("audio/volume/sfx_volume", 1.0)
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Gunshots"), (1 - max(0, min(1, ProjectSettings.get_setting("audio/volume/sfx_volume")))) * -80)
@@ -39,6 +40,7 @@ func load_audio() -> void:
 	
 	#music
 	ProjectSettings.set_initial_value("audio/volume/music_volume", 1.0)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/music_volume")))) * -80)
 	
 	#hitmarkers
 	ProjectSettings.set_initial_value("audio/volume/hitmarker_volume", 1.0)
@@ -46,4 +48,6 @@ func load_audio() -> void:
 	
 	#voice
 	ProjectSettings.set_initial_value("audio/volume/voice_recieve_volume", 1.0)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceRecieve"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/voice_recieve_volume")))) * -80)
 	ProjectSettings.set_initial_value("audio/volume/voice_emit_volume", 1.0)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceEmit"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/voice_emit_volume")))) * -80)
