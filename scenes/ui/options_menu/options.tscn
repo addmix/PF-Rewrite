@@ -1,61 +1,141 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://scenes/ui/options_menu/options.gd" type="Script" id=1]
-[ext_resource path="res://scenes/ui/options_menu/sound.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/ui/options_menu/input_menu.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/ui/Options/Settings.tscn" type="PackedScene" id=4]
-
-
-
-
-
-
-
-
 
 [node name="Options" type="Popup"]
-margin_right = 500.0
-margin_bottom = 300.0
+visible = true
+anchor_left = 0.2
+anchor_top = 0.2
+anchor_right = 0.8
+anchor_bottom = 0.8
+popup_exclusive = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 11.0
-margin_bottom = 43.0
+margin_bottom = 3.05176e-05
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabContainer" type="TabContainer" parent="VBox"]
+margin_right = 614.0
+margin_bottom = 324.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 tab_align = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Gameplay" type="Control" parent="TabContainer"]
+[node name="Gameplay" type="ScrollContainer" parent="VBox/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
 
-[node name="Controls" parent="TabContainer" instance=ExtResource( 3 )]
+[node name="Gameplay" type="VBoxContainer" parent="VBox/TabContainer/Gameplay"]
+margin_right = 606.0
+margin_bottom = 288.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Graphics" type="ScrollContainer" parent="VBox/TabContainer"]
 visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
 
-[node name="Graphics" parent="TabContainer" instance=ExtResource( 4 )]
+[node name="Graphics" type="VBoxContainer" parent="VBox/TabContainer/Graphics"]
+margin_right = 606.0
+margin_bottom = 288.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Controls" type="ScrollContainer" parent="VBox/TabContainer"]
 visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
 
-[node name="Sound" parent="TabContainer" instance=ExtResource( 2 )]
+[node name="Controls" type="VBoxContainer" parent="VBox/TabContainer/Controls"]
+margin_right = 606.0
+margin_bottom = 288.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Audio" type="ScrollContainer" parent="VBox/TabContainer"]
 visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="Audio" type="VBoxContainer" parent="VBox/TabContainer/Audio"]
+margin_right = 606.0
+margin_bottom = 288.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LowerButtons" type="HBoxContainer" parent="VBox"]
+margin_top = 328.0
+margin_right = 614.0
+margin_bottom = 360.0
+rect_min_size = Vector2( 0, 32 )
+
+[node name="Apply" type="Button" parent="VBox/LowerButtons"]
+margin_right = 202.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Apply"
+
+[node name="Revert" type="Button" parent="VBox/LowerButtons"]
+margin_left = 206.0
+margin_right = 408.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Revert"
+
+[node name="Cancel" type="Button" parent="VBox/LowerButtons"]
+margin_left = 412.0
+margin_right = 614.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+text = "Cancel"
+
+[node name="RevertConfirmation" type="ConfirmationDialog" parent="."]
+margin_right = 200.0
+margin_bottom = 70.0
+window_title = "Revert Changes?"
+dialog_text = "Are you sure you want to revert all settings?
+(Note: This cannot be undone)"
+[connection signal="pressed" from="VBox/LowerButtons/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="VBox/LowerButtons/Revert" to="." method="_on_Revert_pressed"]
+[connection signal="pressed" from="VBox/LowerButtons/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="confirmed" from="RevertConfirmation" to="." method="_on_RevertConfirmation_confirmed"]

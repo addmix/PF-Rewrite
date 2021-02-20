@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/ui/options_menu/types/vector2.gd" type="Script" id=1]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+margin_right = 80.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 80, 32 )
+size_flags_horizontal = 9
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="X" type="HBoxContainer" parent="."]
+margin_right = 92.0
+margin_bottom = 32.0
+
+[node name="Label" type="Label" parent="X"]
+margin_top = 9.0
+margin_right = 8.0
+margin_bottom = 23.0
+text = "X"
+
+[node name="X" type="SpinBox" parent="X"]
+margin_left = 12.0
+margin_right = 92.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 80, 32 )
+
+[node name="Y" type="HBoxContainer" parent="."]
+margin_left = 96.0
+margin_right = 187.0
+margin_bottom = 32.0
+
+[node name="Label" type="Label" parent="Y"]
+margin_top = 9.0
+margin_right = 7.0
+margin_bottom = 23.0
+text = "Y"
+
+[node name="Y" type="SpinBox" parent="Y"]
+margin_left = 11.0
+margin_right = 91.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 80, 32 )

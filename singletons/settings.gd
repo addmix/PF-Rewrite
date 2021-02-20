@@ -13,18 +13,24 @@ extends Node
 func load_settings() -> void:
 	load_gameplay()
 	load_graphics()
+	load_controls()
 	load_audio()
-	ProjectSettings.save()
+	var _err := ProjectSettings.save()
 
 func load_gameplay() -> void:
 	#hitmarkers
 	ProjectSettings.set_initial_value("gameplay/hitmarker/color", Color(1, 1, 1, 1))
 	ProjectSettings.set_initial_value("gameplay/hitmarker/size", Vector2(20, 4))
-	ProjectSettings.set_initial_value("gameplay/hitmarker/space", 10.0)
+	ProjectSettings.set_initial_value("gameplay/hitmarker/spacing", 10.0)
 
 func load_graphics() -> void:
 	ProjectSettings.set_initial_value("rendering/quality/filters/anisotropic_filter_level", 0)
 	ProjectSettings.set_initial_value("rendering/quality/filters/msaa", 0)
+
+func load_controls() -> void:
+	ProjectSettings.set_initial_value("controls/invert_x", false)
+	ProjectSettings.set_initial_value("controls/invert_y", false)
+	ProjectSettings.set_initial_value("controls/mouse/sensitivity", Vector2(1, 1))
 
 func load_audio() -> void:
 	#master volume
@@ -51,3 +57,4 @@ func load_audio() -> void:
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceRecieve"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/voice_recieve_volume")))) * -80)
 	ProjectSettings.set_initial_value("audio/volume/voice_emit_volume", 1.0)
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceEmit"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/voice_emit_volume")))) * -80)
+

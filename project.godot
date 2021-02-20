@@ -358,11 +358,17 @@ Settings="*res://singletons/settings.gd"
 [controls]
 
 mouse/sensitivity=Vector2( 0.2, 0.2 )
+invert_x=false
+invert_y=false
 
 [display]
 
 window/vsync/use_vsync=false
 window/stretch/aspect="expand"
+
+[editor]
+
+main_run_args="--verbose"
 
 [editor_plugins]
 

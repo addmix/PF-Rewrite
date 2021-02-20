@@ -185,6 +185,8 @@ func _exit_tree() -> void:
 	for weapon in weapons:
 		if weapon != null:
 			weapon.free()
+	
+
 
 func _notification(what : int) -> void:
 	match what:
