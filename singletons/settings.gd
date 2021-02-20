@@ -28,6 +28,7 @@ func load_settings() -> void:
 	load_graphics()
 	load_controls()
 	load_audio()
+	emit_signal("load_settings")
 	var _err := ProjectSettings.save()
 
 func load_gameplay() -> void:
