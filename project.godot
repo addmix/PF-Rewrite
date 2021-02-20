@@ -366,10 +366,6 @@ invert_y=false
 window/vsync/use_vsync=false
 window/stretch/aspect="expand"
 
-[editor]
-
-main_run_args="--verbose"
-
 [editor_plugins]
 
 enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "smoothing" )
