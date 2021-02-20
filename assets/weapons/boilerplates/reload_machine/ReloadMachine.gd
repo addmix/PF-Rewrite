@@ -68,21 +68,16 @@ func _unhandled_input(event : InputEvent) -> void:
 		if event.is_action_pressed("reload") and get_parent().can_reload():
 			get_tree().set_input_as_handled()
 			if get_tree().is_network_server():
-				rpc("input", event)
+				rpc("reload")
 			else:
-				rpc_id(1, "input", event)
+				rpc_id(1, "reload")
 			
 			if states[current_state].stopped:
 				states[current_state].resume()
 
-remote func input(event : InputEvent) -> void:
-	if get_tree().is_network_server():
-		#anticheat
-		rpc("input", event)
-	
-	if event.is_action_pressed("reload") and get_parent().can_reload():
-		if states[current_state].stopped:
-			states[current_state].resume()
+remote func reload() -> void:
+	if states[current_state].stopped:
+		states[current_state].resume()
 
 remote func resume() -> void:
 	if !is_network_master():

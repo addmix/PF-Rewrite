@@ -538,7 +538,7 @@ func calculate_damage(projectile : Projectile, part : BodyPart) -> float:
 func kill() -> void:
 	if get_tree().is_network_server():
 		rpc("puppet_kill")
-	emit_signal("died")
+		emit_signal("died")
 
 remote func puppet_kill() -> void:
 	emit_signal("died")

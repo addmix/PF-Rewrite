@@ -67,7 +67,30 @@ func peer_disconnected(id : int) -> void:
 
 #start host player
 func start_host() -> void:
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	network.allow_object_decoding = true
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	#create server
 # warning-ignore:return_value_discarded
 	network.create_server(port, playerlimit, in_bandwidth, out_bandwidth)

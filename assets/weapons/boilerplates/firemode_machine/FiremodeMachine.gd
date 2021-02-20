@@ -75,11 +75,26 @@ func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
 		#change firemode
 		if Input.is_action_just_pressed("change_firemode"):
-			states[current_state].changeFiremode()
-			get_tree().set_input_as_handled()
-			return
+			if get_tree().is_network_server():
+				states[current_state].changeFiremode()
+				get_tree().set_input_as_handled()
+				rpc("puppet_change_firemode")
+				return
+			else:
+				rpc_id(1, "puppet_change_firemode")
+				return
 		
 		states[current_state].unhandled_input(event)
+
+remote func puppet_change_firemode() -> void:
+	if get_tree().is_network_server():
+		rpc("puppet_change_firemode")
+	else:
+		if is_network_master():
+			pass
+		else:
+			states[current_state].changeFiremode()
+			get_tree().set_input_as_handled()
 
 func _on_Ready_reset():
 	states[current_state].onReset()
