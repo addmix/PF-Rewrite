@@ -37,13 +37,15 @@ var walk_bob_tick := 0.0
 var breath_sway_tick := 0.0
 
 #controls
+var invert_x : bool = ProjectSettings.get_setting("controls/invert_x")
+var invert_y : bool = ProjectSettings.get_setting("controls/invert_y")
 var axis := Vector3.ZERO
 var mouse_movement := Vector2.ZERO
 remote var puppet_axis := Vector3.ZERO
 remote var puppet_mouse_movement := Vector2.ZERO
 export var camera_max_angle := 85
 export var camera_min_angle := -85
-onready var camera_sensitiviy : Vector2 = ProjectSettings.get_setting("controls/mouse/sensitivity")
+onready var camera_sensitivity : Vector2 = ProjectSettings.get_setting("controls/mouse/sensitivity")
 
 #camera
 var camera_transform := Basis()
@@ -649,7 +651,7 @@ func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
 		#mouse movement
 		if event is InputEventMouseMotion:
-			var relative = event.relative * camera_sensitiviy
+			var relative = event.relative * camera_sensitivity
 			var current = Head.rotation_degrees
 			
 			mouse_movement += relative / process_delta
@@ -682,11 +684,12 @@ func _unhandled_input(event : InputEvent) -> void:
 			get_tree().set_input_as_handled()
 
 func rotate_head(relative : Vector2) -> void:
-	RotationHelper.rotate_y(deg2rad(-relative.x))
+	var x := relative * Vector2(-1.0 * float(invert_x) + 1.0 * float(!invert_x), -1.0 * float(invert_y) + 1.0 * float(!invert_y))
+	RotationHelper.rotate_y(deg2rad(-x.x))
 	#branchless way of limiting up/down movement
-	Head.rotation_degrees.x = ((Head.rotation_degrees.x - relative.y) * int(!Head.rotation_degrees.x - relative.y <= camera_min_angle and !Head.rotation_degrees.x - relative.y >= camera_max_angle)
-	+ camera_min_angle * int(Head.rotation_degrees.x - relative.y <= camera_min_angle)
-	+ camera_max_angle * int(Head.rotation_degrees.x - relative.y >= camera_max_angle))
+	Head.rotation_degrees.x = ((Head.rotation_degrees.x - x.y) * int(!Head.rotation_degrees.x - x.y <= camera_min_angle and !Head.rotation_degrees.x - x.y >= camera_max_angle)
+	+ camera_min_angle * int(Head.rotation_degrees.x - x.y <= camera_min_angle)
+	+ camera_max_angle * int(Head.rotation_degrees.x - x.y >= camera_max_angle))
 
 func get_axis() -> Vector3:
 	#reset axis to 0 when getting value
@@ -762,4 +765,9 @@ remote func set_player_position(pos : Vector3) -> void:
 	transform.origin = pos
 
 func settings_changed() -> void:
-	camera_sensitiviy = ProjectSettings.get_setting("controls/mouse/sensitivity")
+	if !is_network_master():
+		return
+	invert_x = ProjectSettings.get_setting("controls/invert_x")
+	invert_y = ProjectSettings.get_setting("controls/invert_y")
+	
+	camera_sensitivity = ProjectSettings.get_setting("controls/mouse/sensitivity")

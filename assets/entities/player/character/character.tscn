@@ -231,14 +231,14 @@ margin_bottom = 47.0
 mouse_filter = 2
 
 [node name="Ammo" parent="UI/MarginContainer/RightHUDPanel/VBoxContainer" instance=ExtResource( 18 )]
-[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]
 [connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_camera_movement"]
-[connection signal="loaded" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="on_character_loaded"]
+[connection signal="camera_movement" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_camera_movement"]
 [connection signal="loaded" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_loaded"]
-[connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_shot_fired"]
+[connection signal="loaded" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="on_character_loaded"]
 [connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_shot_fired"]
-[connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_update_accuracy"]
+[connection signal="shot_fired" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_shot_fired"]
 [connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/Camera" method="_on_Character_update_accuracy"]
+[connection signal="update_accuracy" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_update_accuracy"]
 [connection signal="update_ammo" from="." to="UI/MarginContainer/RightHUDPanel/VBoxContainer/Ammo" method="_on_Character_update_ammo"]
 [connection signal="weapon_changed" from="." to="Smoothing/RotationHelper/Head/WeaponController" method="_on_Character_weapon_changed"]
 [connection signal="hit" from="Smoothing/RotationHelper/Skeleton" to="." method="_on_Skeleton_hit"]
