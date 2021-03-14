@@ -106,6 +106,28 @@ func start_host() -> void:
 
 #start client player, connects to host player
 func start_client() -> void:
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	network.allow_object_decoding = true
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	#connect to server
 # warning-ignore:return_value_discarded
 	network.create_client(ip, port, in_bandwidth, out_bandwidth)
