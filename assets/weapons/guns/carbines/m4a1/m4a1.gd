@@ -31,8 +31,24 @@ func loaded() -> void:
 
 func on_shot_fired() -> void:
 	update_ammo()
-	#muzzle flash
 	var instance
+	if is_network_master() and !get_tree().is_network_server():
+		rpc_id(1, "puppet_shot_fired", barrel.get_global_transform(), data["Ballistics"]["Velocity"])
+	elif is_network_master() and get_tree().is_network_server():
+		puppet_shot_fired(barrel.get_global_transform(), data["Ballistics"]["Velocity"])
+	
+	if !get_tree().is_network_server():
+		#bullet
+		instance = Spatial.new()
+		instance.set_script(bullet_script)
+		instance.weapon = self
+		instance.player = character.Player
+		instance.transform.origin = barrel.get_global_transform().origin
+		instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
+		$"/root".add_child(instance)
+	
+	#muzzle flash
+	
 	instance = gunshot.instance()
 	instance.add_to_group("Gunshots")
 	$"/root".add_child(instance)
@@ -43,13 +59,16 @@ func on_shot_fired() -> void:
 	instance = muzzle_flash.instance()
 	$Barrel.add_child(instance)
 	
+	
+
+remote func puppet_shot_fired(trans : Transform, speed : float) -> void:
 	#bullet
-	instance = Spatial.new()
+	var instance := Spatial.new()
 	instance.set_script(bullet_script)
 	instance.weapon = self
 	instance.player = character.Player
-	instance.transform.origin = barrel.get_global_transform().origin
-	instance.velocity = data["Ballistics"]["Velocity"] * -$Barrel.get_global_transform().basis.z
+	instance.transform = trans
+	instance.velocity = speed * -trans.basis.z
 	$"/root".add_child(instance)
 
 var data = {
