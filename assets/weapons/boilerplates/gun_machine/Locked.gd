@@ -4,10 +4,12 @@ extends Node
 signal change_state
 
 func release() -> void:
+	print("release")
 	call_deferred("emit_signal", "change_state", "Forward")
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
+	print("locked")
 	pass
 
 func exit() -> void:

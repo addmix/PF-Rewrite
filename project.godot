@@ -368,7 +368,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "smoothing" )
+enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "scatter", "smoothing" )
 
 [gameplay]
 

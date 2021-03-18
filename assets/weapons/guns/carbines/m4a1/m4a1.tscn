@@ -84,7 +84,7 @@ material/0 = ExtResource( 27 )
 material/0 = ExtResource( 27 )
 
 [node name="HandIKL" type="BoneAttachment" parent="Armature/Skeleton" index="23"]
-transform = Transform( 1, 1.42109e-14, -2.38419e-07, 2.38419e-07, -8.9407e-08, 1, 0, -1, -5.96046e-08, -0.115257, -0.221117, 0.0495666 )
+transform = Transform( 1, 1.42109e-14, -2.38419e-07, 2.38419e-07, -8.9407e-08, 1, 7.10543e-15, -1, -8.9407e-08, -0.118673, 0.135835, 0.147351 )
 bone_name = "hand_ik_l"
 
 [node name="HandIKR" type="BoneAttachment" parent="Armature/Skeleton" index="24"]

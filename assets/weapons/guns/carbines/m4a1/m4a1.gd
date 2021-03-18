@@ -67,7 +67,7 @@ remote func puppet_shot_fired(trans : Transform, speed : float) -> void:
 	instance.set_script(bullet_script)
 	instance.weapon = self
 	instance.player = character.Player
-	instance.transform = trans
+	instance.transform.origin = trans.origin
 	instance.velocity = speed * -trans.basis.z
 	$"/root".add_child(instance)
 

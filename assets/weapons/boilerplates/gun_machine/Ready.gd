@@ -7,6 +7,7 @@ signal reset
 
 # warning-ignore:unused_argument
 func enter(prev : String) -> void:
+	print("enter")
 	call_deferred("emit_signal", "reset")
 
 func exit() -> void:
