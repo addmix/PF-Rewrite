@@ -73,7 +73,7 @@ data = PoolVector3Array( 31.5215, 103.265, -230.504, 38.3545, 121.016, -256.004,
 background_mode = 2
 background_sky = SubResource( 21 )
 ambient_light_color = Color( 0.105882, 0.105882, 0.105882, 1 )
-ambient_light_sky_contribution = 0.4
+ambient_light_sky_contribution = 0.22
 fog_enabled = true
 fog_color = Color( 0.494, 0.506567, 0.52, 1 )
 fog_depth_begin = 300.0
@@ -82,7 +82,7 @@ fog_depth_curve = 0.499997
 fog_transmit_enabled = true
 fog_transmit_curve = 0.840897
 tonemap_mode = 2
-tonemap_exposure = 0.61
+tonemap_white = 13.53
 ss_reflections_enabled = true
 ss_reflections_fade_in = 0.47075
 ssao_enabled = true
@@ -283,22 +283,22 @@ transform = Transform( 1, 0, 0, 0, 0.802255, 0.596981, 0, -0.596981, 0.802255, 7
 fov = 50.0
 far = 2000.0
 
-[node name="DirectionalLight" type="DirectionalLight" parent="." index="31"]
-transform = Transform( 0.258785, 0.874255, -0.410741, 0, 0.425226, 0.905087, 0.965935, -0.234223, 0.110042, 0, 174.4, 0 )
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="31"]
+environment = SubResource( 22 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment" index="0"]
+transform = Transform( 1, 0, 0, 0, -0.819152, 0.573577, 0, -0.573577, -0.819152, 47.5909, 170.951, 47.7196 )
 shadow_enabled = true
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 500.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="32"]
-environment = SubResource( 22 )
-
-[node name="CSGBox" type="CSGBox" parent="." index="33"]
+[node name="CSGBox" type="CSGBox" parent="." index="32"]
 transform = Transform( 1, 0, 0, 0, 0.855816, -0.51728, 0, 0.51728, 0.855816, 169.909, 100.606, 155.097 )
 use_collision = true
 width = 14.277
 depth = 32.3178
 
-[node name="Area" type="Area" parent="." index="34"]
+[node name="Area" type="Area" parent="." index="33"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 154.66, 97.7863, 154.861 )
 monitorable = false
 collision_mask = 2
@@ -316,6 +316,6 @@ material = SubResource( 23 )
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="1"]
 shape = SubResource( 24 )
 
-[node name="Dummy" parent="." index="35" instance=ExtResource( 5 )]
+[node name="Dummy" parent="." index="34" instance=ExtResource( 5 )]
 transform = Transform( -0.895921, 0, -0.444213, 0, 1, 0, 0.444213, 0, -0.895921, 141.198, 97.7941, 156.707 )
 [connection signal="body_entered" from="Area" to="Area" method="_on_Area_body_entered"]
