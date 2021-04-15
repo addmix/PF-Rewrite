@@ -2,29 +2,19 @@ extends Spatial
 
 
 #signals
-
-
 signal teams_created
 signal game_started
 signal game_ended
 signal game_won
-signal score_updated
-
 
 
 #variables
-
-
-var scores := []
 var game_timer := Timer.new()
 var countdown_timer := Timer.new()
 var end_timer := Timer.new()
 
 
-
 #nodes
-
-
 #teams
 var teams := preload("res://gamemodes/boilerplates/teams/teams.tscn")
 var Teams : Node
@@ -36,8 +26,6 @@ var Spawner : Node
 #UI plugin
 var plugin := preload("res://gamemodes/teamdeathmatch/tdm_ui_plugin.tscn")
 var Plugin : MarginContainer
-
-
 
 
 func init() -> void:
@@ -53,19 +41,12 @@ func init() -> void:
 	add_child(Spawner, true)
 	
 	
-	
-	
-	
-	
 	#sets team count
 	Teams.team_count = Server.game_settings["teams"]
 	#creates teams
 	Teams.initialize_teams()
 	#assigns players to teams
 	Teams.assign_to_teams_random()
-	
-	#initialize scores for teams
-	init_scores()
 	
 	init_Players()
 	
@@ -115,10 +96,6 @@ func connect_signals() -> void:
 	#ui signals
 	_err = connect("score_updated", Plugin, "on_score_updated")
 
-func init_scores() -> void:
-	for team in Teams.team_count:
-		scores.append(0)
-
 func init_Players() -> void:
 #	print(Players.players)
 	for player in Players.players:
@@ -160,16 +137,6 @@ func on_game_end() -> void:
 	#this does not allow stalemates
 	#allow that in a future revision
 	
-	#choose winner
-	for team in range(scores.size()):
-		#branchless way to get team with highest score
-		highest_team = (team * int(scores[team] > highest_score)
-		+ team * int(!scores[team] > highest_score)
-		)
-		#branchless way to get highest score
-		highest_score = (scores[team] * int(scores[team] > highest_score)
-		+ highest_score * int(!scores[team] > highest_score)
-		)
 	
 	#emits signal that highest team won
 	emit_signal("game_won", highest_team)
@@ -206,41 +173,17 @@ func on_Player_died(player : Player) -> void:
 	
 	pass
 
-#when player scores
-func player_scored(player : Player) -> void:
-	#update score
-	scores[player.team] += 1
-	
-	#check score
-	if scores[player.team] >= Server.game_settings["score"]:
-		#emit game ended signal if one team has won
-		emit_signal("game_ended")
-	
-	emit_signal("score_updated", scores)
-
 func on_reset(player : Player) -> void:
 	print(player.player_id, " reset")
 
 func on_suicide(player : Player) -> void:
 	print(player.player_id, " committed suicide")
-	
-	#punish suicide
-	scores[player.team] -= 1
-	
-	print(scores)
 
 func on_killed(player : Player) -> void:
 	#get killer
 	var killer = player.character_instance.damage_stack[0][0]
 	
 	print(player.player_id, " was killed by ", killer.player.player_id)
-	
-	player_scored(killer.player)
 
 func on_natural(player : Player) -> void:
 	print(player.player_id, " died from natural causes")
-	
-	#punish dying from non-enemies
-	scores[player.team] -= 1
-	
-	print(scores)

@@ -3,7 +3,6 @@
 [ext_resource path="res://scenes/menu/gamemode_select/gamemode_select.gd" type="Script" id=1]
 
 [node name="GamemodeSelect" type="PopupDialog"]
-visible = true
 margin_left = 64.0
 margin_top = 79.0
 margin_right = 960.0
@@ -52,6 +51,10 @@ margin_bottom = 378.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 select_mode = 1
+max_columns = 2
+same_column_width = true
+icon_mode = 0
+fixed_icon_size = Vector2( 128, 128 )
 
 [node name="VBox" type="VBoxContainer" parent="Margin/HBox"]
 margin_left = 422.0

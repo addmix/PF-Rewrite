@@ -12,17 +12,17 @@ onready var LoginPopup : PopupDialog = $Margin/Login
 #	LoginPopup.popup_centered()
 
 func _on_Singleplayer_pressed():
-	GamemodePopup.popup_centered()
+	GamemodePopup.popup_centered_clamped(Vector2(1000000, 1000000), .8)
 
 func _on_Multiplayer_pressed():
-	MultiplayerPopup.popup_centered()
+	MultiplayerPopup.popup_centered_clamped(Vector2(1000000, 1000000), .8)
 	MultiplayerPopup._connect_servers()
 
 func _on_Options_pressed():
-	OptionsPopup.popup_centered()
+	OptionsPopup.popup_centered_clamped(Vector2(1000000, 1000000), .8)
 
 func _on_Credits_pressed():
-	CreditsPopup.popup_centered()
+	CreditsPopup.popup_centered_clamped(Vector2(1000000, 1000000), .8)
 
 func _on_Quit_pressed():
-	QuitPopup.popup_centered()
+	QuitPopup.popup_centered_clamped(Vector2(1000000, 1000000), .8)
