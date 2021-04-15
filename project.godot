@@ -326,12 +326,18 @@ boot_splash/image="res://assets/warning_low_tides_logos/logo.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
-config/windows_native_icon=""
 boot_splash/skip_intro=true
 
 [audio]
 
 enable_audio_input=true
+volume/master_volume=1.0
+volume/ambient_volume=1.0
+volume/sfx_volume=1.0
+volume/hitmarker_volume=1.0
+volume/voice_emit_volume=1.0
+volume/voice_recieve_volume=1.0
+volume/music_volume=1.0
 
 [autoload]
 
@@ -352,11 +358,11 @@ Settings="*res://singletons/settings.gd"
 [controls]
 
 mouse/sensitivity=Vector2( 0.2, 0.2 )
+invert_x=false
+invert_y=false
 
 [display]
 
-window/size/width=1024
-window/size/height=600
 window/vsync/use_vsync=false
 window/stretch/aspect="expand"
 
@@ -366,6 +372,9 @@ enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "scatter", "s
 
 [gameplay]
 
+hitmarker/color=Color( 1, 1, 1, 1 )
+hitmarker/size=Vector2( 20, 4 )
+hitmarker/spacing=10.0
 hud/scale=0.0
 hud/transparency=0.0
 
