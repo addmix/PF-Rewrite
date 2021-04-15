@@ -118,6 +118,7 @@ func create_option(text : String, option : Dictionary) -> void:
 	if option.has("options"):
 		type_instance.set_options(option["options"])
 	if option.has("default"):
-		setting_instance.call_deferred("set_value", option["default"])
+		type_instance.set_value(option["default"])
+		setting_instance.set_value(option["default"])
 	
 	
