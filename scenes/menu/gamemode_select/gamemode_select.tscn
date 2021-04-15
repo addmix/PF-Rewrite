@@ -1,0 +1,100 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/menu/gamemode_select/gamemode_select.gd" type="Script" id=1]
+
+[node name="GamemodeSelect" type="PopupDialog"]
+visible = true
+margin_left = 64.0
+margin_top = 79.0
+margin_right = 960.0
+margin_bottom = 521.0
+rect_min_size = Vector2( 256, 256 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 6.10352e-05
+margin_bottom = 3.05176e-05
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 32
+custom_constants/margin_top = 32
+custom_constants/margin_left = 32
+custom_constants/margin_bottom = 32
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBox" type="HSplitContainer" parent="Margin"]
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 864.0
+margin_bottom = 410.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/HBox"]
+margin_right = 410.0
+margin_bottom = 378.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="Gamemodes" type="ItemList" parent="Margin/HBox/Scroll"]
+margin_right = 410.0
+margin_bottom = 378.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+select_mode = 1
+
+[node name="VBox" type="VBoxContainer" parent="Margin/HBox"]
+margin_left = 422.0
+margin_right = 832.0
+margin_bottom = 378.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/HBox/VBox"]
+margin_right = 410.0
+margin_bottom = 346.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="Settings" type="VBoxContainer" parent="Margin/HBox/VBox/Scroll"]
+margin_right = 410.0
+margin_bottom = 346.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="Margin/HBox/VBox"]
+margin_top = 350.0
+margin_right = 410.0
+margin_bottom = 354.0
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/HBox/VBox"]
+margin_top = 358.0
+margin_right = 410.0
+margin_bottom = 378.0
+
+[node name="Next" type="Button" parent="Margin/HBox/VBox/Buttons"]
+margin_right = 203.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Load"
+
+[node name="Cancel" type="Button" parent="Margin/HBox/VBox/Buttons"]
+margin_left = 207.0
+margin_right = 410.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Cancel"
+[connection signal="pressed" from="Margin/HBox/VBox/Buttons/Next" to="." method="_on_next_pressed"]
+[connection signal="pressed" from="Margin/HBox/VBox/Buttons/Cancel" to="." method="_on_cancel_pressed"]
