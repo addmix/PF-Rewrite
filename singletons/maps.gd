@@ -76,5 +76,5 @@ func load_map(map : String) -> Resource:
 	return scene
 
 func load_mode(map : String, mode : String) -> Resource:
-	var scene = load(manifest[map]["info"]["path"] + "/" + manifest[map]["gamemodes"][mode])
+	var scene = load(manifest[map]["info"]["path"] + "/" + Gamemodes.manifest[mode]["info"]["scene_name"] + ".tscn")
 	return scene

@@ -1,0 +1,15 @@
+[info]
+
+name="Training"
+script="training.gd"
+scene_name="training"
+
+[options]
+
+time={
+"name":"time",
+"type":2,
+"min":0,
+"max":0,
+"default":0
+}

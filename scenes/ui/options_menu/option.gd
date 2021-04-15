@@ -5,10 +5,6 @@ onready var label : Label = $Label
 var setting : String
 var type
 
-func _ready() -> void:
-	if ProjectSettings.has_setting(setting):
-		call_deferred("set_value", ProjectSettings.get_setting(setting))
-
 func set_name(n : String) -> void:
 	self.name = n
 	call_deferred("set_text", n)

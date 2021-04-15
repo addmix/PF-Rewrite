@@ -7,8 +7,9 @@ scene_name="tdm"
 [options]
 
 score_limit={
-"type": 2,
-"min": 1,
-"max": 100000,
-"default": 250
+"name":"score limit",
+"type":2,
+"min":1,
+"max":100000,
+"default":250
 }
