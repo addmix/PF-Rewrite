@@ -3,7 +3,7 @@ extends Popup
 #var FileUtils = preload("res://Utils/FileUtils.gd")
 
 var selected
-var server = preload("res://scenes/menu/multiplayer/server.tscn")
+var server = preload("res://scenes/menu/Multiplayer/Server.tscn")
 
 func _ready():
 	load_servers()

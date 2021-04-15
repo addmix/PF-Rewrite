@@ -2,11 +2,11 @@ extends Popup
 
 var setting_scene : PackedScene = preload("res://scenes/ui/options_menu/option.tscn")
 
-var FLOAT : PackedScene = preload("res://scenes/ui/types/float.tscn")
-var BOOL : PackedScene = preload("res://scenes/ui/types/bool.tscn")
-var COLOR : PackedScene = preload("res://scenes/ui/types/color.tscn")
-var VECTOR2 : PackedScene = preload("res://scenes/ui/types/vector2.tscn")
-var VECTOR3 : PackedScene = preload("res://scenes/ui/types/vector3.tscn")
+var FLOAT : PackedScene = preload("res://scenes/ui/options_menu/types/float.tscn")
+var BOOL : PackedScene = preload("res://scenes/ui/options_menu/types/bool.tscn")
+var COLOR : PackedScene = preload("res://scenes/ui/options_menu/types/color.tscn")
+var VECTOR2 : PackedScene = preload("res://scenes/ui/options_menu/types/vector2.tscn")
+var VECTOR3 : PackedScene = preload("res://scenes/ui/options_menu/types/vector3.tscn")
 
 onready var gameplay : Control = $VBox/TabContainer/Gameplay/Gameplay
 onready var graphics : Control = $VBox/TabContainer/Graphics/Graphics

@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=2]
-
-[ext_resource path="res://scenes/menu/multiplayer/info_client/info_client.gd" type="Script" id=1]
-
-
-[node name="InfoClient" type="Node"]
-script = ExtResource( 1 )

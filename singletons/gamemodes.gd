@@ -53,31 +53,25 @@ func scan_gamemodes() -> void:
 				push_error("Could not load " + base_dir + "/" + d + "/gamemode.dat Error " + str(err))
 			#no error
 			else:
-				var dict : Dictionary = dictionary_from_config(config)
-				#add an array for maps
-				dict["options"]["maps"] = {"type": "OPTION", "options": []}
+				#store config to dictionary
+				var dict := {}
+				#go through each section
+				for section in config.get_sections():
+					#create a dictionary for that section
+					var keys := {}
+					#for every key in that section
+					for key in config.get_section_keys(section):
+						#add key/value to dictionary
+						keys[key] = config.get_value(section, key)
+					#add section to dictionary
+					dict[section] = keys
+				
 				#include mod's install location with other map info
 				dict["info"]["path"] = base_dir + "/" + d
 				
 				#add map dictionary to manifest
 				manifest[dict["info"]["name"]] = dict
-
-
-func dictionary_from_config(config : ConfigFile) -> Dictionary:
-	#store config to dictionary
-	var dict := {}
-	#go through each section
-	for section in config.get_sections():
-		#create a dictionary for that section
-		var keys := {}
-		#for every key in that section
-		for key in config.get_section_keys(section):
-			#add key/value to dictionary
-			keys[key] = config.get_value(section, key)
-		#add section to dictionary
-		dict[section] = keys
-	
-	return dict
+#	print(manifest)
 
 func load_gamemode_script(mode : String) -> Resource:
 	var script = load(manifest[mode]["info"]["path"] + "/" + manifest[mode]["info"]["script"])
