@@ -71,17 +71,17 @@ func init() -> void:
 	
 	#initialize timers
 	#countdown timer
-	countdown_timer.wait_time = Server.game_settings["countdown_time"]
+	countdown_timer.wait_time = Server.game_settings["countdown time"]
 	countdown_timer.one_shot = true
 	add_child(countdown_timer)
 	
 	#game timer
-	game_timer.wait_time = Server.game_settings["game_time"]
+	game_timer.wait_time = Server.game_settings["play time"]
 	game_timer.one_shot = true
 	add_child(game_timer)
 	
 	#end timer
-	end_timer.wait_time = Server.game_settings["end_time"]
+	end_timer.wait_time = Server.game_settings["cooldown time"]
 	end_timer.one_shot = true
 	add_child(end_timer)
 	

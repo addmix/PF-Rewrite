@@ -63,10 +63,13 @@ func load_options() -> void:
 	options.erase("maps")
 	#default time
 	if !options.has("time"):
-		create_option("Time (seconds)", {"name": "time", "type":2,"min":0, "max":7200, "step":30, "default": 600})
+		create_option("Play Time", {"name": "play time", "type":2,"min":0, "max":7200, "step":30, "default": 600})
 		options.erase("time")
+	create_option("Countdown Time", {"name": "countdown time", "type":2, "min":0, "max":120, "step":1, "default": 10})
+	create_option("Post-match Cooldown Time", {"name": "cooldown time", "type":2, "min":0, "max":120, "step":1, "default": 10})
 	#multipalyer
 	create_option("Multiplayer", {"name": "multiplayer","type":1})
+	create_option("Teams", {"name": "teams", "type":2, "min":1, "max":16, "step":1, "default":2})
 	
 	#gamemode specific options
 	for option in options:
@@ -125,3 +128,6 @@ func get_settings() -> Dictionary:
 	
 	return dict
 
+func _on_Gamemodes_item_selected(index: int) -> void:
+	selection = Gamemodes.manifest[$Margin/HBox/Scroll/Gamemodes.get_item_text(index)]
+	load_options()

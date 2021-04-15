@@ -24,8 +24,8 @@ var spawner := preload("res://gamemodes/boilerplates/playerspawner/playerspawner
 var Spawner : Node
 
 #UI plugin
-var plugin := preload("res://gamemodes/teamdeathmatch/tdm_ui_plugin.tscn")
-var Plugin : MarginContainer
+#var plugin := preload("res://gamemodes/teamdeathmatch/tdm_ui_plugin.tscn")
+#var Plugin : MarginContainer
 
 
 func init() -> void:
@@ -52,24 +52,24 @@ func init() -> void:
 	
 	#initialize timers
 	#countdown timer
-	countdown_timer.wait_time = Server.game_settings["countdown_time"]
+	countdown_timer.wait_time = Server.game_settings["countdown time"]
 	countdown_timer.one_shot = true
 	add_child(countdown_timer)
 	
 	#game timer
-	game_timer.wait_time = Server.game_settings["game_time"]
+	game_timer.wait_time = Server.game_settings["play time"]
 	game_timer.one_shot = true
 	add_child(game_timer)
 	
 	#end timer
-	end_timer.wait_time = Server.game_settings["end_time"]
+	end_timer.wait_time = Server.game_settings["cooldown time"]
 	end_timer.one_shot = true
 	add_child(end_timer)
 	
 	
 	#initializes UI plugin
-	Plugin = plugin.instance()
-	$"/root".add_child(Plugin, true)
+#	Plugin = plugin.instance()
+#	$"/root".add_child(Plugin, true)
 	
 	
 	connect_signals()
@@ -94,7 +94,7 @@ func connect_signals() -> void:
 	_err = Players.connect("player_added", self, "on_Player_added")
 	
 	#ui signals
-	_err = connect("score_updated", Plugin, "on_score_updated")
+#	_err = connect("score_updated", Plugin, "on_score_updated")
 
 func init_Players() -> void:
 #	print(Players.players)

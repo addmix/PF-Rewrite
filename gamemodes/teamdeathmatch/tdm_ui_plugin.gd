@@ -7,7 +7,7 @@ var bars := []
 func _ready() -> void:
 	for team in Server.GamemodeInstance.Teams.teams:
 		var instance : ProgressBar = bar.instance()
-		instance.max_value = Server.GamemodeInstance.options["score"]
+		instance.max_value = Server.game_settings["score limit"]
 		instance.name = str(team)
 		container.add_child(instance)
 		

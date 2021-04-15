@@ -20,6 +20,7 @@ __meta__ = {
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -34,6 +35,7 @@ margin_bottom = 382.0
 grow_horizontal = 2
 grow_vertical = 2
 rect_min_size = Vector2( 175, 0 )
+mouse_filter = 2
 custom_constants/separation = 16
 alignment = 1
 __meta__ = {
@@ -88,6 +90,7 @@ margin_top = 64.0
 margin_bottom = 536.0
 
 [node name="Multiplayer" parent="Margin" instance=ExtResource( 4 )]
+visible = false
 margin_left = 64.0
 margin_top = 64.0
 margin_right = 960.0

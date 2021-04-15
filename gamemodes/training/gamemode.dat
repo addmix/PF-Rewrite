@@ -7,7 +7,7 @@ scene_name="training"
 [options]
 
 time={
-"name":"time",
+"name":"play time",
 "type":2,
 "min":0,
 "max":0,
