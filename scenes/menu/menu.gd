@@ -1,27 +1,28 @@
 extends Control
 
-onready var singleplayerPopup = $Singleplayer
-onready var multiplayerPopup = $Multiplayer
-onready var optionsPopup = $Options
-onready var creditsPopup = $Credits
-onready var quitPopup = $Quit
-onready var loginPopup = $Login
+onready var GamemodePopup : PopupDialog = $Margin/GamemodeSelect
+
+onready var MultiplayerPopup : Popup = $Margin/Multiplayer
+onready var OptionsPopup : Popup = $Margin/Options
+onready var CreditsPopup : PopupDialog = $Margin/Credits
+onready var QuitPopup : PopupDialog = $Margin/Quit
+onready var LoginPopup : PopupDialog = $Margin/Login
 
 #func _ready():
-#	loginPopup.popup_centered()
+#	LoginPopup.popup_centered()
 
 func _on_Singleplayer_pressed():
-	singleplayerPopup.popup_centered()
+	GamemodePopup.popup_centered()
 
 func _on_Multiplayer_pressed():
-	multiplayerPopup.popup_centered()
-	multiplayerPopup._connect_servers()
+	MultiplayerPopup.popup_centered()
+	MultiplayerPopup._connect_servers()
 
 func _on_Options_pressed():
-	optionsPopup.popup_centered()
+	OptionsPopup.popup_centered()
 
 func _on_Credits_pressed():
-	creditsPopup.popup_centered()
+	CreditsPopup.popup_centered()
 
 func _on_Quit_pressed():
-	quitPopup.popup_centered()
+	QuitPopup.popup_centered()

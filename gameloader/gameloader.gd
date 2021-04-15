@@ -8,15 +8,14 @@ func _ready() -> void:
 	ModLoader.load_resources()
 	#apply settings to relevant nodes
 	Settings.load_settings()
-	#scan maps folder
-	Maps.scan_maps()
 	#scan gamemodes
 	Gamemodes.scan_gamemodes()
+	#scan maps folder
+	Maps.scan_maps()
 	#scan weapons
 	Weapons.scan_weapons()
 	#particle compilation lag fix
 	ParticleLoader.load_particles()
-	
 	#loading commands
 	var args : Array = OS.get_cmdline_args()
 	
