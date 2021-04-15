@@ -105,7 +105,7 @@ func load_dictionary_from_config_file(path : String) -> Dictionary:
 	
 	#no file found
 	elif err == ERR_FILE_NOT_FOUND:
-		push_error("File not found at " + path + " creating new file")
+		print("File not found at " + path + " creating new file")
 		save_dictionary_as_config_file(path, {})
 		return {}
 	
