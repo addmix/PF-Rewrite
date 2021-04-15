@@ -1,11 +1,3 @@
-<<<<<<< HEAD
 [Null:Null]
 
 name="Server"
-=======
-[127.0.0.1:1909]
-
-name="LocalHost"
-ip="127.0.0.1"
-port=1909
->>>>>>> parent of 56e0a8c (Menu improvements)

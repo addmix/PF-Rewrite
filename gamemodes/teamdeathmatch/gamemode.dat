@@ -1,7 +1,6 @@
 [info]
 
 name="TDM"
-<<<<<<< HEAD
 script="tdm.gd"
 scene_name="tdm"
 
@@ -14,6 +13,3 @@ score_limit={
 "max":100000,
 "default":250
 }
-=======
-script="tdm.gd"
->>>>>>> parent of 56e0a8c (Menu improvements)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://scenes/menu/Multiplayer/Server.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/menu/Multiplayer/Multiplayer.gd" type="Script" id=2]
+[ext_resource path="res://scenes/menu/multiplayer/server.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/menu/multiplayer/multiplayer.gd" type="Script" id=2]
 
 [node name="Multiplayer" type="Popup"]
 visible = true
