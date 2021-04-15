@@ -2,6 +2,7 @@ extends PopupDialog
 
 onready var settings : VBoxContainer = $Margin/HBox/VBox/Scroll/Settings
 var default_icon : String = "res://icon.png"
+var gamemode_instance = preload("res://scenes/menu/gamemode_select/gamemode.tscn")
 
 var dir = Directory.new()
 var selection : Dictionary = {}
@@ -13,30 +14,35 @@ func load_gamemodes() -> void:
 	var dict : Dictionary = Gamemodes.manifest
 	for key in dict.keys():
 		var gamemode : Dictionary = dict[key]
-		#add button to scene, then self loading happens
-		var path : String
-		if gamemode["info"].has("icon"):
-			path = gamemode["info"]["icon"]
-		else:
-			path = default_icon
+		#instance button
+		var instance = gamemode_instance.instance()
+		#set name of button
+		instance.name = gamemode["info"]["name"]
+		#give the level instance the path so it can load itself
+		instance.set_gamemode(gamemode)
+		#connect button selection event
+		instance.connect("_pressed", self, "on_gamemode_pressed")
 		
-		$Margin/HBox/Scroll/Gamemodes.add_item(gamemode["info"]["name"], load(path))
+		#add button to scene, then self loading happens
+		$Margin/HBox/Scroll/Gamemodes.add_child(instance)
 
 func on_gamemode_pressed(dict : Dictionary) -> void:
 	selection = dict
-	remove_options()
 	load_options()
 
 func _on_next_pressed():
 	if selection.size() == 0:
 		return
 	else:
-		var settings : Dictionary = get_settings()
-		Server.game_settings = settings
-		Server.start_host()
+		#load proper levels
+		var map_select = get_parent().get_node("MapSelect")
+		map_select.gamemode = selection
+		
+		map_select.popup_centered()
+		map_select.load_maps()
+	
 
 func _on_cancel_pressed():
-	remove_options()
 	selection = {}
 	self.hide()
 
@@ -49,12 +55,11 @@ var COLOR : PackedScene = preload("res://scenes/ui/types/color.tscn")
 var VECTOR2 : PackedScene = preload("res://scenes/ui/types/vector2.tscn")
 var VECTOR3 : PackedScene = preload("res://scenes/ui/types/vector3.tscn")
 
-func remove_options() -> void:
+func load_options() -> void:
 	#remove any options from previous gamemode
 	for child in settings.get_children():
 		child.queue_free()
-
-func load_options() -> void:
+	
 	var options : Array = selection["options"].keys()
 	var maps_dict : Dictionary = selection["options"]["maps"]
 	
@@ -63,10 +68,11 @@ func load_options() -> void:
 	options.erase("maps")
 	#default time
 	if !options.has("time"):
-		create_option("Time (seconds)", {"name": "time", "type":2,"min":0, "max":7200, "step":30, "default": 600})
+		create_option("Time (seconds)", {"type":2,"min":0, "max":7200, "step":30, "default": 600})
 		options.erase("time")
 	#multipalyer
-	create_option("Multiplayer", {"name": "multiplayer","type":1})
+	create_option("Multiplayer", {"type":1})
+	
 	
 	#gamemode specific options
 	for option in options:
@@ -98,7 +104,6 @@ func create_option(text : String, option : Dictionary) -> void:
 	
 	var type_instance = decision.instance()
 	
-	setting_instance.setting = option["name"]
 	setting_instance.type = type_instance
 	setting_instance.add_child(type_instance)
 	settings.add_child(setting_instance)
@@ -114,14 +119,5 @@ func create_option(text : String, option : Dictionary) -> void:
 		type_instance.set_options(option["options"])
 	if option.has("default"):
 		setting_instance.call_deferred("set_value", option["default"])
-
-
-func get_settings() -> Dictionary:
-	var dict : Dictionary = {}
 	
-	dict["mode"] = selection["info"]["name"]
-	for child in settings.get_children():
-		dict[child.setting] = child.get_value()
 	
-	return dict
-

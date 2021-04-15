@@ -20,6 +20,14 @@ var game_timer := Timer.new()
 var countdown_timer := Timer.new()
 var end_timer := Timer.new()
 
+var options := {
+	"game_time" : 300,
+	"countdown_time": .1,
+	"end_time": 10,
+	"score": 200,
+	"teams": 2,
+}
+
 
 
 #nodes
@@ -58,7 +66,7 @@ func init() -> void:
 	
 	
 	#sets team count
-	Teams.team_count = Server.game_settings["teams"]
+	Teams.team_count = options["teams"]
 	#creates teams
 	Teams.initialize_teams()
 	#assigns players to teams
@@ -71,17 +79,17 @@ func init() -> void:
 	
 	#initialize timers
 	#countdown timer
-	countdown_timer.wait_time = Server.game_settings["countdown_time"]
+	countdown_timer.wait_time = options["countdown_time"]
 	countdown_timer.one_shot = true
 	add_child(countdown_timer)
 	
 	#game timer
-	game_timer.wait_time = Server.game_settings["game_time"]
+	game_timer.wait_time = options["game_time"]
 	game_timer.one_shot = true
 	add_child(game_timer)
 	
 	#end timer
-	end_timer.wait_time = Server.game_settings["end_time"]
+	end_timer.wait_time = options["end_time"]
 	end_timer.one_shot = true
 	add_child(end_timer)
 	
@@ -212,7 +220,7 @@ func player_scored(player : Player) -> void:
 	scores[player.team] += 1
 	
 	#check score
-	if scores[player.team] >= Server.game_settings["score"]:
+	if scores[player.team] >= options["score"]:
 		#emit game ended signal if one team has won
 		emit_signal("game_ended")
 	

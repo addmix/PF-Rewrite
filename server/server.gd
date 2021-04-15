@@ -8,7 +8,7 @@ signal connection_failed
 signal peer_connected
 signal peer_disconnected
 
-signal recieved_game_settings
+signal recieved_game_data
 
 #server variables
 export var ip := "127.0.0.1"
@@ -19,7 +19,10 @@ export var out_bandwidth := 0
 export var client_port := 1909
 
 #game settings
-var game_settings : Dictionary
+export var game_data := {
+	"map": "Desert Storm",
+	"mode": "TDM",
+}
 
 var PauseMenu : Control
 var Scoreboard : PopupDialog 
@@ -55,7 +58,7 @@ func peer_connected(id : int) -> void:
 	#only on server
 	if get_tree().is_network_server():
 		#send game data to new player
-		rpc_id(id, "return_game_settings", game_settings)
+		rpc_id(id, "return_game_data", game_data)
 
 func peer_disconnected(id : int) -> void:
 	emit_signal("peer_disconnected", id)
@@ -98,7 +101,7 @@ func start_host() -> void:
 	load_game()
 	
 	#loading stuff is done, allow players to join
-	network.refuse_new_connections = !game_settings["multiplayer"]
+	network.refuse_new_connections = false
 	Players.add_player(1, Players.local_player)
 
 #start client player, connects to host player
@@ -136,9 +139,9 @@ remote func kick(reason : String) -> void:
 	print("Kicked for: ", reason)
 	close_server()
 
-remote func return_game_settings(data : Dictionary) -> void:
-	game_settings = data
-	emit_signal("recieved_game_settings")
+remote func return_game_data(data : Dictionary) -> void:
+	game_data = data
+	emit_signal("recieved_game_data")
 	#makes sure we are getting data from the server
 	#loads map and gamemode, and removes menu
 	load_game()
@@ -150,7 +153,7 @@ func load_game() -> void:
 	
 	#game related stuff
 	#load map
-	var resource : Resource = Maps.load_map(game_settings["map"])
+	var resource : Resource = Maps.load_map(game_data["map"])
 	MapInstance = resource.instance()
 	$"/root".add_child(MapInstance, true)
 	
@@ -160,12 +163,12 @@ func load_game() -> void:
 	$"/root".add_child(Scoreboard)
 	
 	#load map's gamemode nodes
-	resource = Maps.load_mode(game_settings["map"], game_settings["mode"])
+	resource = Maps.load_mode(game_data["map"], game_data["mode"])
 	GamemodeInstance = resource.instance()
 	MapInstance.add_child(GamemodeInstance)
 	
 	#load gamemode script
-	resource = Gamemodes.load_gamemode_script(game_settings["mode"])
+	resource = Gamemodes.load_gamemode_script(game_data["mode"])
 	GamemodeInstance.set_script(resource)
 	
 # warning-ignore:return_value_discarded
@@ -235,15 +238,15 @@ func change_game(data : Dictionary) -> void:
 
 #changes map
 func change_map(map : String) -> void:
-	game_settings["map"] = map
+	game_data["map"] = map
 
 #changes gamemode
 func change_mode(mode : String) -> void:
-	game_settings["mode"] = mode
+	game_data["mode"] = mode
 
 #loads map
 func load_map() -> void:
-	var resource : Resource = Maps.load_map(game_settings["map"])
+	var resource : Resource = Maps.load_map(game_data["map"])
 	var scene : Spatial = resource.instance()
 	MapInstance = scene
 	$"/root".add_child(scene, true)

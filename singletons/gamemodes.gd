@@ -55,7 +55,7 @@ func scan_gamemodes() -> void:
 			else:
 				var dict : Dictionary = dictionary_from_config(config)
 				#add an array for maps
-				dict["options"]["maps"] = {"name":"map" ,"type": "OPTION", "options": []}
+				dict["options"]["maps"] = {"type": "OPTION", "options": []}
 				#include mod's install location with other map info
 				dict["info"]["path"] = base_dir + "/" + d
 				

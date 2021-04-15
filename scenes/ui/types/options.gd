@@ -11,5 +11,5 @@ func set_options(o : Array) -> void:
 func set_value(v : int) -> void:
 	selected = v
 
-func get_value() -> String:
-	return get_item_text(selected)
+func get_value() -> int:
+	return selected
