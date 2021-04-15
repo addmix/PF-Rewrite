@@ -1,4 +1,5 @@
 [info]
 
 name="Debug level"
+icon="icon.png"
 scene="Debug world.tscn"
