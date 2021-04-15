@@ -24,7 +24,6 @@ func load_gamemodes() -> void:
 
 func on_gamemode_pressed(dict : Dictionary) -> void:
 	selection = dict
-	remove_options()
 	load_options()
 
 func _on_next_pressed():
@@ -55,6 +54,7 @@ func remove_options() -> void:
 		child.queue_free()
 
 func load_options() -> void:
+	remove_options()
 	var options : Array = selection["options"].keys()
 	var maps_dict : Dictionary = selection["options"]["maps"]
 	

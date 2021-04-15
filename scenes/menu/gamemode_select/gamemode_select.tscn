@@ -55,9 +55,11 @@ max_columns = 2
 same_column_width = true
 icon_mode = 0
 fixed_icon_size = Vector2( 128, 128 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBox" type="VBoxContainer" parent="Margin/HBox"]
-margin_left = 422.0
 margin_right = 832.0
 margin_bottom = 378.0
 size_flags_horizontal = 3
@@ -65,37 +67,37 @@ size_flags_vertical = 3
 alignment = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Margin/HBox/VBox"]
-margin_right = 410.0
+margin_right = 832.0
 margin_bottom = 346.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Settings" type="VBoxContainer" parent="Margin/HBox/VBox/Scroll"]
-margin_right = 410.0
+margin_right = 832.0
 margin_bottom = 346.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HSeparator" type="HSeparator" parent="Margin/HBox/VBox"]
 margin_top = 350.0
-margin_right = 410.0
+margin_right = 832.0
 margin_bottom = 354.0
 
 [node name="Buttons" type="HBoxContainer" parent="Margin/HBox/VBox"]
 margin_top = 358.0
-margin_right = 410.0
+margin_right = 832.0
 margin_bottom = 378.0
 
 [node name="Next" type="Button" parent="Margin/HBox/VBox/Buttons"]
-margin_right = 203.0
+margin_right = 414.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Load"
 
 [node name="Cancel" type="Button" parent="Margin/HBox/VBox/Buttons"]
-margin_left = 207.0
-margin_right = 410.0
+margin_left = 418.0
+margin_right = 832.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Cancel"
