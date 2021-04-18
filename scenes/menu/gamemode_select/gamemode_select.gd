@@ -62,11 +62,24 @@ func load_options() -> void:
 	create_option("Map", maps_dict)
 	options.erase("maps")
 	#default time
-	if !options.has("time"):
-		create_option("Play Time", {"name": "play time", "type":2,"min":0, "max":7200, "step":30, "default": 600})
-		options.erase("time")
-	create_option("Countdown Time", {"name": "countdown time", "type":2, "min":0, "max":120, "step":1, "default": 10})
-	create_option("Post-match Cooldown Time", {"name": "cooldown time", "type":2, "min":0, "max":120, "step":1, "default": 10})
+	if !options.has("play time"):
+		create_option("Play Time", {"name": "play time", "type":2,"min":0, "step":30, "default": 600})
+	else:
+		create_option("Play Time", selection["options"]["play time"])
+	options.erase("play time")
+	
+	if !options.has("countdown time"):
+		create_option("Countdown Time", {"name": "countdown time", "type":2, "min":0, "step":1, "default": 10})
+	else:
+		create_option("Countdown Time", selection["options"]["countdown time"])
+	options.erase("countdown time")
+	
+	if !options.has("cooldown time"):
+		create_option("Cooldown Time", {"name": "cooldown time", "type":2, "min":0, "step":1, "default": 10})
+	else:
+		create_option("Countdown Time", selection["options"]["cooldown time"])
+	options.erase("cooldown time")
+	
 	#multipalyer
 	create_option("Multiplayer", {"name": "multiplayer","type":1})
 	create_option("Teams", {"name": "teams", "type":2, "min":1, "max":16, "step":1, "default":2})

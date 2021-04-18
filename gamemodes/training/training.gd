@@ -40,7 +40,6 @@ func init() -> void:
 	Spawner.Gamemode = self
 	add_child(Spawner, true)
 	
-	
 	#sets team count
 	Teams.team_count = Server.game_settings["teams"]
 	#creates teams
@@ -50,32 +49,11 @@ func init() -> void:
 	
 	init_Players()
 	
-	#initialize timers
-	#countdown timer
-	countdown_timer.wait_time = Server.game_settings["countdown time"]
-	countdown_timer.one_shot = true
-	add_child(countdown_timer)
-	
-	#game timer
-	game_timer.wait_time = Server.game_settings["play time"]
-	game_timer.one_shot = true
-	add_child(game_timer)
-	
-	#end timer
-	end_timer.wait_time = Server.game_settings["cooldown time"]
-	end_timer.one_shot = true
-	add_child(end_timer)
-	
-	
 	#initializes UI plugin
 #	Plugin = plugin.instance()
 #	$"/root".add_child(Plugin, true)
 	
-	
 	connect_signals()
-	#start countdown timer
-	countdown_timer.start()
-#	print("Starting countdown")
 
 #connects signals
 func connect_signals() -> void:
@@ -84,11 +62,6 @@ func connect_signals() -> void:
 	_err = connect("game_started", self, "on_game_start")
 	_err = connect("game_ended", self, "on_game_ended")
 	_err = connect("game_won", self, "on_game_won")
-	
-	#timer signals
-	_err = countdown_timer.connect("timeout", self, "on_countdown_finished")
-	_err = game_timer.connect("timeout", self, "on_game_time_finished")
-	_err = end_timer.connect("timeout", self, "on_end_time_finished")
 	
 	#player signals
 	_err = Players.connect("player_added", self, "on_Player_added")
@@ -104,17 +77,6 @@ func init_Players() -> void:
 func on_Player_added(player : Player) -> void:
 # warning-ignore:return_value_discarded
 	player.connect("died", self, "on_Player_died")
-
-func on_countdown_finished() -> void:
-	countdown_timer.queue_free()
-	emit_signal("game_started")
-
-func on_game_time_finished() -> void:
-	emit_signal("game_ended")
-
-func on_end_time_finished() -> void:
-	#removes players from teams, and removes teams
-	Teams.denitialize_teams()
 
 #when game starts
 func on_game_start() -> void:

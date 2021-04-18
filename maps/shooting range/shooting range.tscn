@@ -5,15 +5,23 @@
 [ext_resource path="res://maps/shooting range/reference.jpg" type="Texture" id=3]
 
 [node name="Shooting Range" type="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.63624, -7.67281 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -105.164, -7.67281 )
 
 [node name="CSGBox" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.23084, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.23084, -79.9595 )
 material_override = ExtResource( 2 )
 use_collision = true
-width = 117.065
+width = 316.375
 height = 10.3341
-depth = 173.584
+depth = 338.433
+
+[node name="CSGBox30" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3867, 11.9855, -150.581 )
+material_override = ExtResource( 2 )
+use_collision = true
+width = 68.2193
+height = 31.874
+depth = 77.4989
 
 [node name="CSGBox2" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.353816, -3.06932 )
@@ -238,15 +246,10 @@ depth = 0.377621
 [node name="WorldEnvironment" parent="." instance=ExtResource( 1 )]
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform( 32, 5.59506e-06, -7.64274e-15, 0, -1.39876e-06, -1, -5.59506e-06, 32, -4.37114e-08, -93.5792, -0.0454359, -87.2764 )
-visible = false
+transform = Transform( 32, 5.59506e-06, -7.64274e-15, 0, -1.39876e-06, -1, -5.59506e-06, 32, -4.37114e-08, -93.5792, 0.0474014, -87.2764 )
 texture = ExtResource( 3 )
-__meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true
-}
 
 [node name="Position3D" type="Position3D" parent="." groups=[
 "Spawns",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.68105, 3.19586, 8.53009 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1447, 1.41478, 8.53009 )

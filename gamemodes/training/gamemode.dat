@@ -6,8 +6,24 @@ scene_name="training"
 
 [options]
 
-time={
+"play time"={
 "name":"play time",
+"type":2,
+"min":0,
+"max":0,
+"default":0
+}
+
+"cooldown time"={
+"name":"cooldown time",
+"type":2,
+"min":0,
+"max":0,
+"default":0
+}
+
+"countdown time"={
+"name":"countdown time",
 "type":2,
 "min":0,
 "max":0,
