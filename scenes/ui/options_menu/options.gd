@@ -45,6 +45,8 @@ func load_settings() -> void:
 				TYPE_COLOR:
 					decision = COLOR
 			
+			
+			
 			var type_instance = decision.instance()
 			
 			var keys : Array = displayed_settings[category][setting].keys()
@@ -144,7 +146,7 @@ const displayed_settings := {
 		"volume/voice_recieve_volume": {
 			"name": "Voice Recieve Volume",
 			"min": 0.0,
-			"max": 1.5,
+			"max": 2.0,
 			"step": .01,
 		},
 	},

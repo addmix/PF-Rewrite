@@ -114,10 +114,13 @@ margin_right = 960.0
 margin_bottom = 536.0
 
 [node name="Quit" type="PopupDialog" parent="Margin"]
-margin_left = 64.0
-margin_top = 64.0
-margin_right = 960.0
-margin_bottom = 536.0
+margin_left = 383.0
+margin_top = 241.0
+margin_right = 641.0
+margin_bottom = 359.0
+rect_min_size = Vector2( 258, 118 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -126,7 +129,6 @@ __meta__ = {
 [node name="MarginContainer" type="MarginContainer" parent="Margin/Quit"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_bottom = 1.52588e-05
 custom_constants/margin_right = 32
 custom_constants/margin_top = 32
 custom_constants/margin_left = 32
@@ -138,33 +140,46 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="Margin/Quit/MarginContainer"]
 margin_left = 32.0
 margin_top = 32.0
-margin_right = 864.0
-margin_bottom = 440.0
-custom_constants/separation = 64
+margin_right = 226.0
+margin_bottom = 86.0
+size_flags_horizontal = 5
+size_flags_vertical = 4
 alignment = 1
 
+[node name="HSeparator2" type="HSeparator" parent="Margin/Quit/MarginContainer/VBoxContainer"]
+margin_right = 194.0
+margin_bottom = 4.0
+
 [node name="Label" type="Label" parent="Margin/Quit/MarginContainer/VBoxContainer"]
-margin_top = 22.0
-margin_right = 218.0
-margin_bottom = 36.0
-text = "Would you like to quit?"
+margin_top = 8.0
+margin_right = 194.0
+margin_bottom = 22.0
+size_flags_horizontal = 4
+text = "Are you sure you want to quit?"
 align = 1
 
+[node name="HSeparator" type="HSeparator" parent="Margin/Quit/MarginContainer/VBoxContainer"]
+margin_top = 26.0
+margin_right = 194.0
+margin_bottom = 30.0
+
 [node name="HBoxContainer" type="HBoxContainer" parent="Margin/Quit/MarginContainer/VBoxContainer"]
-margin_top = 100.0
-margin_right = 218.0
-margin_bottom = 120.0
+margin_left = 48.0
+margin_top = 34.0
+margin_right = 146.0
+margin_bottom = 54.0
+size_flags_horizontal = 4
+size_flags_vertical = 5
 alignment = 1
 
 [node name="Quit" type="Button" parent="Margin/Quit/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 60.0
-margin_right = 100.0
+margin_right = 40.0
 margin_bottom = 20.0
 text = "Quit"
 
 [node name="Cancel" type="Button" parent="Margin/Quit/MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 104.0
-margin_right = 158.0
+margin_left = 44.0
+margin_right = 98.0
 margin_bottom = 20.0
 text = "Cancel"
 

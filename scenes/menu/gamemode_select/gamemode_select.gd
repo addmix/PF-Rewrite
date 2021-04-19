@@ -1,6 +1,6 @@
 extends PopupDialog
 
-onready var settings : VBoxContainer = $Margin/HBox/VBox/Scroll/Settings
+onready var settings : VBoxContainer = $Margin/VBoxContainer/HBox/VBox/Scroll/Settings
 var default_icon : String = "res://icon.png"
 
 var dir = Directory.new()
@@ -20,7 +20,7 @@ func load_gamemodes() -> void:
 		else:
 			path = default_icon
 		
-		$Margin/HBox/Scroll/Gamemodes.add_item(gamemode["info"]["name"], load(path))
+		$Margin/VBoxContainer/HBox/Scroll/Gamemodes.add_item(gamemode["info"]["name"], load(path))
 
 func on_gamemode_pressed(dict : Dictionary) -> void:
 	selection = dict
@@ -77,7 +77,7 @@ func load_options() -> void:
 	if !options.has("cooldown time"):
 		create_option("Cooldown Time", {"name": "cooldown time", "type":2, "min":0, "step":1, "default": 10})
 	else:
-		create_option("Countdown Time", selection["options"]["cooldown time"])
+		create_option("Cooldown Time", selection["options"]["cooldown time"])
 	options.erase("cooldown time")
 	
 	#multipalyer
@@ -142,5 +142,5 @@ func get_settings() -> Dictionary:
 	return dict
 
 func _on_Gamemodes_item_selected(index: int) -> void:
-	selection = Gamemodes.manifest[$Margin/HBox/Scroll/Gamemodes.get_item_text(index)]
+	selection = Gamemodes.manifest[$Margin/VBoxContainer/HBox/Scroll/Gamemodes.get_item_text(index)]
 	load_options()

@@ -15,6 +15,7 @@ func explode() -> void:
 	
 	queue_free()
 
+# warning-ignore:unused_argument
 func create_shrapnel(dir : Vector3) -> void:
 	pass
 
