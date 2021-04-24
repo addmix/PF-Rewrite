@@ -3,7 +3,6 @@
 [ext_resource path="res://scenes/menu/gamemode_select/gamemode_select.gd" type="Script" id=1]
 
 [node name="GamemodeSelect" type="PopupDialog"]
-visible = true
 margin_left = 64.0
 margin_top = 79.0
 margin_right = 960.0
