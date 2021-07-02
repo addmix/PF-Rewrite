@@ -34,15 +34,15 @@ func positionvelocity(delta : float) -> void:
 	var curve = pow(1 - pow(damper, 2), .5)
 	
 	#weird exponetial thingy
-	var curve1 = (velocity / speed + damper * direction) / curve
+	var curve1 : Vector3 = (velocity / speed + damper * direction) / curve
 	
 	#hanging rope
-	var cosine = cos(curve * speed * delta)
+	var cosine : float = cos(curve * speed * delta)
 	
 	#deflated bubble
-	var sine = sin(curve * speed * delta)
+	var sine : float = sin(curve * speed * delta)
 	
-	var e = pow(2.718281828459045, damper * speed * delta)
+	var e : float = pow(2.718281828459045, damper * speed * delta)
 	
 	position = target + (direction * cosine + curve1 * sine) / e
 	velocity = speed * ((curve * curve1 - damper * direction) * cosine - (curve * direction + damper * curve1) * sine) / e

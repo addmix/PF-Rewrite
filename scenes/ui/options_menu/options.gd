@@ -31,6 +31,7 @@ func load_settings() -> void:
 			var type : int = typeof(ProjectSettings.get_setting(string))
 			
 			var decision : PackedScene
+			
 			match type:
 				TYPE_BOOL:
 					decision = BOOL
@@ -44,7 +45,8 @@ func load_settings() -> void:
 					decision = VECTOR3
 				TYPE_COLOR:
 					decision = COLOR
-			
+				_:
+					decision = FLOAT
 			
 			
 			var type_instance = decision.instance()
@@ -92,10 +94,10 @@ const displayed_settings := {
 		},
 	},
 	"controls": {
-		"invert_x": {
+		"camera/invert_x": {
 			"name": "Invert X",
 		},
-		"invert_y": {
+		"camera/invert_y": {
 			"name": "Invert Y",
 		},
 		"mouse/sensitivity": {
@@ -137,7 +139,7 @@ const displayed_settings := {
 			"max": 1.5,
 			"step": .01,
 		},
-		"volume/voice_emit_volume": {
+		"volume/voice_transmit_volume": {
 			"name": "Voice Emit Volume",
 			"min": 0.0,
 			"max": 1.5,
@@ -160,7 +162,7 @@ func _on_Apply_pressed() -> void:
 	for node in nodes:
 		ProjectSettings.set_setting(node.setting, node.get_value())
 # warning-ignore:return_value_discarded
-	ProjectSettings.save()
+#	ProjectSettings.save()
 	
 	Settings.load_settings()
 	
@@ -175,7 +177,7 @@ func _on_RevertConfirmation_confirmed() -> void:
 		ProjectSettings.set_setting(node.setting, revert)
 		node.set_value(revert)
 # warning-ignore:return_value_discarded
-	ProjectSettings.save()
+#	ProjectSettings.save()
 
 func _on_Cancel_pressed() -> void:
 	#if unapplied changes

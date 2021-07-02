@@ -37,8 +37,8 @@ var walk_bob_tick := 0.0
 var breath_sway_tick := 0.0
 
 #controls
-var invert_x : bool = ProjectSettings.get_setting("controls/invert_x")
-var invert_y : bool = ProjectSettings.get_setting("controls/invert_y")
+var invert_x : bool = ProjectSettings.get_setting("controls/camera/invert_x")
+var invert_y : bool = ProjectSettings.get_setting("controls/camera/invert_y")
 var axis := Vector3.ZERO
 var mouse_movement := Vector2.ZERO
 remote var puppet_axis := Vector3.ZERO
@@ -359,6 +359,8 @@ func process_breath(delta : float) -> void:
 
 func ready_weapons() -> void:
 	#loads weapons
+	
+	#solve dependency error by moving loadout
 	for weapon in range(Player.loadout.size()):
 		if Player.loadout[weapon] == null:
 			continue
@@ -649,6 +651,7 @@ func get_modifier_value(modifier : String) -> float:
 
 func _unhandled_input(event : InputEvent) -> void:
 	if is_network_master():
+		
 		#mouse movement
 		if event is InputEventMouseMotion:
 			var relative = event.relative * camera_sensitivity

@@ -41,6 +41,7 @@ func can_reload() -> bool:
 func get_aim() -> Transform:
 	return AimMachine.get_aim()
 
+#depreciated
 export var _data := {
 	"Misc": {
 		"Name": "",
