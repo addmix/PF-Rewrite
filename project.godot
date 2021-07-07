@@ -149,6 +149,26 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/nodes/message_dispatcher_wrapper.gd"
 }, {
+"base": "Node",
+"class": "ModularAttachmentPoint",
+"language": "GDScript",
+"path": "res://assets/weapons/guns/modular_attachment_point.gd"
+}, {
+"base": "ModularPart",
+"class": "ModularGun",
+"language": "GDScript",
+"path": "res://assets/weapons/guns/modular_gun.gd"
+}, {
+"base": "Spatial",
+"class": "ModularPart",
+"language": "GDScript",
+"path": "res://assets/weapons/guns/modular_part.gd"
+}, {
+"base": "Node",
+"class": "ModularRail",
+"language": "GDScript",
+"path": "res://assets/weapons/guns/modular_rail.gd"
+}, {
 "base": "Resource",
 "class": "PhysicsLayers",
 "language": "GDScript",
@@ -293,6 +313,10 @@ _global_script_class_icons={
 "M4A1": "",
 "MessageDispatcher": "",
 "MessageDispatcherWrapper": "",
+"ModularAttachmentPoint": "",
+"ModularGun": "",
+"ModularPart": "",
+"ModularRail": "",
 "PhysicsLayers": "",
 "Player": "",
 "ProjectTools": "",
@@ -554,9 +578,9 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
-quality/filters/anisotropic_filter_level=8
 quality/shadows/filter_mode=2
 quality/reflections/irradiance_max_size=256
+quality/filters/anisotropic_filter_level=8
 quality/filters/use_nearest_mipmap_filter=true
 quality/filters/msaa=3
 environment/default_environment="res://default_env.tres"
