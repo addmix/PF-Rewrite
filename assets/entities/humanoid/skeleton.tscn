@@ -1,13 +1,14 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
+[ext_resource path="res://assets/entities/humanoid/skeleton.gd" type="Script" id=1]
 [ext_resource path="res://assets/entities/test_dummy/dummy_body.gd" type="Script" id=2]
 [ext_resource path="res://assets/entities/humanoid/body_part.gd" type="Script" id=3]
 [ext_resource path="res://assets/entities/humanoid/body_part_area.gd" type="Script" id=4]
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="SpatialMaterial" id=14]
 vertex_color_use_as_albedo = true
 
-[sub_resource type="ArrayMesh" id=2]
+[sub_resource type="ArrayMesh" id=15]
 resource_name = "Cube009"
 surfaces/0 = {
 "aabb": AABB( -0.933914, -0.0341366, -0.29523, 1.86783, 4.69937, 0.830487 ),
@@ -16,13 +17,13 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 97751,
 "index_count": 576,
-"material": SubResource( 1 ),
+"material": SubResource( 14 ),
 "primitive": 4,
 "skeleton_aabb": [ AABB( 0, 0, 0, -1, -1, -1 ), AABB( -0.526696, 2.02063, -0.267367, 1.05339, 0.37121, 0.487629 ), AABB( -0.411026, 2.43664, -0.267367, 0.822053, 0.743022, 0.449193 ), AABB( -0.514962, 3.23103, -0.29523, 1.02992, 0.743022, 0.59046 ), AABB( 0, 0, 0, -1, -1, -1 ), AABB( 0.572102, 3.12506, -0.214286, 0.361812, 0.745387, 0.337648 ), AABB( 0.617943, 2.36441, -0.171507, 0.270131, 0.723267, 0.25209 ), AABB( 0.674443, 1.88443, -0.215397, 0.157132, 0.425611, 0.33987 ), AABB( 0, 0, 0, -1, -1, -1 ), AABB( -0.933914, 3.12506, -0.214286, 0.361822, 0.745388, 0.337648 ), AABB( -0.888074, 2.36441, -0.171507, 0.270141, 0.723267, 0.25209 ), AABB( -0.831574, 1.88443, -0.215397, 0.157142, 0.425611, 0.33987 ), AABB( -0.3, 4.06523, -0.239521, 0.6, 0.6, 0.6 ), AABB( 0.123742, 1.05891, -0.205856, 0.441176, 0.920946, 0.411711 ), AABB( 0.169716, 0.238244, -0.162952, 0.349227, 0.810094, 0.325904 ), AABB( 0.149491, -0.0341363, -0.217651, 0.389678, 0.252241, 0.752909 ), AABB( -0.564917, 1.05891, -0.205856, 0.441186, 0.920946, 0.411711 ), AABB( -0.518944, 0.238244, -0.162952, 0.349238, 0.810094, 0.325904 ), AABB( -0.539169, -0.0341366, -0.217651, 0.389688, 0.252241, 0.752909 ) ],
 "vertex_count": 384
 }
 
-[sub_resource type="Skin" id=3]
+[sub_resource type="Skin" id=16]
 resource_name = "Skin"
 bind_count = 19
 bind/0/name = "root"
@@ -83,31 +84,31 @@ bind/18/name = "toe.R"
 bind/18/bone = -1
 bind/18/pose = Transform( -1, -8.74228e-08, 4.2057e-15, 6.21591e-15, -2.29941e-08, 1, -8.74228e-08, 1, -4.81076e-08, -0.34433, 0.00735986, -0.091984 )
 
-[sub_resource type="BoxShape" id=4]
+[sub_resource type="BoxShape" id=17]
 extents = Vector3( 0.0772924, 0.212946, 0.170022 )
 
-[sub_resource type="BoxShape" id=5]
+[sub_resource type="BoxShape" id=18]
 extents = Vector3( 0.135552, 0.361882, 0.127612 )
 
-[sub_resource type="BoxShape" id=6]
+[sub_resource type="BoxShape" id=19]
 extents = Vector3( 0.181451, 0.370611, 0.169857 )
 
-[sub_resource type="BoxShape" id=7]
+[sub_resource type="BoxShape" id=20]
 extents = Vector3( 0.52616, 0.185895, 0.242219 )
 
-[sub_resource type="BoxShape" id=8]
+[sub_resource type="BoxShape" id=21]
 extents = Vector3( 0.411676, 0.371959, 0.224396 )
 
-[sub_resource type="BoxShape" id=9]
+[sub_resource type="BoxShape" id=22]
 extents = Vector3( 0.513425, 0.370904, 0.29643 )
 
-[sub_resource type="BoxShape" id=10]
+[sub_resource type="BoxShape" id=23]
 extents = Vector3( 0.299014, 0.298647, 0.30116 )
 
-[sub_resource type="BoxShape" id=11]
+[sub_resource type="BoxShape" id=24]
 extents = Vector3( 0.220214, 0.461563, 0.205656 )
 
-[sub_resource type="BoxShape" id=12]
+[sub_resource type="BoxShape" id=25]
 extents = Vector3( 0.17443, 0.404896, 0.163441 )
 
 [sub_resource type="BoxShape" id=13]
@@ -209,10 +210,11 @@ bones/18/parent = 17
 bones/18/rest = Transform( -1, 0, -8.74228e-08, 8.74228e-08, 0, -1, 0, -1, 0, 0, 0.980146, 0 )
 bones/18/enabled = true
 bones/18/bound_children = [  ]
+script = ExtResource( 1 )
 
 [node name="Body" type="MeshInstance" parent="."]
-mesh = SubResource( 2 )
-skin = SubResource( 3 )
+mesh = SubResource( 15 )
+skin = SubResource( 16 )
 material/0 = null
 
 [node name="HandL" type="BoneAttachment" parent="."]
@@ -232,7 +234,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="HandL/Area"]
 transform = Transform( 1, 1.81027e-16, 0, 0, 1, 0, 0, 0, 1, 0, 0.0627236, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 17 )
 
 [node name="ForearmL" type="BoneAttachment" parent="."]
 transform = Transform( 1, 5.96046e-08, 8.80799e-08, 7.8985e-17, -1, 5.75493e-08, 2.84753e-08, 2.05526e-09, -1, 0.753008, 3.10422, -0.045462 )
@@ -251,7 +253,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="ForearmL/Area"]
 transform = Transform( 1, 1.35052e-18, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 5 )
+shape = SubResource( 18 )
 
 [node name="BicepL" type="BoneAttachment" parent="."]
 transform = Transform( 1, 5.96046e-08, 0, -8.33344e-17, -1, 5.82065e-08, -5.96046e-08, 1.39812e-09, -1, 0.753008, 3.85988, -0.045462 )
@@ -270,7 +272,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="BicepL/Area"]
 transform = Transform( 1, -1.22227e-16, 0, 0, 1, 0, 0, 0, 1, 0, -0.0159431, 0 )
-shape = SubResource( 6 )
+shape = SubResource( 19 )
 
 [node name="Hips" type="BoneAttachment" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, -1.39812e-09, 0, 1.39812e-09, 1, 0, 2.07642, -0.0147197 )
@@ -289,7 +291,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Hips/Area"]
 transform = Transform( 1, -1.22227e-16, 0, 0, 1, 0, 0, 0, 1, 0, -0.0159431, 0 )
-shape = SubResource( 7 )
+shape = SubResource( 20 )
 
 [node name="Waist" type="BoneAttachment" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 1.39812e-09, 0, -1.39812e-09, 1, 0, 2.40948, -0.0147197 )
@@ -308,7 +310,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Waist/Area"]
 transform = Transform( 1, -1.22227e-16, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 8 )
+shape = SubResource( 21 )
 
 [node name="Chest" type="BoneAttachment" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 1.39812e-09, 0, -1.39812e-09, 1, 0, 3.20491, -0.0147197 )
@@ -327,7 +329,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Chest/Area"]
 transform = Transform( 1, -1.22227e-16, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 9 )
+shape = SubResource( 22 )
 
 [node name="Head" type="BoneAttachment" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84847e-22, 4.02133, 0.060479 )
@@ -345,7 +347,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Head/Area"]
 transform = Transform( 1, -1.22227e-16, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 10 )
+shape = SubResource( 23 )
 
 [node name="ForearmR" type="BoneAttachment" parent="."]
 transform = Transform( 1, -5.96046e-08, -8.80799e-08, -7.8985e-17, -1, 5.75493e-08, -2.84753e-08, 2.05526e-09, -1, -0.753008, 3.10422, -0.045462 )
@@ -364,7 +366,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="ForearmR/Area"]
 transform = Transform( 1, 1.35052e-18, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 5 )
+shape = SubResource( 18 )
 
 [node name="BicepR" type="BoneAttachment" parent="."]
 transform = Transform( 1, -5.96046e-08, 0, 8.33344e-17, -1, 5.82065e-08, 5.96046e-08, 1.39812e-09, -1, -0.753008, 3.85988, -0.045462 )
@@ -383,7 +385,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="BicepR/Area"]
 transform = Transform( 1, -1.22227e-16, 0, 0, 1, 0, 0, 0, 1, 0, -0.0159431, 0 )
-shape = SubResource( 6 )
+shape = SubResource( 19 )
 
 [node name="HandR" type="BoneAttachment" parent="."]
 transform = Transform( 1, -5.96046e-08, -8.80799e-08, -7.89849e-17, -1, 5.75493e-08, -2.84753e-08, 2.05526e-09, -1, -0.753008, 2.32703, -0.045462 )
@@ -402,7 +404,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="HandR/Area"]
 transform = Transform( 1, -1.81027e-16, 0, 0, 1, 0, 0, 0, 1, 0, 0.0627236, 0 )
-shape = SubResource( 4 )
+shape = SubResource( 17 )
 
 [node name="ThighL" type="BoneAttachment" parent="."]
 transform = Transform( 1, 2.32744e-16, -8.74228e-08, -1.10516e-16, -1, -3.92644e-09, -8.74228e-08, 3.92644e-09, -1, 0.34433, 2.12159, -0.00735984 )
@@ -420,7 +422,7 @@ collision_mask = 0
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="ThighL/Area"]
-shape = SubResource( 11 )
+shape = SubResource( 24 )
 
 [node name="ShinL" type="BoneAttachment" parent="."]
 transform = Transform( 1, 2.64698e-22, 0, -1.05879e-22, -1, -1.39812e-09, 0, 1.39812e-09, -1, 0.34433, 1.07213, -0.00735984 )
@@ -438,7 +440,7 @@ collision_mask = 0
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="ShinL/Area"]
-shape = SubResource( 12 )
+shape = SubResource( 25 )
 
 [node name="FootL" type="BoneAttachment" parent="."]
 transform = Transform( -1, 0, -8.74228e-08, -8.74228e-08, 1.39812e-09, 1, 0, 1, -1.39812e-09, 0.34433, 0.0919871, -0.00735984 )
@@ -475,7 +477,7 @@ collision_mask = 2147483648
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="ThighR/Area"]
-shape = SubResource( 11 )
+shape = SubResource( 24 )
 
 [node name="ShinR" type="BoneAttachment" parent="."]
 transform = Transform( 1, -3.70577e-22, 0, -3.17637e-22, -1, -1.39811e-09, 0, 1.39811e-09, -1, -0.34433, 1.07213, -0.00735984 )
@@ -493,7 +495,7 @@ collision_mask = 0
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="ShinR/Area"]
-shape = SubResource( 12 )
+shape = SubResource( 25 )
 
 [node name="FootR" type="BoneAttachment" parent="."]
 transform = Transform( -1, 0, -8.74228e-08, -8.74228e-08, 1.39811e-09, 1, 0, 1, -1.39811e-09, -0.34433, 0.0919827, -0.00735983 )

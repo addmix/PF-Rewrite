@@ -384,6 +384,8 @@ Settings="*res://singletons/settings.gd"
 mouse/sensitivity=Vector2( 0.2, 0.2 )
 invert_x=false
 invert_y=false
+camera/invert_y=false
+camera/invert_x=false
 
 [display]
 
