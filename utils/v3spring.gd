@@ -10,7 +10,7 @@ var speed : float = 1
 var mass : float = 1
 
 #base funcs
-func _init(p : Vector3, v : Vector3, t : Vector3, d: float, s: float) -> void:
+func _init(p := Vector3(0, 0, 0), v := Vector3(0, 0, 0), t := Vector3(0, 0, 0), d := 0.5, s := 1.0) -> void:
 	position = p
 	velocity = v
 	target = t
@@ -21,9 +21,11 @@ func get_class() -> String:
 	return "V3Spring"
 
 
+#this basically just runs 3 1d springs together
+#im pretty sure this will be effected by gimbal lock
 #physics funcs
 func positionvelocity(delta : float) -> void:
-	if damper > 1:
+	if damper >= 1:
 		return
 	if speed == 0:
 		push_error("Speed == 0 on V3Spring")
@@ -31,7 +33,7 @@ func positionvelocity(delta : float) -> void:
 	var direction = position - target
 	
 	#round curve
-	var curve = pow(1 - pow(damper, 2), .5)
+	var curve = pow(1 - damper * damper, .5)
 	
 	#weird exponetial thingy
 	var curve1 : Vector3 = (velocity / speed + damper * direction) / curve

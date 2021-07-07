@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/things/barrel.gltf" type="PackedScene" id=1]
+[ext_resource path="res://assets/props/barrel.gltf" type="PackedScene" id=1]
+
 
 [sub_resource type="CylinderShape" id=1]
 radius = 1.21267

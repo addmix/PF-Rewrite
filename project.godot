@@ -109,6 +109,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://assets/weapons/guns/gun.gd"
 }, {
+"base": "Spatial",
+"class": "HoldableObject",
+"language": "GDScript",
+"path": "res://assets/holdable_objects/holdable_object.gd"
+}, {
 "base": "Skeleton",
 "class": "HumanoidSkeleton",
 "language": "GDScript",
@@ -305,6 +310,7 @@ _global_script_class_icons={
 "FileSystemLink": "",
 "Geometry2D": "res://addons/godot-next/icons/icon_geometry_2d.svg",
 "Gun": "",
+"HoldableObject": "",
 "HumanoidSkeleton": "",
 "Icons": "",
 "Inflector": "",
@@ -383,7 +389,7 @@ Settings="*res://singletons/settings.gd"
 
 camera/invert_x=false
 camera/invert_y=false
-mouse/sensitivity=Vector2( 1, 1 )
+mouse/sensitivity=Vector2( 0.01, 0.01 )
 
 [display]
 

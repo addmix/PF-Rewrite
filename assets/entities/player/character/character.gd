@@ -6,21 +6,6 @@ var player
 signal spawned
 signal died
 
-#settings
-
-var invert_x : bool = ProjectSettings.get_setting("controls/camera/invert_x")
-var invert_y : bool = ProjectSettings.get_setting("controls/camera/invert_y")
-var camera_sensitivity : Vector2 = ProjectSettings.get_setting("controls/mouse/sensitivity")
-
-func settings_changed() -> void:
-	if !is_network_master():
-		return
-	
-	invert_x = ProjectSettings.get_setting("controls/invert_x")
-	invert_y = ProjectSettings.get_setting("controls/invert_y")
-	
-	camera_sensitivity = ProjectSettings.get_setting("controls/mouse/sensitivity") * Vector2(-1.0 * float(invert_x) + 1.0 * float(!invert_x), -1.0 * float(invert_y) + 1.0 * float(!invert_y))
-
 
 #nodes
 
@@ -49,15 +34,9 @@ func on_enter() -> void:
 func _exit_tree() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-
-func _unhandled_input(event : InputEvent) -> void:
-	if !is_network_master():
-		return
-	
-	if event is InputEventMouseMotion:
-		#apply settings here
-		
-		skeleton.move_head(event.relative * camera_sensitivity)
+func _ready() -> void:
+	if is_network_master():
+		skeleton.is_controlling = true
 
 
 #movement

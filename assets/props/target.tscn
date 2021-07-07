@@ -1,5 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://assets/things/target.gltf" type="PackedScene" id=1]
+[ext_resource path="res://assets/props/target.gltf" type="PackedScene" id=1]
+
 
 [node name="target" instance=ExtResource( 1 )]
