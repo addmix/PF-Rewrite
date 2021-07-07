@@ -1,0 +1,92 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/entities/player/character/ui/ui.gd" type="Script" id=1]
+[ext_resource path="res://assets/entities/player/character/ui/radar.gd" type="Script" id=2]
+[ext_resource path="res://assets/entities/player/character/ui/ammo_ui.gd" type="Script" id=3]
+[ext_resource path="res://assets/entities/player/character/ui/ammo.tscn" type="PackedScene" id=4]
+
+[sub_resource type="World" id=1]
+
+[node name="UI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeftHUDPanel" type="PanelContainer" parent="MarginContainer"]
+margin_left = 8.0
+margin_top = 450.0
+margin_right = 150.0
+margin_bottom = 592.0
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Radar" type="ViewportContainer" parent="MarginContainer/LeftHUDPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 135.0
+margin_bottom = 135.0
+rect_min_size = Vector2( 128, 128 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 2 )
+
+[node name="Viewport" type="Viewport" parent="MarginContainer/LeftHUDPanel/Radar"]
+size = Vector2( 120, 120 )
+own_world = true
+world = SubResource( 1 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="RightHUDPanel" type="PanelContainer" parent="MarginContainer"]
+margin_left = 942.0
+margin_top = 538.0
+margin_right = 1016.0
+margin_bottom = 592.0
+mouse_filter = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/RightHUDPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 67.0
+margin_bottom = 47.0
+mouse_filter = 2
+
+[node name="Ammo" type="Panel" parent="MarginContainer/RightHUDPanel/VBoxContainer" instance=ExtResource( 4 )]
+self_modulate = Color( 1, 1, 1, 0.878431 )
+margin_right = 60.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 60, 40 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
