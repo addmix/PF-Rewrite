@@ -65,11 +65,21 @@ func setup_ik() -> Array:
 func hit(projectile : Projectile, part : BodyPart) -> void:
 	emit_signal("hit", projectile, part)
 
+
+var body_rotation_offset := 0.35
 var head_rotation := Vector2.ZERO
-var max_x := 0.7
+var max_x := 0.35
 var max_y := 1.4
 
 var body_rotation := 0.0
+
+#this is for positioning the gun
+onready var Armpit : Spatial = $ChestAttachment/Armpit
+onready var ArmpitTransform : Transform = Armpit.get_transform()
+
+#get bone id at runtime to avoid ID errors
+onready var head_id : int = find_bone("head")
+onready var spine_id : int = find_bone("spine.001")
 
 func move_head(movement := Vector2.ZERO) -> void:
 	#desired head movement
@@ -83,5 +93,12 @@ func move_head(movement := Vector2.ZERO) -> void:
 	#try to make a smooth difference between the two
 	body_rotation += difference.x
 	
-	set_bone_custom_pose(0, Transform(Basis(Vector3(0, -body_rotation, 0)), Vector3.ZERO))
-	set_bone_custom_pose(11, Transform(Basis(Vector3(head_rotation.y, -head_rotation.x, 0)), Vector3.ZERO))
+	var working_head_transform : Transform = Transform(Basis(Vector3(head_rotation.y, -head_rotation.x + body_rotation_offset, 0)), Vector3.ZERO)
+	var working_body_transform : Transform = Transform(Basis(Vector3(0, -body_rotation - body_rotation_offset, 0)), Vector3.ZERO)
+	
+	set_bone_custom_pose(spine_id, working_body_transform)
+	set_bone_custom_pose(head_id, working_head_transform)
+	
+	#gun/chest stuff
+	Armpit.transform = ArmpitTransform * Transform(Basis(Vector3(head_rotation.y, -head_rotation.x + body_rotation_offset, 0)), Vector3.ZERO)
+

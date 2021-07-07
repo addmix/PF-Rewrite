@@ -22,29 +22,3 @@ script = ExtResource( 2 )
 
 [node name="Skeleton" parent="Smoothing" instance=ExtResource( 19 )]
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, -0.0499997, 0 )
-bones/0/bound_children = [ NodePath("Hips") ]
-bones/1/bound_children = [ NodePath("Waist") ]
-bones/2/bound_children = [ NodePath("Chest") ]
-bones/4/bound_children = [ NodePath("BicepL") ]
-bones/5/bound_children = [ NodePath("ForearmL") ]
-bones/6/bound_children = [ NodePath("HandL") ]
-bones/8/bound_children = [ NodePath("BicepR") ]
-bones/9/bound_children = [ NodePath("ForearmR") ]
-bones/10/bound_children = [ NodePath("HandR") ]
-bones/11/bound_children = [ NodePath("Head"), NodePath("HeadAttachment") ]
-bones/12/bound_children = [ NodePath("ThighL") ]
-bones/13/bound_children = [ NodePath("ShinL") ]
-bones/14/bound_children = [ NodePath("FootL") ]
-bones/15/bound_children = [ NodePath("ThighR") ]
-bones/16/bound_children = [ NodePath("ShinR") ]
-bones/17/bound_children = [ NodePath("FootR") ]
-
-[node name="HeadAttachment" type="BoneAttachment" parent="Smoothing/Skeleton"]
-transform = Transform( 1, 0, 0, 0, 1, 1.39812e-09, 0, -1.39812e-09, 1, -2.84847e-22, 4.02133, 0.060479 )
-bone_name = "head"
-
-[node name="Camera" type="Camera" parent="Smoothing/Skeleton/HeadAttachment"]
-transform = Transform( -1, 1.22227e-16, -8.74228e-08, -1.22227e-16, 1, 2.79624e-09, 8.74228e-08, 2.79624e-09, -1, -4.24312e-08, 0.393597, 0.130221 )
-far = 1000.0
-
-[connection signal="hit" from="Smoothing/Skeleton" to="." method="_on_Skeleton_hit"]
