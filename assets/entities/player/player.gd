@@ -77,8 +77,7 @@ func _exit_tree() -> void:
 
 func connect_character_signals() -> void:
 	var err := []
-	err.append(character_instance.connect("spawned", self, "on_player_spawned"))
-	err.append(character_instance.connect("died", self, "on_player_died"))
+	
 	#check for errors
 
 
@@ -130,8 +129,9 @@ func instance_character() -> void:
 	character_instance = character.instance()
 	character_instance.name = str(player_id)
 	character_instance.set_network_master(player_id)
-	character_instance.Player = self
+	character_instance.player = self
 	character_instance.add_to_group("characters")
+	character_instance.connect("spawned", self, "on_player_spawned")
 	connect_character_signals()
 
 

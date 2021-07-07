@@ -65,22 +65,11 @@ func setup_ik() -> Array:
 func hit(projectile : Projectile, part : BodyPart) -> void:
 	emit_signal("hit", projectile, part)
 
-var controlling := false
-
 var head_rotation := Vector2.ZERO
 var max_x := 0.7
 var max_y := 1.4
 
 var body_rotation := 0.0
-
-func _unhandled_input(event : InputEvent) -> void:
-	#only on master
-	if !controlling or !is_network_master():
-		return
-	
-	if event is InputEventMouseMotion:
-		move_head(event.relative)
-		get_tree().set_input_as_handled()
 
 func move_head(movement := Vector2.ZERO) -> void:
 	#desired head movement

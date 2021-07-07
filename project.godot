@@ -355,13 +355,13 @@ boot_splash/skip_intro=true
 [audio]
 
 enable_audio_input=true
-volume/master_volume=1.0
-volume/ambient_volume=1.0
-volume/sfx_volume=1.0
-volume/hitmarker_volume=1.0
-volume/voice_emit_volume=1.0
-volume/voice_recieve_volume=1.0
-volume/music_volume=1.0
+volume/master_volume=0.0
+volume/ambient_volume=0.0
+volume/sfx_volume=0.0
+volume/music_volume=0.0
+volume/hitmarker_volume=0.0
+volume/voice_recieve_volume=0.0
+volume/voice_transmit_volume=0.0
 
 [autoload]
 
@@ -381,11 +381,9 @@ Settings="*res://singletons/settings.gd"
 
 [controls]
 
-mouse/sensitivity=Vector2( 0.2, 0.2 )
-invert_x=false
-invert_y=false
-camera/invert_y=false
 camera/invert_x=false
+camera/invert_y=false
+mouse/sensitivity=Vector2( 1, 1 )
 
 [display]
 
@@ -398,11 +396,9 @@ enabled=PoolStringArray( "SIsilicon.3d.text", "godot-next", "gut", "smoothing" )
 
 [gameplay]
 
-hitmarker/color=Color( 1, 1, 1, 1 )
-hitmarker/size=Vector2( 20, 4 )
-hitmarker/spacing=10.0
-hud/scale=0.0
-hud/transparency=0.0
+hitmarker/color=Color( 0, 0, 0, 1 )
+hitmarker/size=Vector2( 0, 0 )
+hitmarker/spacing=0.0
 
 [importer_defaults]
 
@@ -580,9 +576,9 @@ file_logging/enable_file_logging=true
 [rendering]
 
 threads/thread_model=2
-quality/shadows/filter_mode=2
 quality/reflections/irradiance_max_size=256
 quality/filters/anisotropic_filter_level=8
-quality/filters/use_nearest_mipmap_filter=true
+quality/lightmapping/use_bicubic_sampling=false
+quality/subsurface_scattering/quality=2
 quality/filters/msaa=3
 environment/default_environment="res://default_env.tres"
