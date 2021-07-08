@@ -4,7 +4,6 @@ class_name SimulationCollider
 signal on_collided
 
 #objects we will check collision on, in nodepaths
-var to_collide : Dictionary = {}
 var collision_shapes : Array = []
 var constraints : Array = []
 
@@ -35,33 +34,27 @@ func _ready() -> void:
 
 func set_collision_layer(layer : int) -> void:
 	collision_layer = layer
-	space.recalculate_collision_groups = true
 
 func get_collision_layer() -> int:
 	return collision_layer
 
 func set_collision_mask(mask : int) -> void:
 	collision_mask = mask
-	space.recalculate_collision_groups = true
 
 func get_collision_mask() -> int:
 	return collision_mask
-
-#this could be cut in half with a proper algorithm
-func calculate_colliders() -> void:
-	to_collide = {}
-	
-	#this can be done better with an algorithm
-	for collider in space.colliders:
-		if collision_mask & collider.collision_layer:
-			to_collide[collider.get_object_id()] = collider
 
 func get_collisions() -> Array:
 	#array of soonest collisions with every object
 	var collisions : Array = []
 	
-	for key in to_collide.keys():
-		var collider = to_collide[key]
+	for collider in get_parent().colliders:
+		var a : bool = collision_mask & collider.collision_layer
+		var b : bool = collider.collision_mask & collision_layer
+		
+		if !a and b:
+			continue
+		
 		var result : Dictionary = get_object_collisions(collider)
 		if result.size() > 0:
 			collisions.append(result)
