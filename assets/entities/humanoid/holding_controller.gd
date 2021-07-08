@@ -33,6 +33,7 @@ var angular_velocity := Vector3.ZERO
 var linear_acceleration := Vector3.ZERO
 var angular_acceleration := Vector3.ZERO
 
+
 #hold distances from CoM
 
 func _physics_process(delta : float) -> void:
@@ -44,6 +45,9 @@ func _physics_process(delta : float) -> void:
 	last_head_movement = head_movement
 	head_movement = Vector2.ZERO
 
+func on_character_spawned(position : Vector3 = Vector3.ZERO, direction : float = 0.0) -> void:
+	last_transform = get_parent().get_global_transform()
+
 func calculate_springs(delta : float) -> void:
 	RotationSpring.damper = arm_damping
 	PositionSpring.damper = arm_damping
@@ -51,12 +55,14 @@ func calculate_springs(delta : float) -> void:
 	RotationSpring.target = desired_transform.basis.get_euler()
 	PositionSpring.target = desired_transform.origin
 	
+	#no held object
 	if held_object == null or !held_object is HoldableObject:
 		RotationSpring.mass = arm_mass
 		RotationSpring.speed = arm_strength
 		
 		PositionSpring.mass = arm_mass
 		PositionSpring.speed = arm_strength
+	#held object
 	else:
 		#in local space
 		var center_of_mass : Vector3 = held_object.transform.xform(held_object.center_of_mass)
@@ -72,7 +78,6 @@ func calculate_springs(delta : float) -> void:
 		PositionSpring.speed = hold_strength
 	
 	RotationSpring.accelerate(Vector3(-angular_acceleration.y, angular_acceleration.x, 0.0))
-	print(angular_acceleration.x)
 	PositionSpring.accelerate(linear_acceleration)
 	
 	RotationSpring.positionvelocity(delta)

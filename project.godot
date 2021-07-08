@@ -389,7 +389,7 @@ Settings="*res://singletons/settings.gd"
 
 camera/invert_x=false
 camera/invert_y=false
-mouse/sensitivity=Vector2( 0.01, 0.01 )
+mouse/sensitivity=Vector2( 0.3, 0.3 )
 
 [display]
 

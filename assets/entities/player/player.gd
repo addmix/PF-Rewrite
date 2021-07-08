@@ -91,10 +91,7 @@ func connect_hit() -> void:
 
 
 #spawning/removing
-func on_player_spawned() -> void:
-	emit_signal("spawned")
-	
-	
+func on_player_spawned(position := Vector3.ZERO, direction := 0.0) -> void:
 	#hide menu
 	if is_network_master():
 		Server.GamemodeInstance.Spawner.hide_menu()
@@ -114,24 +111,22 @@ func remove_character() -> void:
 	character_instance.queue_free()
 
 func spawn_character(_node : Position3D) -> void:
-	instance_character()
-	add_child(character_instance)
-	
-	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
-	character_instance.transform.origin = spawn_point.origin
-
-func instance_character() -> void:
 	#remove preexisting character
 	if character_instance:
 		remove_character()
 	
+	var spawn_point : Transform = get_tree().get_nodes_in_group("Spawns")[0].get_global_transform()
+	
 	#instance new character
 	character_instance = character.instance()
+	character_instance.spawn(spawn_point.origin)
 	character_instance.name = str(player_id)
 	character_instance.set_network_master(player_id)
 	character_instance.player = self
 	character_instance.add_to_group("characters")
 	character_instance.connect("spawned", self, "on_player_spawned")
 	connect_character_signals()
-
-
+	
+	add_child(character_instance)
+	
+	

@@ -22,19 +22,5 @@ script = ExtResource( 2 )
 
 [node name="Skeleton" parent="Smoothing" instance=ExtResource( 19 )]
 transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, -0.0499997, 0 )
-bones/1/bound_children = [  ]
-bones/2/bound_children = [  ]
-bones/3/bound_children = [  ]
-bones/5/bound_children = [  ]
-bones/6/bound_children = [  ]
-bones/7/bound_children = [  ]
-bones/9/bound_children = [  ]
-bones/10/bound_children = [  ]
-bones/11/bound_children = [  ]
-bones/12/bound_children = [  ]
-bones/13/bound_children = [  ]
-bones/14/bound_children = [  ]
-bones/15/bound_children = [  ]
-bones/16/bound_children = [  ]
-bones/17/bound_children = [  ]
-bones/18/bound_children = [  ]
+
+[connection signal="spawned" from="." to="Smoothing/Skeleton" method="_on_Character_spawned"]

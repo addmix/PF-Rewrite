@@ -27,7 +27,6 @@ func _enter_tree() -> void:
 	call_deferred("on_enter")
 
 func on_enter() -> void:
-	emit_signal("spawned")
 	if is_network_master():
 		camera.current = true
 
@@ -38,8 +37,22 @@ func _ready() -> void:
 	if is_network_master():
 		skeleton.is_controlling = true
 
+func _notification(what : int) -> void:
+	match what:
+		MainLoop.NOTIFICATION_WM_FOCUS_IN:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func spawn(position : Vector3 = Vector3.ZERO, direction : float = 0.0) -> void:
+	global_transform = Transform(Basis(Vector3(0, direction, 0)), position)
+	call_deferred("emit_signal", "spawned", position, direction)
+
+
+
 
 #movement
+
+
 func get_ground_normal_translation(basis : Basis, normal : Vector3) -> Basis:
 	#intersection of ground normal and rotation helper's planes
 	var zy := normal.cross(basis.x)
@@ -66,7 +79,3 @@ func get_movement_axis() -> Vector3:
 
 
 
-func _notification(what : int) -> void:
-	match what:
-		MainLoop.NOTIFICATION_WM_FOCUS_IN:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

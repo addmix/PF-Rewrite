@@ -525,6 +525,7 @@ bone_name = "head"
 
 [node name="Camera" type="Camera" parent="HeadAttachment"]
 transform = Transform( -1, 1.22228e-16, -8.74228e-08, -1.22227e-16, 1, 2.79624e-09, 8.74228e-08, 2.79624e-09, -1, -4.24312e-08, 0.393597, 0.130221 )
+far = 1000.0
 
 [node name="ChestAttachment" type="BoneAttachment" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.20491, -0.0147197 )

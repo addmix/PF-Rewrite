@@ -62,7 +62,7 @@ func _unhandled_input(event : InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		move_head(event.relative * camera_sensitivity)
+		move_head(Vector2(deg2rad(event.relative.x), deg2rad(event.relative.y)) * camera_sensitivity)
 		get_tree().set_input_as_handled()
 
 
@@ -174,3 +174,6 @@ func update_movement() -> void:
 	#set object controller desired position
 	ObjectController.desired_transform = desired_armpit_transform
 	
+
+func _on_Character_spawned(position : Vector3 = Vector3.ZERO, direction : float = 0.0):
+	ObjectController.on_character_spawned(position, direction)
