@@ -219,6 +219,91 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/resources/resource_collections/resource_set.gd"
 }, {
+"base": "SimulationObject",
+"class": "SimulationArea",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/nodes/SimulationArea.gd"
+}, {
+"base": "SimulationShape",
+"class": "SimulationBoundsShape",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/shapes/SimulationBoundShape.gd"
+}, {
+"base": "SimulationObject",
+"class": "SimulationCollider",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/physics/SimulationCollider.gd"
+}, {
+"base": "Node",
+"class": "SimulationConstraint",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/physics/constraints/SimulationConstraint.gd"
+}, {
+"base": "SimulationCollider",
+"class": "SimulationKinematicBody",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/physics/SimulationKinematicBody.gd"
+}, {
+"base": "SimulationSpaceSegment",
+"class": "SimulationLinearSpace",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/space/segments/SimulationLinearSpace.gd"
+}, {
+"base": "Node",
+"class": "SimulationObject",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/nodes/SimulationObject.gd"
+}, {
+"base": "SimulationShape",
+"class": "SimulationOnewayShape",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/shapes/SimulationOnewayShape.gd"
+}, {
+"base": "SimulationSpaceSegment",
+"class": "SimulationRadialSpace",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/space/segments/SimulationRadialSpace.gd"
+}, {
+"base": "SimulationCollider",
+"class": "SimulationRigidBody",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/physics/SimulationRigidBody.gd"
+}, {
+"base": "SimulationShape",
+"class": "SimulationSegmentShape",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/shapes/SimulationSegmentShape.gd"
+}, {
+"base": "Node",
+"class": "SimulationShape",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/shapes/SimulationShape.gd"
+}, {
+"base": "Spatial",
+"class": "SimulationSpace",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/space/SimulationSpace.gd"
+}, {
+"base": "Object",
+"class": "SimulationSpaceSegment",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/space/segments/SimulationSpaceSegment.gd"
+}, {
+"base": "SimulationConstraint",
+"class": "SimulationSpringConstraint",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/physics/constraints/SimulationSpringConstraint.gd"
+}, {
+"base": "SimulationCollider",
+"class": "SimulationStaticBody",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/physics/SimulationStaticBody.gd"
+}, {
+"base": "Node",
+"class": "Simulator",
+"language": "GDScript",
+"path": "res://addons/1d simulation tools/core/Simulation.gd"
+}, {
 "base": "Reference",
 "class": "Singletons",
 "language": "GDScript",
@@ -332,6 +417,23 @@ _global_script_class_icons={
 "ResourceArray": "",
 "ResourceCollection": "",
 "ResourceSet": "",
+"SimulationArea": "",
+"SimulationBoundsShape": "",
+"SimulationCollider": "",
+"SimulationConstraint": "",
+"SimulationKinematicBody": "",
+"SimulationLinearSpace": "",
+"SimulationObject": "",
+"SimulationOnewayShape": "",
+"SimulationRadialSpace": "",
+"SimulationRigidBody": "",
+"SimulationSegmentShape": "",
+"SimulationShape": "",
+"SimulationSpace": "",
+"SimulationSpaceSegment": "",
+"SimulationSpringConstraint": "",
+"SimulationStaticBody": "",
+"Simulator": "",
 "Singletons": "",
 "Spring": "",
 "Trail2D": "res://addons/godot-next/icons/icon_trail_2d.svg",
