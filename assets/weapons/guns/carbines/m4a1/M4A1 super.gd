@@ -6,6 +6,7 @@ var PositionSpring := V3Spring.new()
 func _physics_process(delta : float) -> void:
 	RotationSpring.positionvelocity(delta)
 	PositionSpring.positionvelocity(delta)
+#	print(bolt.velocity)
 
 onready var bolt : SimulationCollider = $Simulator/SimulationSpace/Bolt
 
@@ -14,4 +15,4 @@ func _unhandled_input(event : InputEvent) -> void:
 		shoot()
 
 func shoot() -> void:
-	bolt.accelerate(-50)
+	bolt.velocity = -6.9
