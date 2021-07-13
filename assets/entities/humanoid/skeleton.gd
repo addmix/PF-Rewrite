@@ -147,7 +147,7 @@ func move_head(movement := Vector2.ZERO) -> void:
 	var new_head_rotation : Vector2 = head_rotation + movement
 	var difference : Vector2 = new_head_rotation - head_rotation
 	#limit head movement
-	head_rotation = Vector2(min(max(-max_x, new_head_rotation.x), max_x), min(max(-max_y, new_head_rotation.y), max_y))
+	head_rotation = Vector2(clamp(new_head_rotation.x, -max_x, max_x), clamp(new_head_rotation.y, -max_y, max_y))
 	#get difference in desired head movement and limited head movement
 	
 	#rotate body by difference

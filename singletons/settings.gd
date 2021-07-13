@@ -40,26 +40,26 @@ func load_audio() -> void:
 	emit_signal("load_audio")
 	#master volume
 	ProjectSettings.set_initial_value("audio/volume/master_volume", 1.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), (1 - max(0, min(1, ProjectSettings.get_setting("audio/volume/master_volume")))) * -80)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/master_volume"), 0.0, 1.0)) * -80.0)
 	#ambient
 	ProjectSettings.set_initial_value("audio/volume/ambient_volume", 1.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Ambient"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/ambient_volume")))) * -80)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Ambient"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/ambient_volume"), 0.0, 1.5)) * -80.0)
 	#sfx volume
 	ProjectSettings.set_initial_value("audio/volume/sfx_volume", 1.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Gunshots"), (1 - max(0, min(1, ProjectSettings.get_setting("audio/volume/sfx_volume")))) * -80)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Explosions"), (1 - max(0, min(1, ProjectSettings.get_setting("audio/volume/sfx_volume")))) * -80)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Gunshots"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/sfx_volume"), 0.0, 1.0)) * -80.0)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Explosions"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/sfx_volume"), 0.0, 1.0)) * -80.0)
 	
 	#music
 	ProjectSettings.set_initial_value("audio/volume/music_volume", 1.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/music_volume")))) * -80)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/music_volume"), 0.0, 1.5)) * -80.0)
 	
 	#hitmarkers
 	ProjectSettings.set_initial_value("audio/volume/hitmarker_volume", 1.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Hitmarkers"), (1 - max(0, min(1, ProjectSettings.get_setting("audio/volume/hitmarker_volume")))) * -80)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Hitmarkers"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/hitmarker_volume"), 0.0, 1.5)) * -80.0)
 	
 	#voice
 	ProjectSettings.set_initial_value("audio/volume/voice_recieve_volume", 1.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceRecieve"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/voice_recieve_volume")))) * -80)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceRecieve"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/voice_recieve_volume"), 0.0, 1.5)) * -80.0)
 	ProjectSettings.set_initial_value("audio/volume/voice_transmit_volume", 1.0)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceTransmit"), (1 - max(0, min(1.5, ProjectSettings.get_setting("audio/volume/voice_transmit_volume")))) * -80)
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("VoiceTransmit"), (1.0 - clamp(ProjectSettings.get_setting("audio/volume/voice_transmit_volume"), 0.0, 1.5)) * -80.0)
 
