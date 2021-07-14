@@ -12,15 +12,19 @@ func segment_collision(x) -> Dictionary:
 	
 	var s : float = size + x.size
 	
-	var apos : float = a.position + offset
-	var bpos : float = b.position + x.offset
-	var bposps : float = bpos + s
-	
 	var delta_pos : float = a.velocity - b.velocity
 	var delta_velocity : float = a.velocity - b.velocity
 	
 	if delta_velocity == 0.0:
 		return {}
+	
+	var collision_time : float
+	var collision_position : float
+	var collision_normal : float = -delta_pos / abs(delta_pos)
+	
+	var apos : float = a.position + offset
+	var bpos : float = b.position + x.offset
+	var bposps : float = bpos + s * collision_normal
 	
 	#time that segment will collide
 	var timeplus : float = (-apos + bposps) / (delta_velocity)
@@ -33,9 +37,7 @@ func segment_collision(x) -> Dictionary:
 	var plus : float = abs(posplus - a.position)
 	var minus : float = abs(posminus - a.position)
 	
-	var collision_time : float
-	var collision_position : float
-	var collision_normal : float = delta_pos / abs(delta_pos)
+	
 	
 	#can be made branchless
 	#get closer point
@@ -71,7 +73,6 @@ func bound_collision(x) -> Dictionary:
 	
 	var apos : float = a.position + offset
 	var bpos : float = b.position + x.offset
-	var bposps : float = bpos + size
 	
 	var delta_velocity : float = a.velocity - b.velocity
 	if delta_velocity == 0.0:
@@ -106,14 +107,27 @@ func bound_collision(x) -> Dictionary:
 	var mass_ratio : float = a.mass / (a.mass + b.mass)
 	
 	#this teleports objects out of each other
-	
-	if abs(apos - bpos) < size:
-		if b.get_type() == "SimulationStaticBody":
-			collision_position = bpos + size * collision_normal
-		else:
-			collision_position = lerp(bpos + size * collision_normal, apos, mass_ratio)
-		return {"a" : a, "b" : b, "position" : collision_position, "time" : collision_time, "normal" : collision_normal}
-	
+#
+#	#right wall
+#	if x.direction:
+#		if bpos - apos < size:
+##			collision_time = 0.00000001
+#			if b.get_type() == "SimulationStaticBody":
+#				collision_position = bpos + size * collision_normal
+#			else:
+#				collision_position = lerp(bpos + size * collision_normal, apos, mass_ratio)
+#			return {"a" : a, "b" : b, "position" : collision_position, "time" : collision_time, "normal" : collision_normal}
+#	#left wall
+#	else:
+#		if bpos - apos > -size:
+#			print(2)
+##			collision_time = 0.0000001
+#			if b.get_type() == "SimulationStaticBody":
+#				collision_position = bpos + size * collision_normal
+#			else:
+#				collision_position = lerp(bpos + size * collision_normal, apos, mass_ratio)
+#			return {"a" : a, "b" : b, "position" : collision_position, "time" : collision_time, "normal" : collision_normal}
+#
 	#collision doesnt happen this frame
 	if collision_time <= 0.0:
 		return {}

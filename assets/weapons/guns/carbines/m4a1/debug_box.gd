@@ -7,4 +7,4 @@ func _ready():
 	node = get_node(path)
 
 func _process(delta):
-	transform.origin.x = node.position / 0.3048
+	transform.origin.x = (node.get_parent().position + node.offset) / 0.3048

@@ -49,10 +49,7 @@ func get_collisions() -> Array:
 	var collisions : Array = []
 	
 	for collider in get_parent().colliders:
-		var a : bool = collision_mask & collider.collision_layer
-		var b : bool = collider.collision_mask & collision_layer
-		
-		if !(a or b):
+		if !(collision_mask & collider.collision_layer or collider.collision_mask & collision_layer):
 			continue
 		
 		var result : Dictionary = get_object_collisions(collider)
@@ -74,18 +71,24 @@ func get_object_collisions(b : SimulationCollider) -> Dictionary:
 			var result : Dictionary = x.get_collision_info(y)
 			if result.size() > 0:
 				collisions.append(result)
+#				if x.name == "Extractor" or x.name == "BCG":
+#					print(x.name, result)
 	
 	#return soonest collision
-	var time : float = INF
+	var time : float = 1000000000.0
 	var index : int = -1
+	
 	for i in collisions.size():
-		var _time : float = collisions[i]["time"]
-		var less : bool = _time < time
+		var collision_time : float = collisions[i]["time"]
+		var less : bool = collision_time < time
 		
-		time = float(less) * _time + float(!less) * time
-		index = int(less) * i + int(!less) * index
+		time = float(less) * collision_time + float(!less) * time
+		index = float(less) * i + float(!less) * index
+		print(less, i, index, ", ", collision_time, ", ", time)
 	
 	if index != -1:
+#		print(index)
+#		print(collisions[index]["a"].name,collisions[index])
 		return collisions[index]
 	else:
 		return {}
