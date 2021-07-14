@@ -143,63 +143,12 @@ func oneway_collision(x) -> Dictionary:
 	#right
 	if x.direction:
 		if delta_pos >= size + x.size:
-			return _oneway_collision(x)
+			return segment_collision(x)
 		else:
 			return {}
 	#left side
 	else:
 		if delta_pos <= -(size + x.size):
-			return _oneway_collision(x)
+			return segment_collision(x)
 		else:
 			return {}
-
-func _oneway_collision(x) -> Dictionary:
-	var a = collider
-	var b = x.collider
-	
-	var s : float = size + x.size
-	
-	var apos : float = a.position + offset
-	var bpos : float = b.position + x.offset
-	var bposps : float = bpos + s * (float(x.direction) - float(!x.direction))
-	
-	var delta_pos : float = apos - bpos
-	var delta_velocity : float = a.velocity - b.velocity
-	
-	if delta_pos == 0.0 or delta_velocity == 0.0:
-		return {}
-	
-	#time that segment will collide
-	var timeplus : float = (-apos + bposps) / (delta_velocity)
-	var timeminus : float = -((apos - bposps) / (delta_velocity))
-	
-	#collider position when segment collides
-	var posplus : float = a.position + a.velocity * timeplus
-	var posminus : float = a.position + a.velocity * timeminus
-	
-	var plus : float = abs(posplus - a.position)
-	var minus : float = abs(posminus - a.position)
-	
-	var collision_time : float
-	var collision_position : float
-	var collision_normal : float = delta_pos / abs(delta_pos)
-	
-	#can be made branchless
-	#get closer point
-	if plus < minus:
-		#use plus
-		collision_position = posplus
-		collision_time = timeplus
-	else:
-		#use minus
-		collision_position = posminus
-		collision_time = timeminus
-	
-	
-	var mass_ratio : float = a.mass / (a.mass + b.mass)
-	
-	#collision doesnt happen this frame
-	if collision_time < 0.0:
-		return {}
-	
-	return {"a" : a, "b" : b, "position" : collision_position, "time" : collision_time, "normal" : -collision_normal}

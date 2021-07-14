@@ -84,11 +84,8 @@ func get_object_collisions(b : SimulationCollider) -> Dictionary:
 		
 		time = float(less) * collision_time + float(!less) * time
 		index = float(less) * i + float(!less) * index
-		print(less, i, index, ", ", collision_time, ", ", time)
 	
 	if index != -1:
-#		print(index)
-#		print(collisions[index]["a"].name,collisions[index])
 		return collisions[index]
 	else:
 		return {}
