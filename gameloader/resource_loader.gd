@@ -1,11 +1,11 @@
 extends Node
 
 #for game patches
-func load_patches():
+func load_patches(args : Array = []) -> void:
 	pass
 
 #for mods
-func load_resources():
+func load_resources(args : Array = []) -> void:
 #	print("loading resources")
 	#initialize directory for loading
 	var dir := Directory.new()

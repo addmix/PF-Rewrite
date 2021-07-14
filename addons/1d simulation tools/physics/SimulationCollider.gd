@@ -52,7 +52,7 @@ func get_collisions() -> Array:
 		var a : bool = collision_mask & collider.collision_layer
 		var b : bool = collider.collision_mask & collision_layer
 		
-		if !a and b:
+		if !(a or b):
 			continue
 		
 		var result : Dictionary = get_object_collisions(collider)
@@ -67,6 +67,10 @@ func get_object_collisions(b : SimulationCollider) -> Dictionary:
 	#this could be cut in half with a proper algorithm
 	for x in collision_shapes:
 		for y in b.collision_shapes:
+			#for collision shape level collision groups
+			if !(x.collision_layer & y.collision_mask or y.collision_layer & x.collision_mask):
+				continue
+			
 			var result : Dictionary = x.get_collision_info(y)
 			if result.size() > 0:
 				collisions.append(result)

@@ -4,7 +4,7 @@ var manifest := {
 	
 }
 
-func scan_maps() -> void:
+func scan_maps(args : Array = []) -> void:
 	var dir := Directory.new()
 # warning-ignore:return_value_discarded
 	dir.open("res://maps/")

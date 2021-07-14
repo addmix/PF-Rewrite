@@ -6,7 +6,7 @@ var manifest := {
 
 var base_dir := "res://gamemodes/"
 
-func scan_gamemodes() -> void:
+func scan_gamemodes(args : Array = []) -> void:
 	#create directory to navigate through files
 	var dir := Directory.new()
 	#start in gamemodes folder

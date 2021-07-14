@@ -10,7 +10,7 @@ signal load_graphics
 signal load_controls
 signal load_audio
 
-func load_settings() -> void:
+func load_settings(args : Array = []) -> void:
 	load_gameplay()
 	load_graphics()
 	load_controls()

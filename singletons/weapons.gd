@@ -8,7 +8,7 @@ var base_dir := "res://assets/weapons"
 
 #we should change this to have one consolidated mods file, then players can scan for new mods, or remove missing/removed mods
 
-func scan_weapons() -> void:
+func scan_weapons(args : Array = []) -> void:
 	scan_weapons_recursive(base_dir)
 	load_categories()
 	load_models()
