@@ -22,4 +22,4 @@ func _unhandled_input(event : InputEvent) -> void:
 		trigger = 0.0
 
 func shoot() -> void:
-	bolt.velocity = -6.9
+	hammer.velocity = -0.2

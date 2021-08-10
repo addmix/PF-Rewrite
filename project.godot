@@ -14,11 +14,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/godot-next/references/array_2d.gd"
 }, {
-"base": "Reference",
-"class": "ArrayUtils",
-"language": "GDScript",
-"path": "res://addons/SIsilicon.3d.text/array_utils.gd"
-}, {
 "base": "AttributeModifier",
 "class": "AttributeCopy",
 "language": "GDScript",
@@ -148,11 +143,6 @@ _global_script_classes=[ {
 "class": "InspectorControls",
 "language": "GDScript",
 "path": "res://addons/godot-next/global/inspector_controls.gd"
-}, {
-"base": "Spatial",
-"class": "Label3D",
-"language": "GDScript",
-"path": "res://addons/SIsilicon.3d.text/label_3d.gd"
 }, {
 "base": "Gun",
 "class": "M4A1",
@@ -391,7 +381,6 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Array2D": "",
-"ArrayUtils": "",
 "AttributeCopy": "",
 "AttributeMapRange": "",
 "AttributeModifier": "",
@@ -418,7 +407,6 @@ _global_script_class_icons={
 "Icons": "",
 "Inflector": "",
 "InspectorControls": "",
-"Label3D": "",
 "M4A1": "",
 "MessageDispatcher": "",
 "MessageDispatcherWrapper": "",
@@ -518,7 +506,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/1d simulation tools/plugin.cfg", "res://addons/SIsilicon.3d.text/plugin.cfg", "res://addons/godot-next/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/smoothing/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/1d-simulation/plugin.cfg", "res://addons/godot-next/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/smoothing/plugin.cfg" )
 
 [gameplay]
 
