@@ -1,3 +1,9 @@
+[submodule "addons/addons/1D-simulation"]
+	path = addons/addons/1D-simulation
+	url = https://github.com/addmix/1D-simulation
+[submodule "1D-simulation"]
+	path = 1D-simulation
+	url = git://github.com/addmix/1D-simulation
 [submodule "addons/1d-simulation"]
 	path = addons/1d-simulation
 	url = git://github.com/addmix/1D-simulation
