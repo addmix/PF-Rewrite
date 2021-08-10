@@ -25,6 +25,8 @@ func _ready() -> void:
 	
 	var children : Array = get_children()
 	for child in children:
+		if !child.has_method("get_type"):
+			continue
 		match child.get_type():
 			"SimulationObject":
 				objects.append(child)
@@ -46,6 +48,8 @@ func _ready() -> void:
 			"SimulationSpringConstraint":
 				constraints.append(child)
 				child.space = self
+			_:
+				pass
 
 
 func _exit_tree() -> void:
