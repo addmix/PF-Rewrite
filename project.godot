@@ -19,21 +19,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/SIsilicon.3d.text/array_utils.gd"
 }, {
-"base": "AttributeModifier",
-"class": "AttributeCopy",
-"language": "GDScript",
-"path": "res://addons/1d-simulation/attribute_modifiers/attribute_copy.gd"
-}, {
-"base": "AttributeModifier",
-"class": "AttributeMapRange",
-"language": "GDScript",
-"path": "res://addons/1d-simulation/attribute_modifiers/attribute_map_range.gd"
-}, {
-"base": "Node",
-"class": "AttributeModifier",
-"language": "GDScript",
-"path": "res://addons/1d-simulation/attribute_modifiers/attribute_modifier.gd"
-}, {
 "base": "Resource",
 "class": "Behavior",
 "language": "GDScript",
@@ -237,87 +222,87 @@ _global_script_classes=[ {
 "base": "SimulationObject",
 "class": "SimulationArea",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/nodes/SimulationArea.gd"
+"path": "res://addons/1d simulation tools/nodes/SimulationArea.gd"
 }, {
 "base": "SimulationShape",
 "class": "SimulationBoundsShape",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/shapes/SimulationBoundShape.gd"
+"path": "res://addons/1d simulation tools/shapes/SimulationBoundShape.gd"
 }, {
 "base": "SimulationObject",
 "class": "SimulationCollider",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/physics/SimulationCollider.gd"
+"path": "res://addons/1d simulation tools/physics/SimulationCollider.gd"
 }, {
 "base": "Node",
 "class": "SimulationConstraint",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/physics/constraints/SimulationConstraint.gd"
+"path": "res://addons/1d simulation tools/physics/constraints/SimulationConstraint.gd"
 }, {
 "base": "SimulationCollider",
 "class": "SimulationKinematicBody",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/physics/SimulationKinematicBody.gd"
+"path": "res://addons/1d simulation tools/physics/SimulationKinematicBody.gd"
 }, {
 "base": "SimulationSpaceSegment",
 "class": "SimulationLinearSpace",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/space/segments/SimulationLinearSpace.gd"
+"path": "res://addons/1d simulation tools/space/segments/SimulationLinearSpace.gd"
 }, {
 "base": "Node",
 "class": "SimulationObject",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/nodes/SimulationObject.gd"
+"path": "res://addons/1d simulation tools/nodes/SimulationObject.gd"
 }, {
 "base": "SimulationShape",
 "class": "SimulationOnewayShape",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/shapes/SimulationOnewayShape.gd"
+"path": "res://addons/1d simulation tools/shapes/SimulationOnewayShape.gd"
 }, {
 "base": "SimulationSpaceSegment",
 "class": "SimulationRadialSpace",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/space/segments/SimulationRadialSpace.gd"
+"path": "res://addons/1d simulation tools/space/segments/SimulationRadialSpace.gd"
 }, {
 "base": "SimulationCollider",
 "class": "SimulationRigidBody",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/physics/SimulationRigidBody.gd"
+"path": "res://addons/1d simulation tools/physics/SimulationRigidBody.gd"
 }, {
 "base": "SimulationShape",
 "class": "SimulationSegmentShape",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/shapes/SimulationSegmentShape.gd"
+"path": "res://addons/1d simulation tools/shapes/SimulationSegmentShape.gd"
 }, {
 "base": "Node",
 "class": "SimulationShape",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/shapes/SimulationShape.gd"
+"path": "res://addons/1d simulation tools/shapes/SimulationShape.gd"
 }, {
 "base": "Spatial",
 "class": "SimulationSpace",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/space/SimulationSpace.gd"
+"path": "res://addons/1d simulation tools/space/SimulationSpace.gd"
 }, {
 "base": "Object",
 "class": "SimulationSpaceSegment",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/space/segments/SimulationSpaceSegment.gd"
+"path": "res://addons/1d simulation tools/space/segments/SimulationSpaceSegment.gd"
 }, {
 "base": "SimulationConstraint",
 "class": "SimulationSpringConstraint",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/physics/constraints/SimulationSpringConstraint.gd"
+"path": "res://addons/1d simulation tools/physics/constraints/SimulationSpringConstraint.gd"
 }, {
 "base": "SimulationCollider",
 "class": "SimulationStaticBody",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/physics/SimulationStaticBody.gd"
+"path": "res://addons/1d simulation tools/physics/SimulationStaticBody.gd"
 }, {
 "base": "Node",
 "class": "Simulator",
 "language": "GDScript",
-"path": "res://addons/1d-simulation/core/Simulation.gd"
+"path": "res://addons/1d simulation tools/core/Simulation.gd"
 }, {
 "base": "Reference",
 "class": "Singletons",
@@ -392,9 +377,6 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Array2D": "",
 "ArrayUtils": "",
-"AttributeCopy": "",
-"AttributeMapRange": "",
-"AttributeModifier": "",
 "Behavior": "",
 "BitFlag": "",
 "Bitset": "",
